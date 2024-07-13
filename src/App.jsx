@@ -1,12 +1,10 @@
 import "./App.css";
-import { Input } from "./components/ui/input";
-import ItemPerson from "./components/ui/ItemPerson";
+import ButtonWithIcon from "./components/ui/ButtonWithIcon";
 
 function App() {
   return (
     <>
-      <Input type="email" placeholder="Username" />
-      <ItemPerson />
+      <ButtonWithIcon />
     </>
   );
 }
