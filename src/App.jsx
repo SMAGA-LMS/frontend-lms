@@ -1,9 +1,12 @@
 import "./App.css";
+import { Input } from "./components/ui/input";
+import ItemPerson from "./components/ui/ItemPerson";
 
 function App() {
   return (
     <>
-      <div>SMAGA LMS</div>
+      <Input type="email" placeholder="Username" />
+      <ItemPerson />
     </>
   );
 }
