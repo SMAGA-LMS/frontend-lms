@@ -1,5 +1,5 @@
 import ThumbnailWithFooter from "@/components/ui/ThumbnailWithFooter";
-import thumbnailStudents from "../../assets/images/thumbnail-students.svg";
+import thumbnailStudents from "../assets/images/thumbnail-students.svg";
 import { useEffect, useState } from "react";
 
 export default function SplashScreen() {

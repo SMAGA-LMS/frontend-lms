@@ -1,32 +1,33 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import SplashScreen from "./pages/onboarding/SplashScreen";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import LoginScreen from "./pages/login/LoginScreen";
+import SplashScreen from "./pages/SplashScreen";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routers";
 
 function App() {
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  // const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-      navigate("/login");
-    }, 4000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [navigate]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   });
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, []);
 
   return (
     <>
-      {loading ? (
+      <div className="w-full h-screen">
+        {/* {loading ? (
         <SplashScreen />
       ) : (
-        <Routes>
-          <Route path="/login" element={<LoginScreen />} />
-        </Routes>
-      )}
+      )} */}
+        <div>
+          <RouterProvider router={router} />
+        </div>
+      </div>
     </>
   );
 }

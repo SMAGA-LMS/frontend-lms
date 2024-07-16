@@ -26,7 +26,10 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        green: "#3C7A89",
+        smagaLMS: {
+          green: "#3C7A89",
+          gray: "#9FA2B2",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
