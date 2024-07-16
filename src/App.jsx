@@ -5,28 +5,28 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routers";
 
 function App() {
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const timer = setTimeout(() => {
-  //     setLoading(false);
-  //   });
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, []);
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <>
       <div className="w-full h-screen">
-        {/* {loading ? (
-        <SplashScreen />
-      ) : (
-      )} */}
-        <div>
-          <RouterProvider router={router} />
-        </div>
+        {loading ? (
+          <SplashScreen />
+        ) : (
+          <div>
+            <RouterProvider router={router} />
+          </div>
+        )}
       </div>
     </>
   );
