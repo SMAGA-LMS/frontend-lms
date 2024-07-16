@@ -8,7 +8,7 @@ export default function ThumbnailWithFooter({ image, footerText }) {
           alt={footerText}
           src={image}
         />
-        <div className="bg-green text-white text-2xl p-3 font-sans font-bold w-full text-center rounded-xl shadow-xl">
+        <div className="bg-smagaLMS-green text-white text-2xl p-3 font-sans font-bold w-full text-center rounded-xl shadow-xl">
           {footerText}
         </div>
       </div>

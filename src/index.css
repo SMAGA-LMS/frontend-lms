@@ -75,4 +75,14 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .active {
+    @apply opacity-100;
+  }
+  .pending {
+    @apply opacity-50;
+  }
+  .inactive {
+    @apply opacity-50;
+  }
 }
