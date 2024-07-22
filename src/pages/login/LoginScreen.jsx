@@ -19,7 +19,8 @@ export default function LoginScreen() {
   return (
     <>
       <form
-        className="flex flex-col items-center justify-center min-h-screen mx-10"
+        className="flex flex-col items-center justify-center h-screen mx-10"
+        // style={{ height: "calc(100vh - 100px)" }}
         method="POST"
         onSubmit={handleSubmit}
       >

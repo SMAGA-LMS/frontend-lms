@@ -11,7 +11,7 @@ function App() {
     setLoading(true);
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 2000);
     return () => {
       clearTimeout(timer);
     };
@@ -19,7 +19,7 @@ function App() {
 
   return (
     <>
-      <div className="w-full h-screen">
+      <div className="w-full h-full">
         {loading ? (
           <SplashScreen />
         ) : (
