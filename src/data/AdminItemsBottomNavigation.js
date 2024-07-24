@@ -4,32 +4,32 @@ import iconClasses from "../assets/icons/bottom-navigation/classes.svg";
 import iconUserList from "../assets/icons/bottom-navigation/user-list.svg";
 import iconProfile from "../assets/icons/bottom-navigation/profile.svg";
 
-const ItemsBottomNavigation = [
+const AdminItemsBottomNavigation = [
   {
     icon: iconHome,
     label: "Home",
-    slug: "/user/home",
+    slug: "/admin/home",
   },
   {
     icon: iconCourses,
     label: "Courses",
-    slug: "/user/courses",
+    slug: "/admin/courses",
   },
   {
     icon: iconClasses,
     label: "Classes",
-    slug: "/user/classes",
+    slug: "/admin/classes",
   },
   {
     icon: iconUserList,
     label: "User List",
-    slug: "/user/user-list",
+    slug: "/admin/user-list",
   },
   {
     icon: iconProfile,
     label: "Profile",
-    slug: "/user/profile",
+    slug: "/admin/profile",
   },
 ];
 
-export default ItemsBottomNavigation;
+export default AdminItemsBottomNavigation;

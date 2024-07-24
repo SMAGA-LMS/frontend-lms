@@ -1,5 +1,6 @@
 import ErrorPage from "@/components/ui/ErrorPage";
-import BottomNavLayout from "@/layouts/BottomNavLayout";
+import AdminBottomNavLayout from "@/layouts/AdminBottomNavLayout";
+import GuestLayout from "@/layouts/GuestLayout";
 import LoginScreen from "@/pages/login/LoginScreen";
 import ClassesScreen from "@/pages/user/classes/ClassesScreen";
 import CoursesScreen from "@/pages/user/courses/CoursesScreen";
@@ -11,21 +12,27 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to={"/login"} replace />,
+    element: <GuestLayout />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/",
+        element: <Navigate to={"/login"} replace />,
+      },
+      {
+        path: "/login",
+        element: <LoginScreen />,
+      },
+    ],
   },
   {
-    path: "/login",
-    element: <LoginScreen />,
-  },
-  {
-    path: "/user",
-    element: <BottomNavLayout />,
+    path: "/admin",
+    element: <AdminBottomNavLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <Navigate to={"/user/home"} replace />,
+        element: <Navigate to={"/admin/home"} replace />,
       },
       {
         path: "home",

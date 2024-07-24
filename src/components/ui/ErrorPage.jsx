@@ -5,7 +5,7 @@ export default function ErrorPage() {
 
   return (
     <div>
-      <h1>Custom Error di components/ui/ErrorPage.jsx</h1>
+      <h1>404 - Page Not Found</h1>
       <pre>{error.message}</pre>
     </div>
   );

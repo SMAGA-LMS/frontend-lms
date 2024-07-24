@@ -29,6 +29,7 @@ module.exports = {
         smagaLMS: {
           green: "#3C7A89",
           gray: "#9FA2B2",
+          "soft-white": "#F2F3F7",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

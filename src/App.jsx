@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import SplashScreen from "./pages/SplashScreen";
 import { RouterProvider } from "react-router-dom";
-import { router } from "./routers";
+import { router } from "./routers/router";
+import { ContextProvider } from "./contexts/ContextProvider";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -11,7 +12,7 @@ function App() {
     setLoading(true);
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000); // 2000ms default
     return () => {
       clearTimeout(timer);
     };
@@ -24,7 +25,9 @@ function App() {
           <SplashScreen />
         ) : (
           <div>
-            <RouterProvider router={router} />
+            <ContextProvider>
+              <RouterProvider router={router} />
+            </ContextProvider>
           </div>
         )}
       </div>

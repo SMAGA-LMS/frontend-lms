@@ -8,7 +8,7 @@ export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationClass("animate-fadeOut");
-    }, 1500);
+    }, 500); // 1500ms default
 
     return () => clearTimeout(timer);
   }, []);
