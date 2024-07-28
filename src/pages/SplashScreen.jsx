@@ -8,7 +8,7 @@ export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimationClass("animate-fadeOut");
-    }, 500); // 1500ms default
+    }, 1000); // 1500ms default
 
     return () => clearTimeout(timer);
   }, []);
@@ -17,7 +17,13 @@ export default function SplashScreen() {
       <div
         className={`bg-white flex items-center justify-center ${animationClass}`}
       >
-        <ThumbnailWithFooter image={thumbnailStudents} footerText="Welcome!" />
+        <div className="w-full h-screen">
+          <ThumbnailWithFooter
+            image={thumbnailStudents}
+            footerText="Welcome!"
+            isHScreen="h-screen"
+          />
+        </div>
       </div>
     </>
   );

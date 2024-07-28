@@ -1,20 +1,16 @@
-import { Navigate, Outlet } from "react-router-dom";
 import BottomNavigationMenu from "@/components/BottomNavigationMenu";
-import { useStateContext } from "@/contexts/ContextProvider";
+import AdminItemsBottomNavigation from "../data/AdminItemsBottomNavigation";
+import { Outlet } from "react-router-dom";
 
 export default function AdminBottomNavLayout() {
-  const { currentUser, token } = useStateContext();
-
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
-
   return (
     <>
       <div>
         <Outlet />
       </div>
-      <BottomNavigationMenu />
+      <BottomNavigationMenu
+        itemsBottomNavigation={AdminItemsBottomNavigation}
+      />
     </>
   );
 }

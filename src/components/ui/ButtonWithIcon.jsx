@@ -1,13 +1,21 @@
 import { Button } from "./button";
 
-export default function ButtonWithIcon({ children, variant }) {
+export default function ButtonWithIcon({
+  children,
+  variant,
+  size,
+  className,
+  onClickAction,
+}) {
   return (
     <>
-      <Button variant={variant} size="lg" className="w-full rounded-xl">
+      <Button
+        variant={variant}
+        size={size}
+        className={`${className}`}
+        onClick={onClickAction}
+      >
         {children}
-        {/* <div className={`font-sans font-bold text-base mr-4 ${textColor}`}>
-          {label}
-        </div> */}
       </Button>
     </>
   );

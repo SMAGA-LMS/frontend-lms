@@ -1,7 +1,7 @@
 import iconHome from "../assets/icons/bottom-navigation/home.svg";
 import iconCourses from "../assets/icons/bottom-navigation/courses.svg";
-import iconClasses from "../assets/icons/bottom-navigation/classes.svg";
-import iconUserList from "../assets/icons/bottom-navigation/user-list.svg";
+import iconClassPeriods from "../assets/icons/bottom-navigation/classPeriods.svg";
+import iconUsers from "../assets/icons/bottom-navigation/users.svg";
 import iconProfile from "../assets/icons/bottom-navigation/profile.svg";
 
 const AdminItemsBottomNavigation = [
@@ -16,14 +16,14 @@ const AdminItemsBottomNavigation = [
     slug: "/admin/courses",
   },
   {
-    icon: iconClasses,
-    label: "Classes",
-    slug: "/admin/classes",
+    icon: iconClassPeriods,
+    label: "Class List",
+    slug: "/admin/class-periods",
   },
   {
-    icon: iconUserList,
+    icon: iconUsers,
     label: "User List",
-    slug: "/admin/user-list",
+    slug: "/admin/users",
   },
   {
     icon: iconProfile,

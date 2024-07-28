@@ -20,6 +20,12 @@ module.exports = {
       fontFamily: {
         sans: ["Plus Jakarta Sans", "sans-serif"],
       },
+      backgroundImage: {
+        "smagaLMS-gradient-linear":
+          "linear-gradient(180deg, rgba(70, 77, 92, 0) 40%, rgba(148, 162, 194, 0.7) 100%)",
+        "smagaLMS-gradient-linear-top-to-bottom":
+          "linear-gradient(0deg, rgba(70, 77, 92, 0) 60%, rgba(148, 162, 194, 0.7) 100%)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

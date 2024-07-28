@@ -53,9 +53,11 @@ export default function LoginScreen() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
     const payload = {
       username: formDataRef.current.username,
       password: formDataRef.current.password,
+      deviceName: navigator.userAgent,
     };
     login(payload);
   }
@@ -78,7 +80,7 @@ export default function LoginScreen() {
           </div>
           <div className="mb-4">
             <div className="mb-4">
-              <InputWithLabel>
+              <InputWithLabel className="grid w-full items-center gap-1.5">
                 <Label htmlFor="userID">Username</Label>
                 <Input
                   type="text"
@@ -107,7 +109,6 @@ export default function LoginScreen() {
                     className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
                     onClick={handleTogglePasswordVisibility}
                   >
-                    {/* Here you can use an icon or text to indicate visibility state */}
                     {passwordVisible ? "Hide" : "Show"}
                   </button>
                 </div>
@@ -129,9 +130,18 @@ export default function LoginScreen() {
           </div>
           <div>
             {loading ? (
-              <ButtonLoading variant="smagaLMSGreen" />
+              <ButtonLoading
+                variant="smagaLMSGreen"
+                size="lg"
+                className="w-full rounded-lg"
+              />
             ) : (
-              <ButtonWithIcon variant="smagaLMSGreen" type="submit">
+              <ButtonWithIcon
+                variant="smagaLMSGreen"
+                size="lg"
+                className="w-full rounded-lg"
+                type="submit"
+              >
                 <LogIn className="mr-2" />
                 <Label className="font-sans font-bold text-base mr-4">
                   LOGIN

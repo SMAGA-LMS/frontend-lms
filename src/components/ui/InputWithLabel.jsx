@@ -1,9 +1,7 @@
-export default function InputWithLabel({ children }) {
+export default function InputWithLabel({ children, className }) {
   return (
     <>
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        {children}
-      </div>
+      <div className={`${className}`}>{children}</div>
     </>
   );
 }
