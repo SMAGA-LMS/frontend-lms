@@ -14,6 +14,9 @@ axiosClient.interceptors.request.use((config) => {
     config.headers["Content-Type"] = "multipart/form-data";
   }
 
+  // if enable ngrok for hit api (make sure ngrok is running)
+  config.headers["ngrok-skip-browser-warning"] = true;
+
   return config;
 });
 
