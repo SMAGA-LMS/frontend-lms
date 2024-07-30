@@ -8,14 +8,9 @@ const StateContext = createContext({
 });
 
 export const ContextProvider = ({ children }) => {
-  // const [currentUser, setCurrentUser] = useState({});
-  const [currentUser, setCurrentUser] = useState({
-    fullname: " M. Syauqi Frizman",
-    role: "student",
-    photoProfile: "",
-  });
-  const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const [currentUser, setCurrentUser] = useState({});
 
+  const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const setToken = (token) => {
     _setToken(token);
     if (token) {

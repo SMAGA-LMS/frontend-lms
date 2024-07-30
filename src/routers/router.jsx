@@ -1,5 +1,5 @@
 import ErrorPage from "@/components/ui/ErrorPage";
-import AdminBottomNavLayout from "@/layouts/AdminBottomNavLayout";
+import AdminBottomNavLayout from "@/layouts/admin/AdminBottomNavLayout";
 import GuestLayout from "@/layouts/GuestLayout";
 import MemberLayout from "@/layouts/MemberLayout";
 import LoginScreen from "@/pages/login/LoginScreen";
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/",
+    path: "/admin",
     element: <MemberLayout />,
     errorElement: <ErrorPage />,
     children: [
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
         element: <Navigate to={"/admin/home"} replace />,
       },
       {
-        path: "admin",
+        path: "",
         element: <AdminBottomNavLayout />,
         children: [
           {
@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "admin/class-periods",
+        path: "class-periods",
         children: [
           {
             path: "new",
@@ -103,7 +103,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "admin/users",
+        path: "users",
         children: [
           {
             path: "new",
@@ -111,6 +111,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      // nanti di sini path: "courses"
     ],
   },
 ]);

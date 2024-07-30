@@ -5,8 +5,15 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
+  config.headers.Accept = `Application/json`;
   const token = localStorage.getItem("ACCESS_TOKEN");
   config.headers.Authorization = `Bearer ${token}`;
+
+  // Automatically set Content-Type for FormData
+  if (config.data instanceof FormData) {
+    config.headers["Content-Type"] = "multipart/form-data";
+  }
+
   return config;
 });
 

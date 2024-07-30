@@ -5,9 +5,10 @@ import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import axiosClient from "@/services/axios-client";
+import axiosClient from "@/services/axiosClient";
 import { ButtonLoading } from "@/components/ui/ButtonLoading";
 import { useStateContext } from "@/contexts/ContextProvider";
+import { toast } from "sonner";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
@@ -33,19 +34,17 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const response = await axiosClient.post("/auth/login", payload);
-      if (response.status === 201) {
-        setLoading(false);
-        // nanti harus bikin dulu endpoint get user by token
-        // setCurrentUser(response.data.data.user);
-        setToken(response.data.data.token);
-        navigate("/admin");
-      }
+      setLoading(false);
+      setCurrentUser(response.data.data.user);
+      setToken(response.data.data.token);
+      toast.success(response.data.message);
+
+      navigate("/admin");
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-        const errors = error.response.data.message;
-        setErrors(errors);
+      if (error.response) {
+        setErrors(error.response.data.errors);
       } else {
-        setErrors(["Something went wrong, please try again later"]);
+        toast.error("Something went wrong, please try again later");
       }
       setLoading(false);
     }
@@ -57,7 +56,7 @@ export default function LoginScreen() {
     const payload = {
       username: formDataRef.current.username,
       password: formDataRef.current.password,
-      deviceName: navigator.userAgent,
+      device_name: navigator.userAgent,
     };
     login(payload);
   }
@@ -116,15 +115,19 @@ export default function LoginScreen() {
             </div>
             {errors && (
               <div className="text-red-500 text-sm text-center">
-                {Object.keys(errors).map((key) =>
+                {/* {Object.keys(errors).map((key) =>
                   Array.isArray(errors[key]) ? (
                     errors[key].map((error, index) => (
                       <p key={`${key}-${index}`}>{error}</p>
                     ))
                   ) : (
-                    <p key={key}>{errors[key]}</p>
+                    <p key={key}>{errors}</p>
                   )
-                )}
+                )} */}
+
+                {Object.keys(errors).map((key) => (
+                  <p key={key}>{errors[key]}</p>
+                ))}
               </div>
             )}
           </div>

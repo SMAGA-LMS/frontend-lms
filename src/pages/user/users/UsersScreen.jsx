@@ -1,135 +1,97 @@
 import HeaderPageWithBackButton from "@/components/HeaderPageWithBackButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import TableScrollable from "@/components/ui/TableScrollable";
-
 import TableWithSearchFeature from "@/components/TableWithSearchFeature";
-import ButtonWithIcon from "@/components/ui/ButtonWithIcon";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useEffect, useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import SearchInputButton from "@/components/SearchInputButton";
 import { useNavigate } from "react-router-dom";
+import axiosClient from "@/services/axiosClient";
+import { useEffect, useState } from "react";
+import SkeletonUserCard from "@/components/ui/SkeletonUserCard";
+import TableScrollable from "@/components/ui/TableScrollable";
+import { toast } from "sonner";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 
 export default function UserListScreen() {
   const pageTitle = "User List";
-
-  const users = [
-    {
-      fullname: "M. Syauqi Frizman",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "John Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-    {
-      fullname: "Jane Doe",
-      userCode: "123456",
-      profilePicture: "https://i.pravatar.cc/300",
-    },
-  ];
-
   const heightTable = "h-[48vh]";
-
   const navigate = useNavigate();
-  function handleClick() {
+  const [loading, setLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [virtualUsers, setVirtualUsers] = useState([]);
+  // const [searchValue, setSearchValue] = useState("");
+
+  useEffect(() => {
+    getUsersData(UserRolesEnum.STUDENT);
+  }, []);
+
+  async function getUsersData(userRoleId) {
+    setLoading(true);
+    try {
+      const response = await axiosClient.get(
+        `/users?role_id=${userRoleId.toString()}`
+      );
+      setUsers(response.data.data);
+      setVirtualUsers(response.data.data);
+    } catch (error) {
+      toast.error("Failed to fetch data");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // async function getTeachersData() {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axiosClient.get("/users/teachers");
+  //     setUsers(response.data.data);
+  //     setVirtualUsers(response.data.data);
+  //   } catch (error) {
+  //     toast.error("Failed to fetch data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  // async function getAdminsData() {
+  //   setLoading(true);
+  //   try {
+  //     const response = await axiosClient.get("/users/admins");
+  //     setUsers(response.data.data);
+  //     setVirtualUsers(response.data.data);
+  //   } catch (error) {
+  //     toast.error("Failed to fetch data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  function generateSkeletonList() {
+    return (
+      <>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SkeletonUserCard key={index} />
+        ))}
+      </>
+    );
+  }
+
+  function navigateToAddNewUser() {
     return () => {
       navigate("/admin/users/new");
     };
+  }
+
+  function handleSearchUser(value) {
+    if (value === "") {
+      setVirtualUsers(users);
+      return;
+    }
+
+    const filteredData = virtualUsers.filter((virtualUser) =>
+      virtualUser.full_name.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setVirtualUsers(filteredData);
   }
 
   return (
@@ -141,54 +103,72 @@ export default function UserListScreen() {
           <Tabs defaultValue="student" className="">
             <div className=" ">
               <TabsList className="w-full">
-                <TabsTrigger value="student" className="w-full">
+                <TabsTrigger
+                  value="student"
+                  className="w-full"
+                  onClick={() => getUsersData(UserRolesEnum.STUDENT)}
+                >
                   Student
                 </TabsTrigger>
-                <TabsTrigger value="teacher" className="w-full">
+                <TabsTrigger
+                  value="teacher"
+                  className="w-full"
+                  onClick={() => getUsersData(UserRolesEnum.TEACHER)}
+                >
                   Teacher
                 </TabsTrigger>
-                <TabsTrigger value="admin" className="w-full">
+                <TabsTrigger
+                  value="admin"
+                  className="w-full"
+                  onClick={() => getUsersData(UserRolesEnum.ADMIN)}
+                >
                   Admin
                 </TabsTrigger>
               </TabsList>
             </div>
+            <div className="mb-4">
+              <SearchInputButton
+                placeholderText="type user name or user code ..."
+                handleSearch={handleSearchUser}
+              />
+            </div>
             <TabsContent value="student">
-              <TableWithSearchFeature
-                dataTable={users}
-                heightTable={heightTable}
-              >
-                <div className="mb-4">
-                  <SearchInputButton placeholderText="type student name ..." />
-                </div>
-              </TableWithSearchFeature>
+              {loading ? (
+                <div>{generateSkeletonList()}</div>
+              ) : (
+                <TableScrollable
+                  data={virtualUsers}
+                  heightTable={heightTable}
+                />
+              )}
             </TabsContent>
             <TabsContent value="teacher">
-              <TableWithSearchFeature
-                dataTable={users}
-                heightTable={heightTable}
-              >
-                <div className="mb-4">
-                  <SearchInputButton placeholderText="type teacher name ..." />
-                </div>
-              </TableWithSearchFeature>
+              {loading ? (
+                <div>{generateSkeletonList()}</div>
+              ) : (
+                <TableScrollable
+                  data={virtualUsers}
+                  heightTable={heightTable}
+                />
+              )}
             </TabsContent>
             <TabsContent value="admin">
-              <TableWithSearchFeature
-                dataTable={users}
-                heightTable={heightTable}
-              >
-                <div className="mb-4">
-                  <SearchInputButton placeholderText="type admin name ..." />
-                </div>
-              </TableWithSearchFeature>
+              {loading ? (
+                <div>{generateSkeletonList()}</div>
+              ) : (
+                <TableScrollable
+                  data={virtualUsers}
+                  heightTable={heightTable}
+                />
+              )}
             </TabsContent>
           </Tabs>
         </div>
         <div>
           <Button
             variant="smagaLMSGreen"
-            className="w-full mt-2"
-            onClick={handleClick()}
+            className="w-full mt-4"
+            onClick={navigateToAddNewUser()}
           >
             Add New User
           </Button>

@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { useStateContext } from "@/contexts/ContextProvider";
-import axiosClient from "@/services/axios-client";
+import axiosClient from "@/services/axiosClient";
 import { AlertCircle, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,7 @@ export default function ProfileScreen() {
         const message = `${error.response.data.message}. Please refresh the page.`;
         // setErrorMessage(message);
         toast.error(message);
+        setToken(null);
       } else {
         // setErrorMessage("Something went wrong, please try again later");
         const message = "Something went wrong, please try again later";

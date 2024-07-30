@@ -7,16 +7,16 @@ export default function ProfileHeaderUser({ user }) {
       <div className="flex w-full">
         <div className="flex items-center">
           <Avatar>
-            <AvatarImage src={user.profilePicture} />
+            <AvatarImage src={user.avatar} />
             <AvatarFallback>
-              {user.fullname.slice(0, 2).toUpperCase()}
+              {user.full_name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="ml-4">
             <h2 className="text-sm font-sans font-bold text-black">
-              {user.fullname}
+              {user.full_name}
             </h2>
-            <Badge variant="outline">{user.role}</Badge>
+            <Badge variant="outline">{user.role.name}</Badge>
           </div>
         </div>
       </div>

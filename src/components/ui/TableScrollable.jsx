@@ -27,16 +27,16 @@ export default function TableScrollable({ data, heightTable }) {
               </TableRow>
             </TableHeader>
             <TableBody className="bg-white">
-              {data.map((item, index) => (
-                <TableRow key={item}>
+              {data.map((user, index) => (
+                <TableRow key={user.id}>
                   <TableCell className="px-4 font-medium">
                     {index + 1}
                   </TableCell>
                   <TableCell className="pr-4">
                     <Avatar>
-                      <AvatarImage src={item.profilePicture} />
+                      <AvatarImage src={user.avatar} />
                       <AvatarFallback>
-                        {item.fullname.slice(0, 2).toUpperCase()}
+                        {user.full_name.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </TableCell>
@@ -45,9 +45,9 @@ export default function TableScrollable({ data, heightTable }) {
                       <div className="flex items-center">
                         <div className="">
                           <h2 className="text-sm font-sans font-bold text-black break-all">
-                            {item.fullname}
+                            {user.full_name}
                           </h2>
-                          <Badge variant="default">{item.userCode}</Badge>
+                          <Badge variant="default">{user.user_code}</Badge>
                         </div>
                       </div>
                     </div>
