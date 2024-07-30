@@ -4,6 +4,7 @@ import SplashScreen from "./pages/SplashScreen";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routers/router";
 import { ContextProvider } from "./contexts/ContextProvider";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -21,6 +22,7 @@ function App() {
   return (
     <>
       <div className="w-full h-full">
+        <SpeedInsights />
         {loading ? (
           <SplashScreen />
         ) : (
