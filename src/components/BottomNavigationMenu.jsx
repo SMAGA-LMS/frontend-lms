@@ -1,13 +1,13 @@
 import IconMenu from "./ui/IconMenu";
 import ItemMenuWithLabel from "./ui/ItemMenuWithLabel";
-import ItemsBottomNavigation from "../data/ItemsBottomNavigation";
+
 import { NavLink } from "react-router-dom";
 
-export default function BottomNavigationMenu() {
+export default function BottomNavigationMenu({ itemsBottomNavigation }) {
   return (
     <>
-      <div className="fixed inset-x-0 bottom-0 flex flex-row w-full py-4 bg-white shadow-2xl border-t border-gray-200">
-        {ItemsBottomNavigation.map((item) => (
+      <div className="fixed inset-x-0 bottom-0 flex flex-row justify-center w-ful py-2 bg-white shadow-2xl border-t border-gray-200">
+        {itemsBottomNavigation.map((item) => (
           <NavLink
             className={({ isActive, isPending }) =>
               isActive ? "active" : isPending ? "pending" : "inactive"
