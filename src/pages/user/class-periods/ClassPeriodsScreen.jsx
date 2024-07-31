@@ -20,7 +20,7 @@ import { toast } from "sonner";
 
 export default function ClassPeriodsScreen() {
   const pageTitle = "Class Period List";
-  const heightTable = "h-[48vh]";
+  const heightTable = "h-[40vh]";
 
   const [loading, setLoading] = useState(false);
   const [classPeriods, setClassPeriods] = useState([]);
