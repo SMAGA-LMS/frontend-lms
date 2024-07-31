@@ -47,7 +47,7 @@ export default function ProfileScreen() {
     }
   }
 
-  useEffect(() => {}, [errorMessage]);
+  // useEffect(() => {}, [errorMessage]);
 
   function handleLogout(e) {
     e.preventDefault();

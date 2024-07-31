@@ -100,7 +100,7 @@ export default function UserListScreen() {
             </div>
             <div className="mb-4">
               <SearchInputButton
-                placeholderText="type user name or user code ..."
+                placeholderText="type user name"
                 handleSearch={handleSearchUser}
               />
             </div>
