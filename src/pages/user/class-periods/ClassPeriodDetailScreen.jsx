@@ -84,6 +84,9 @@ export default function ClassPeriodDetailScreen() {
               size="icon"
               variant="ghost"
               className="hover:bg-smagaLMS-green"
+              onClickAction={() => {
+                toast.info("Fitur ini belum tersedia");
+              }}
             >
               <EditIcon size={20} className="text-white " />
             </ButtonWithIcon>
