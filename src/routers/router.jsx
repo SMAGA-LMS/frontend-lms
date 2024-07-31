@@ -79,7 +79,7 @@ export const router = createBrowserRouter([
             element: <AddNewClassPeriodScreen />,
           },
           {
-            path: "detail",
+            path: ":classPeriodCode",
             children: [
               {
                 index: true,

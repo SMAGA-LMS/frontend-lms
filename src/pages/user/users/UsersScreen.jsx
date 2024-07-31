@@ -1,6 +1,5 @@
 import HeaderPageWithBackButton from "@/components/HeaderPageWithBackButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TableWithSearchFeature from "@/components/TableWithSearchFeature";
 import { Button } from "@/components/ui/button";
 import SearchInputButton from "@/components/SearchInputButton";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,6 @@ export default function UserListScreen() {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [virtualUsers, setVirtualUsers] = useState([]);
-  // const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     getUsersData(UserRolesEnum.STUDENT);
@@ -38,32 +36,6 @@ export default function UserListScreen() {
       setLoading(false);
     }
   }
-
-  // async function getTeachersData() {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosClient.get("/users/teachers");
-  //     setUsers(response.data.data);
-  //     setVirtualUsers(response.data.data);
-  //   } catch (error) {
-  //     toast.error("Failed to fetch data");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  // async function getAdminsData() {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosClient.get("/users/admins");
-  //     setUsers(response.data.data);
-  //     setVirtualUsers(response.data.data);
-  //   } catch (error) {
-  //     toast.error("Failed to fetch data");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   function generateSkeletonList() {
     return (

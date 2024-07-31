@@ -1,7 +1,7 @@
 import CardUserItem from "@/components/CardUserItem";
 import HeaderPageWithBackButton from "@/components/HeaderPageWithBackButton";
 import SearchInputButton from "@/components/SearchInputButton";
-import TableWithSearchFeature from "@/components/TableWithSearchFeature";
+import TableWithActionFeature from "@/components/TableWithActionFeature";
 import {
   Accordion,
   AccordionContent,
@@ -119,7 +119,7 @@ export default function AddNewStudentToClassPeriodScreen() {
     <>
       <HeaderPageWithBackButton pageTitle={pageTitle} />
       <div className="mx-4">
-        <TableWithSearchFeature
+        <TableWithActionFeature
           dataTable={students}
           heightTable={heightTable}
           id="sticky-table"
@@ -127,7 +127,7 @@ export default function AddNewStudentToClassPeriodScreen() {
           <div className="mb-4">
             <SearchInputButton placeholderText="type teacher name ..." />
           </div>
-        </TableWithSearchFeature>
+        </TableWithActionFeature>
         <div>
           <Accordion type="single" collapsible className="">
             <AccordionItem value="item-1">
