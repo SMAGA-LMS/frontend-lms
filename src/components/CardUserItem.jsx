@@ -1,7 +1,5 @@
-import { MoreHorizontalIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import ButtonWithIcon from "./ui/ButtonWithIcon";
 
 export default function CardUserItem({
   user,
@@ -10,6 +8,13 @@ export default function CardUserItem({
   defaultBadgeStyle,
   children,
 }) {
+  const defaultUser = {
+    full_name: "Dummy Teacher",
+    user_code: "DT",
+    avatar: null,
+  };
+
+  const displayUser = user || defaultUser;
   return (
     <>
       <div
@@ -17,18 +22,19 @@ export default function CardUserItem({
       >
         <div className="flex items-center">
           <Avatar>
-            <AvatarImage src={user.profilePicture} />
+            <AvatarImage src={displayUser.avatar} />
             <AvatarFallback>
-              {user.fullname.slice(0, 2).toUpperCase()}
+              {displayUser.full_name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="ml-4">
             <h2 className={`text-sm font-sans font-bold ${textFullnameColor}`}>
-              {user.fullname}
+              {displayUser.full_name}
             </h2>
-            <Badge variant={defaultBadgeStyle}>{user.userCode}</Badge>
+            <Badge variant={defaultBadgeStyle}>{displayUser.user_code}</Badge>
           </div>
         </div>
+
         <div className="text-right">{children}</div>
       </div>
     </>

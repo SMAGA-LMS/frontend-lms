@@ -4,12 +4,9 @@ import IconMenu from "@/components/ui/IconMenu";
 
 import iconEnrolledCourses from "../../../assets/icons/enrolled-courses.svg";
 import ProfileHeaderUser from "@/components/ProfileHeaderUser";
-import { useEffect, useState } from "react";
 import { useStateContext } from "@/contexts/ContextProvider";
-import axiosClient from "@/services/axiosClient";
 import ThumbnailWithFooter from "@/components/ui/ThumbnailWithFooter";
 import thumbnailStudents from "@/assets/images/thumbnail-students.svg";
-import { Separator } from "@/components/ui/separator";
 
 export default function HomeScreen() {
   const { currentUser } = useStateContext();

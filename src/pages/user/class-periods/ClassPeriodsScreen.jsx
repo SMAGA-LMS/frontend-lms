@@ -1,31 +1,9 @@
 import CardClassItem from "@/components/CardClassItem";
 import HeaderPageWithBackButton from "@/components/HeaderPageWithBackButton";
 import SearchInputButton from "@/components/SearchInputButton";
+import BasicSkelenton from "@/components/ui/BasicSkelenton";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
@@ -35,35 +13,58 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { useState } from "react";
+import axiosClient from "@/services/axiosClient";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function ClassPeriodsScreen() {
   const pageTitle = "Class Period List";
-  const numberOfClasses = new Array(10).fill(0);
-  const classPeriod = {
-    name: "Class 1",
-    class_period_code: "CP-001",
-    students: [],
-  };
-
   const heightTable = "h-[48vh]";
 
-  const academicTerms = [
-    {
-      value: "2023/2024",
-      label: "2023/2024",
-    },
-    {
-      value: "2024/2025",
-      label: "2025/2026",
-    },
-    {
-      value: "2025/2026",
-      label: "2025/2026",
-    },
-  ];
+  const [loading, setLoading] = useState(false);
+  const [classPeriods, setClassPeriods] = useState([]);
+
+  const [academicTerms, setAcademicTerms] = useState([]);
+  const [selectedAcademicTerm, setSelectedAcademicTerm] = useState(null);
+
+  useEffect(() => {
+    async function getAcademicTerms() {
+      setLoading(true);
+      try {
+        const response = await axiosClient.get("/academic-terms");
+        setAcademicTerms(response.data.data);
+        setSelectedAcademicTerm(response.data.data[0].id);
+      } catch (error) {
+        toast.error("Failed to fetch academic terms");
+      } finally {
+        setLoading(false);
+      }
+    }
+    getAcademicTerms();
+  }, []);
+
+  useEffect(() => {
+    if (selectedAcademicTerm) {
+      getClassPeriods(selectedAcademicTerm);
+    }
+    // getClassPeriods(selectedAcademicTerm);
+  }, [selectedAcademicTerm]);
+
+  async function getClassPeriods(academicTermId) {
+    setLoading(true);
+    try {
+      const response = await axiosClient.get(
+        `/class-periods?academic_term_id=${academicTermId}`
+      );
+      setClassPeriods(response.data.data);
+      setVirtualClassPeriods(response.data.data);
+    } catch (error) {
+      toast.error("Failed to fetch class periods");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const navigate = useNavigate();
   function handleClick() {
@@ -71,6 +72,32 @@ export default function ClassPeriodsScreen() {
       navigate("/admin/class-periods/new");
     };
   }
+
+  function generateSkeletonList() {
+    return Array.from({ length: 3 }).map((_, index) => (
+      <div className="border rounded-lg my-2" key={index}>
+        <BasicSkelenton loading={loading} additionalClassName="m-2 p-3" />
+      </div>
+    ));
+  }
+
+  const [virtualClassPeriods, setVirtualClassPeriods] = useState([]);
+
+  function handleSearchClassPeriod(value) {
+    if (value === "") {
+      setVirtualClassPeriods(classPeriods);
+      return;
+    }
+
+    const filteredData = virtualClassPeriods.filter((virtualClassPeriod) =>
+      virtualClassPeriod.class_period_name
+        .toLowerCase()
+        .includes(value.toLowerCase())
+    );
+
+    setVirtualClassPeriods(filteredData);
+  }
+
   return (
     <>
       <HeaderPageWithBackButton pageTitle={pageTitle} />
@@ -78,31 +105,58 @@ export default function ClassPeriodsScreen() {
       <div className="mx-4">
         <div className="">
           <Label>Tahun Ajaran</Label>
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Pilih Tahun Ajaran" />
-            </SelectTrigger>
-            <SelectContent>
-              {academicTerms.map((term, index) => (
-                <SelectItem key={index} value={term.value}>
-                  {term.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {loading ? (
+            <BasicSkelenton loading={loading} />
+          ) : (
+            <div>
+              <Select
+                value={selectedAcademicTerm}
+                onValueChange={(value) => setSelectedAcademicTerm(value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Pilih Tahun Ajaran" />
+                </SelectTrigger>
+                <SelectContent>
+                  {academicTerms.map((term, index) => (
+                    <SelectItem key={index} value={term.id}>
+                      {term.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
         <div>
           <div className="mb-2">
-            <SearchInputButton placeholderText="Search class" />
+            <SearchInputButton
+              placeholderText="Search Class Period"
+              handleSearch={handleSearchClassPeriod}
+            />
           </div>
-          <ScrollArea className={`${heightTable} rounded-md`}>
-            {numberOfClasses.map((_, index) => (
-              <Link to="/admin/class-periods/detail" key={index}>
-                <CardClassItem key={index} classPeriod={classPeriod} />
-              </Link>
-            ))}
-            <ScrollBar orientation="vertical" />
-          </ScrollArea>
+          {loading ? (
+            generateSkeletonList()
+          ) : (
+            <div>
+              <Separator className="my-3" />
+              <div className="my-3">
+                <Label className="font-semibold">
+                  Total Kelas: {virtualClassPeriods.length}
+                </Label>
+              </div>
+              <ScrollArea className={`${heightTable} rounded-md`}>
+                {virtualClassPeriods.map((classPeriod, index) => (
+                  <Link
+                    to={`/admin/class-periods/${classPeriod.class_period_code}`}
+                    key={index}
+                  >
+                    <CardClassItem key={index} data={classPeriod} />
+                  </Link>
+                ))}
+                <ScrollBar orientation="vertical" />
+              </ScrollArea>
+            </div>
+          )}
         </div>
         <div>
           <Button

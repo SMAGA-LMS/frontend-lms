@@ -13,7 +13,9 @@ export default function SearchInputButton({ placeholderText, handleSearch }) {
     setSearchValue(event.target.value);
   }
 
-  function handleClickButton() {
+  function handleClickButton(event) {
+    event.preventDefault();
+    console.log("searchValue", searchValue);
     handleSearch(searchValue);
   }
 

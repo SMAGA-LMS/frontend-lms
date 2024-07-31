@@ -1,4 +1,3 @@
-import { MoreHorizontalIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import {
@@ -9,10 +8,33 @@ import {
   TableHeader,
   TableRow,
 } from "./table";
-import ButtonWithIcon from "./ButtonWithIcon";
 import { Badge } from "./badge";
+import { useEffect, useState } from "react";
 
-export default function TableScrollable({ data, heightTable }) {
+export default function TableScrollable({
+  data,
+  heightTable,
+  handleSelectedItem,
+  resetSelected,
+  children,
+}) {
+  const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    if (resetSelected === true) {
+      setSelected(null);
+    }
+  }, [resetSelected]);
+
+  // useEffect(() => {
+  //   console.log("selected id test: ", selected);
+  // }, [selected]);
+
+  function handleSelectedRow(id) {
+    handleSelectedItem(id);
+    console.log("selected id: ", id, "selected ", selected);
+  }
+
   return (
     <>
       <div className="">
@@ -28,7 +50,16 @@ export default function TableScrollable({ data, heightTable }) {
             </TableHeader>
             <TableBody className="bg-white">
               {data.map((user, index) => (
-                <TableRow key={user.id}>
+                <TableRow
+                  key={user.id}
+                  className={selected === user.id ? "bg-blue-300" : ""}
+                  onClickAction={(e) => {
+                    e.preventDefault();
+                    setSelected(user.id);
+                    handleSelectedRow(user.id);
+                    console.log("selected id: ", selected);
+                  }}
+                >
                   <TableCell className="px-4 font-medium">
                     {index + 1}
                   </TableCell>
@@ -54,9 +85,14 @@ export default function TableScrollable({ data, heightTable }) {
                   </TableCell>
                   <TableCell className="pr-4 text-right">
                     <div>
-                      <ButtonWithIcon size="icon" variant="ghost">
-                        <MoreHorizontalIcon size={16} />
-                      </ButtonWithIcon>
+                      {/* <ButtonWithIcon
+                        size="icon"
+                        variant="ghost"
+                        type="button"
+                        onClickAction={(e) => handleSelectItem(e, user.id)}
+                      >
+                        {children}
+                      </ButtonWithIcon> */}
                     </div>
                   </TableCell>
                 </TableRow>

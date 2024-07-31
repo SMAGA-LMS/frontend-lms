@@ -46,6 +46,7 @@ export default function LoginScreen() {
       } else {
         toast.error("Something went wrong, please try again later");
       }
+    } finally {
       setLoading(false);
     }
   }
@@ -115,16 +116,6 @@ export default function LoginScreen() {
             </div>
             {errors && (
               <div className="text-red-500 text-sm text-center">
-                {/* {Object.keys(errors).map((key) =>
-                  Array.isArray(errors[key]) ? (
-                    errors[key].map((error, index) => (
-                      <p key={`${key}-${index}`}>{error}</p>
-                    ))
-                  ) : (
-                    <p key={key}>{errors}</p>
-                  )
-                )} */}
-
                 {Object.keys(errors).map((key) => (
                   <p key={key}>{errors[key]}</p>
                 ))}
