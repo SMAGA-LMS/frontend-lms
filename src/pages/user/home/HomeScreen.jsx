@@ -7,6 +7,7 @@ import ProfileHeaderUser from "@/components/ProfileHeaderUser";
 import { useStateContext } from "@/contexts/ContextProvider";
 import ThumbnailWithFooter from "@/components/ui/ThumbnailWithFooter";
 import thumbnailStudents from "@/assets/images/thumbnail-students.svg";
+import { toast } from "sonner";
 
 export default function HomeScreen() {
   const { currentUser } = useStateContext();
@@ -42,11 +43,17 @@ export default function HomeScreen() {
       </div>
       <div className="mx-4">
         <div className="mt-5 flex justify-center w-full">
-          <ItemMenuWithLabel label="Enrolled Courses">
-            <IconMenuWithBackground color="smagaLMS-gray">
-              <IconMenu icon={iconEnrolledCourses} />
-            </IconMenuWithBackground>
-          </ItemMenuWithLabel>
+          <button
+            onClick={() => {
+              toast.info("Fitur ini belum tersedia");
+            }}
+          >
+            <ItemMenuWithLabel label="Enrolled Courses">
+              <IconMenuWithBackground color="smagaLMS-gray">
+                <IconMenu icon={iconEnrolledCourses} />
+              </IconMenuWithBackground>
+            </ItemMenuWithLabel>
+          </button>
         </div>
       </div>
     </>
