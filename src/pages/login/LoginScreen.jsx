@@ -44,7 +44,9 @@ export default function LoginScreen() {
       if (error.response) {
         setErrors(error.response.data.errors);
       } else {
-        toast.error("Something went wrong, please try again later");
+        toast.error(
+          "Server backend lagi ga aktif nih. Mohon kontak author atau coba lagi nanti ya!"
+        );
       }
     } finally {
       setLoading(false);
