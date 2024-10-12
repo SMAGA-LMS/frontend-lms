@@ -10,8 +10,12 @@ import { ButtonLoading } from "@/components/global/ButtonLoading";
 import { useStateContext } from "@/contexts/ContextProvider";
 import { toast } from "sonner";
 import { UserDto } from "@/components/users/users";
+import { BaseResponseAPIDto } from "@/services/apis/baseResponseAPI";
+import { LoginResponseDto } from "@/services/apis/auth/loginResponse";
+import authService from "@/services/apis/auth/authService";
+import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 
-interface FormData {
+export interface FormData {
   username: string;
   password: string;
   deviceName?: string;
@@ -24,7 +28,7 @@ export default function LoginPage() {
     username: "",
     password: "",
   });
-  const [errors, setErrors] = useState<string[] | null>(null);
+  const [errors, setErrors] = useState<Errors | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const { setCurrentUser, setToken } = useStateContext() as {
     setCurrentUser: (user: UserDto | null) => void;
@@ -35,43 +39,36 @@ export default function LoginPage() {
     setPasswordVisible(!passwordVisible);
   }
 
-  function handleChange(e) {
-    const { name, value } = e.target;
+  function handleChange(event) {
+    const { name, value } = event.target;
     formDataRef.current[name] = value;
   }
 
-  async function login(payload: FormData) {
-    setLoading(true);
-    try {
-      const response = await axiosClient.post("/auth/login", payload);
-      setLoading(false);
-      setCurrentUser(response.data.data.user);
-      setToken(response.data.data.token);
-      toast.success(response.data.message);
-
-      navigate("/admin");
-    } catch (error) {
-      if (error.response) {
-        setErrors(error.response.data.errors);
-      } else {
-        toast.error(
-          "Server backend lagi ga aktif nih. Mohon kontak author atau coba lagi nanti ya!"
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
 
     const payload: FormData = {
       username: formDataRef.current.username,
       password: formDataRef.current.password,
       deviceName: navigator.userAgent,
     };
-    login(payload);
+
+    setLoading(true);
+    const response = await authService.login(payload);
+    setLoading(false);
+
+    if (response.success && response.data) {
+      const { user, token } = response.data;
+
+      setCurrentUser(user);
+      setToken(token);
+      toast.success(response.message);
+
+      navigate("/home");
+    } else {
+      setErrors(response.errors);
+      toast.error(response.message);
+    }
   }
 
   return (
@@ -126,13 +123,7 @@ export default function LoginPage() {
                 </div>
               </InputWithLabel>
             </div>
-            {errors && (
-              <div className="text-red-500 text-sm text-center">
-                {Object.keys(errors).map((key) => (
-                  <p key={key}>{errors[key]}</p>
-                ))}
-              </div>
-            )}
+            {errors && <ErrorDisplay errors={errors} />}
           </div>
           <div>
             {loading ? (

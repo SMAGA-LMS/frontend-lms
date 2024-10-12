@@ -2,7 +2,7 @@ interface ThumbnailWithFooterProps {
   image: string;
   footerText: string;
   isHScreen?: string;
-  sizeText: string;
+  sizeText?: string;
 }
 
 function ThumbnailWithFooter({

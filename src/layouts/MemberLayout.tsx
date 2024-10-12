@@ -16,10 +16,14 @@ export default function MemberLayout() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  if (!token) {
-    navigate("/login");
-    return;
-  }
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+    // TODO: tambahin fetch authMe
+    console.log("MemberLayout mounted");
+  }, []);
 
   // useEffect(() => {
   //   if (!token) {
@@ -77,17 +81,4 @@ export default function MemberLayout() {
       </WithToaster>
     </>
   );
-
-  // setCurrentUser({});
-  // localStorage.removeItem("ACCESS_TOKEN");
-  // return <Navigate to="/login" />;
-
-  // return (
-  //   <>
-  //     <div>
-  //       <Outlet />
-  //       <Toaster position="bottom-center" richColors closeButton />
-  //     </div>
-  //   </>
-  // );
 }

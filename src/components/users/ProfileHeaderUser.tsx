@@ -14,12 +14,12 @@ export default function ProfileHeaderUser({ user }: ProfileHeaderUserProps) {
           <Avatar>
             <AvatarImage src={user.avatar} />
             <AvatarFallback>
-              {user.fullName.slice(0, 2).toUpperCase()}
+              {user.name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="ml-4">
             <h2 className="text-sm font-sans font-bold text-black">
-              {user.fullName}
+              {user.name}
             </h2>
             <Badge variant="outline">{user.role}</Badge>
           </div>

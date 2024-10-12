@@ -1,5 +1,5 @@
 export default interface Model {
-  id: string;
-  createdAt: Date;
-  updatedAt?: Date;
+  id: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

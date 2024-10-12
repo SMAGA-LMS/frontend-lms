@@ -23,17 +23,27 @@ interface ContextProviderProps {
 }
 
 export function ContextProvider({ children }: ContextProviderProps) {
-  const [currentUser, setCurrentUser] = useState<UserDto | null>({
-    id: "1",
-    createdAt: new Date(),
-    fullName: "Syauqi",
-    role: UserRolesEnum.ADMIN,
-  });
+  // const [currentUser, setCurrentUser] = useState<UserDto | null>({
+  //   id: 1,
+  //   name: "Admin",
+  //   username: "admin",
+  //   role: UserRolesEnum.ADMIN,
+  //   avatar: "https://avatars.githubusercontent.com/u/22588967?v=4",
+  // });
+  const [currentUser, setCurrentUser] = useState<UserDto | null>(null);
 
-  const [token, setToken] = useState<string | null>(
-    // localStorage.getItem("ACCESS_TOKEN")
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2MzIwNjYwNzIsImV4cCI6MTYzMjA2NjA3Mn0.1"
+  const [token, _setToken] = useState<string | null>(
+    localStorage.getItem("ACCESS_TOKEN")
   );
+
+  const setToken = (token: string | null) => {
+    _setToken(token);
+    if (token) {
+      localStorage.setItem("ACCESS_TOKEN", token);
+    } else {
+      localStorage.removeItem("ACCESS_TOKEN");
+    }
+  };
 
   return (
     <StateContext.Provider
