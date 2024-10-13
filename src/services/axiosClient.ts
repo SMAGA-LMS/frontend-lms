@@ -1,7 +1,12 @@
 import axios from "axios";
 
+const isNgrok = import.meta.env.VITE_USE_NGROK === "true";
+const baseURL = isNgrok
+  ? `${import.meta.env.VITE_NGROK_URL}/api`
+  : `${import.meta.env.VITE_LOCAL_URL}/api`;
+
 const axiosClient = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
+  baseURL,
 });
 
 axiosClient.interceptors.request.use((config) => {
@@ -15,7 +20,9 @@ axiosClient.interceptors.request.use((config) => {
   }
 
   // if enable ngrok for hit api (make sure ngrok is running)
-  config.headers["ngrok-skip-browser-warning"] = true;
+  if (isNgrok) {
+    config.headers["ngrok-skip-browser-warning"] = true;
+  }
 
   return config;
 });
