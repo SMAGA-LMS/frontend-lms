@@ -47,7 +47,7 @@ export default function HomePage() {
           <h1 className="text-smagaLMS-green font-sans font-bold text-center text-xl">
             {getGreeting()}
             <br />
-            {currentUser?.fullName || currentUser.role}!
+            {currentUser?.name || currentUser.role}!
           </h1>
           <ThumbnailWithFooter
             image={thumbnailStudents}

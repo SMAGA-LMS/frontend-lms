@@ -1,54 +1,52 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useStateContext } from "@/contexts/ContextProvider";
-import axiosClient from "@/services/axiosClient";
-import Lottie from "lottie-react";
 import { useEffect, useRef, useState } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { toast, Toaster } from "sonner";
-import waveLoadingAnimation from "@/assets/lotties/wave-loading-animation.json";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import AdminBottomNavLayout from "./admin/AdminBottomNavLayout";
 import WithToaster from "@/components/global/WithToaster";
 import TeacherBottomNavLayout from "./teacher/TeacherBottomNavLayout";
 import StudentBottomNavLayout from "./student/StudentBottomNavLayout";
+import authService from "@/services/apis/auth/authService";
+import Lottie from "lottie-react";
+import waveLoadingAnimation from "@/assets/lotties/wave-loading-animation.json";
 
 export default function MemberLayout() {
-  const { setCurrentUser, token, currentUser } = useStateContext();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { currentUser, setCurrentUser, token, setToken } = useStateContext();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
+  const hasFetchedUser = useRef(false);
 
-  if (!token) {
-    navigate("/login");
-    return;
-  }
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     navigate("/login");
-  //     return;
-  //   }
+    const fetchCurrentUser = async () => {
+      setLoading(true);
+      const response = await authService.me();
+      setLoading(false);
 
-  //   console.log("MemberLayout mounted");
+      if (response.success && response.data) {
+        setCurrentUser(response.data.user);
+      } else {
+        // set timeout to allow toast to show
+        setTimeout(() => {
+          toast.error(response.message);
+          setCurrentUser(null);
+          setToken(null);
+          navigate("/login");
+        }, 1500);
+      }
+    };
 
-  //   async function fetchCurrentUser() {
-  //     try {
-  //       const response = await axiosClient.get("/auth/me");
-  //       if (response.status === 200) {
-  //         setCurrentUser(response.data.data);
-  //       }
-  //     } catch (error) {
-  //       if (error.response && error.response.status === 401) {
-  //         setCurrentUser({});
-  //         localStorage.removeItem("ACCESS_TOKEN");
-  //       } else {
-  //         toast.error("Something went wrong, please try again later");
-  //       }
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   fetchCurrentUser();
-  // }, [token, navigate, setCurrentUser]);
+    if (!hasFetchedUser.current) {
+      fetchCurrentUser();
+      hasFetchedUser.current = true;
+    }
+  }, [navigate, setCurrentUser, setToken, token]);
 
   if (loading) {
     return (
@@ -77,17 +75,4 @@ export default function MemberLayout() {
       </WithToaster>
     </>
   );
-
-  // setCurrentUser({});
-  // localStorage.removeItem("ACCESS_TOKEN");
-  // return <Navigate to="/login" />;
-
-  // return (
-  //   <>
-  //     <div>
-  //       <Outlet />
-  //       <Toaster position="bottom-center" richColors closeButton />
-  //     </div>
-  //   </>
-  // );
 }

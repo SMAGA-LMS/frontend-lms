@@ -14,6 +14,7 @@ interface ButtonWithIconProps {
     | null;
   size?: "default" | "sm" | "lg" | "icon" | null;
   className?: string;
+  type?: "submit" | "reset" | "button";
   onClickAction?: (event: any) => void;
 }
 
@@ -22,6 +23,7 @@ export default function ButtonWithIcon({
   variant,
   size,
   className,
+  type,
   onClickAction,
 }: ButtonWithIconProps) {
   return (
@@ -30,6 +32,7 @@ export default function ButtonWithIcon({
         variant={variant}
         size={size}
         className={`${className}`}
+        type={type}
         onClick={onClickAction}
       >
         {children}
