@@ -5,13 +5,10 @@ import { Label } from "@/components/ui/label";
 import { LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import axiosClient from "@/services/axiosClient";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import { useStateContext } from "@/contexts/ContextProvider";
 import { toast } from "sonner";
 import { UserDto } from "@/components/users/users";
-import { BaseResponseAPIDto } from "@/services/apis/baseResponseAPI";
-import { LoginResponseDto } from "@/services/apis/auth/loginResponse";
 import authService from "@/services/apis/auth/authService";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 
