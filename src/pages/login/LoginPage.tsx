@@ -8,7 +8,6 @@ import { useRef, useState } from "react";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import { useStateContext } from "@/contexts/ContextProvider";
 import { toast } from "sonner";
-import { UserDto } from "@/components/users/users";
 import authService from "@/services/apis/auth/authService";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 
@@ -27,10 +26,7 @@ export default function LoginPage() {
   });
   const [errors, setErrors] = useState<Errors | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { setCurrentUser, setToken } = useStateContext() as {
-    setCurrentUser: (user: UserDto | null) => void;
-    setToken: (token: string | null) => void;
-  };
+  const { setCurrentUser, setToken } = useStateContext();
 
   function handleTogglePasswordVisibility() {
     setPasswordVisible(!passwordVisible);
@@ -95,6 +91,7 @@ export default function LoginPage() {
                   placeholder="Username"
                   className="bg-smagaLMS-soft-white"
                   onChange={handleChange}
+                  required
                 />
               </InputWithLabel>
             </div>
@@ -109,6 +106,7 @@ export default function LoginPage() {
                     placeholder="Password"
                     className="bg-smagaLMS-soft-white"
                     onChange={handleChange}
+                    required
                   />
                   <button
                     type="button"
@@ -134,7 +132,7 @@ export default function LoginPage() {
                 variant="smagaLMSGreen"
                 size="lg"
                 className="w-full rounded-lg"
-                // type="submit"
+                type="submit"
               >
                 <LogIn className="mr-2" />
                 <Label className="font-sans font-bold text-base mr-4">

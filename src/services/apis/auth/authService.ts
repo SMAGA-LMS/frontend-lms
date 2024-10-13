@@ -5,8 +5,7 @@ import { BaseResponseAPIDto } from "@/services/apis/baseResponseAPI";
 import { FormData } from "@/pages/login/LoginPage";
 import { LoginResponseDto } from "./loginResponse";
 import { authResponseDto } from "./authResponse";
-
-type Response<T> = BaseResponseAPIDto<T>;
+import { AxiosError } from "axios";
 
 const authService = {
   login: async (
@@ -14,24 +13,34 @@ const authService = {
   ): Promise<BaseResponseAPIDto<LoginResponseDto>> => {
     try {
       const response = await axiosClient.post("/auth/login", payload);
-      console.log("response: ", response);
+      // success
       return response.data;
     } catch (error: any) {
       console.log("error: ", error);
-      if (error.response) {
-        return error.response.data;
-      } else {
-        const errorMessage =
-          "Server backend lagi ga aktif nih. Mohon kontak author atau coba lagi nanti ya!";
-        const responseData: Response<LoginResponseDto> = {
+
+      const axiosError: AxiosError<BaseResponseAPIDto<LoginResponseDto>> =
+        error;
+      // error no response (network error/ server down)
+      if (!axiosError.response) {
+        return {
           success: false,
-          message: errorMessage,
-          errors: {
-            general: [error.message],
-          },
+          message:
+            "Backend server is not active. Please contact the author or try again later!",
+          errors: { general: [error.message] },
         };
-        return responseData;
       }
+
+      // error has response (response defined by Laravel, usually database error)
+      if (axiosError.response && axiosError.response.status === 500) {
+        return {
+          success: false,
+          message: axiosError.response.statusText,
+          errors: { general: [axiosError.response.statusText] },
+        };
+      }
+
+      // error has response (response defined by our backend controller api resource)
+      return axiosError.response.data;
     }
   },
 
@@ -41,7 +50,7 @@ const authService = {
       return response.data;
     } catch (error) {
       console.log("error: ", error);
-      let responseData: Response<null> = {
+      let responseData: BaseResponseAPIDto<null> = {
         success: false,
         message: "",
         errors: {},
@@ -52,10 +61,16 @@ const authService = {
         responseData.message = errorMessage;
       }
 
-      if (!error.response) {
-        const errorMessage = "Something went wrong, please try again later";
+      if (error.response && error.response.status === 500) {
+        const errorMessage = error.response.statusText;
         responseData.message = errorMessage;
-        responseData.errors = error.response.data.data.errors;
+      }
+
+      if (!error.response) {
+        const errorMessage =
+          "Backend server is not active. Please contact the author or try again later!";
+        responseData.message = errorMessage;
+        responseData.errors = { general: [error.message] };
       }
 
       return responseData;
@@ -69,7 +84,7 @@ const authService = {
       return response.data;
     } catch (error: any) {
       console.log("error: ", error);
-      let responseData: Response<authResponseDto> = {
+      let responseData: BaseResponseAPIDto<authResponseDto> = {
         success: false,
         message: "",
         errors: {},
@@ -80,10 +95,16 @@ const authService = {
         responseData.message = errorMessage;
       }
 
-      if (!error.response) {
-        const errorMessage = "Something went wrong, please try again later";
+      if (error.response && error.response.status === 500) {
+        const errorMessage = error.response.statusText;
         responseData.message = errorMessage;
-        responseData.errors = error.response.data.data.errors;
+      }
+
+      if (!error.response) {
+        const errorMessage =
+          "Backend server is not active. Please contact the author or try again later!";
+        responseData.message = errorMessage;
+        responseData.errors = { general: [error.message] };
       }
 
       return responseData;

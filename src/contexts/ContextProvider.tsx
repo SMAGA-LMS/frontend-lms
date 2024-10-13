@@ -1,5 +1,4 @@
 import { UserDto } from "@/components/users/users";
-import UserRolesEnum from "@/enums/UserRoleEnum";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface StateContextType {
@@ -23,13 +22,6 @@ interface ContextProviderProps {
 }
 
 export function ContextProvider({ children }: ContextProviderProps) {
-  // const [currentUser, setCurrentUser] = useState<UserDto | null>({
-  //   id: 1,
-  //   name: "Admin",
-  //   username: "admin",
-  //   role: UserRolesEnum.ADMIN,
-  //   avatar: "https://avatars.githubusercontent.com/u/22588967?v=4",
-  // });
   const [currentUser, setCurrentUser] = useState<UserDto | null>(null);
 
   const [token, _setToken] = useState<string | null>(
