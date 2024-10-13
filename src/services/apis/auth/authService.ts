@@ -27,8 +27,8 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
   if (axiosError.response && axiosError.response.status === 500) {
     return {
       success: false,
-      message: axiosError.response.statusText,
-      errors: { general: [axiosError.response.statusText] },
+      message: "Internal server error.",
+      errors: { general: ["Internal server error."] },
     };
   }
 
