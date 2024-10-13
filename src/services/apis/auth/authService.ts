@@ -1,17 +1,19 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosClient from "@/services/axiosClient";
-import { toast } from "sonner";
 import { BaseResponseAPIDto } from "@/services/apis/baseResponseAPI";
 import { FormData } from "@/pages/login/LoginPage";
 import { LoginResponseDto } from "./loginResponse";
+import { authResponseDto } from "./authResponse";
 
-interface Response<T> extends BaseResponseAPIDto<T> {}
+type Response<T> = BaseResponseAPIDto<T>;
 
 const authService = {
   login: async (
     payload: FormData
   ): Promise<BaseResponseAPIDto<LoginResponseDto>> => {
     try {
-      const response = await axiosClient.post("/users/login", payload);
+      const response = await axiosClient.post("/auth/login", payload);
       console.log("response: ", response);
       return response.data;
     } catch (error: any) {
@@ -35,11 +37,39 @@ const authService = {
 
   logout: async (): Promise<BaseResponseAPIDto<null>> => {
     try {
-      const response = await axiosClient.post("/users/logout");
+      const response = await axiosClient.post("/auth/logout");
+      return response.data;
+    } catch (error) {
+      console.log("error: ", error);
+      let responseData: Response<null> = {
+        success: false,
+        message: "",
+        errors: {},
+      };
+
+      if (error.response && error.response.status === 401) {
+        const errorMessage = `${error.response.data.message}. Please refresh the page.`;
+        responseData.message = errorMessage;
+      }
+
+      if (!error.response) {
+        const errorMessage = "Something went wrong, please try again later";
+        responseData.message = errorMessage;
+        responseData.errors = error.response.data.data.errors;
+      }
+
+      return responseData;
+    }
+  },
+
+  me: async (): Promise<BaseResponseAPIDto<authResponseDto>> => {
+    try {
+      const response = await axiosClient.get("/auth/me");
+      console.log("response: ", response);
       return response.data;
     } catch (error: any) {
       console.log("error: ", error);
-      let responseData: Response<null> = {
+      let responseData: Response<authResponseDto> = {
         success: false,
         message: "",
         errors: {},
