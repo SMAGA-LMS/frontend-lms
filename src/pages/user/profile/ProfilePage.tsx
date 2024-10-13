@@ -1,73 +1,44 @@
 import ProfileHeaderUser from "@/components/users/ProfileHeaderUser";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/hooks/use-toast";
 import { useStateContext } from "@/contexts/ContextProvider";
-import axiosClient from "@/services/axiosClient";
-import { AlertCircle, LogOut } from "lucide-react";
-import { useEffect, useState } from "react";
+import { LogOut } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { UserDto } from "@/components/users/users";
-import { Errors } from "@/components/global/ErrorDisplay";
 import authService from "@/services/apis/auth/authService";
 
 export default function ProfilePage() {
-  const { currentUser, token } = useStateContext() as {
-    currentUser: UserDto;
-    token: string;
-  };
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [errors, setErrors] = useState<Errors | null>(null);
+  const { currentUser } = useStateContext();
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { setCurrentUser, setToken } = useStateContext() as {
-    setCurrentUser: (user: UserDto | null) => void;
-    setToken: (token: string | null) => void;
-  };
+  const { setCurrentUser, setToken } = useStateContext();
 
-  // async function logout() {
-  //   setLoading(true);
-  //   try {
-  //     const response = await axiosClient.post("/auth/logout");
-  //     if (response.status === 204) {
-  //       setCurrentUser(null);
-  //       setToken(null);
-  //       navigate("/login");
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 401) {
-  //       const message = `${error.response.data.message}. Please refresh the page.`;
-  //       // setErrorMessage(message);
-  //       toast.error(message);
-  //       setToken(null);
-  //     } else {
-  //       // setErrorMessage("Something went wrong, please try again later");
-  //       const message = "Something went wrong, please try again later";
-  //       toast.error(message);
-  //     }
-  //     setLoading(false);
-  //   }
-  // }
+  if (!currentUser) {
+    setToken(null);
+    navigate("/login");
+    return;
+  }
 
   const logout = async () => {
     setLoading(true);
     const response = await authService.logout();
     setLoading(false);
 
-    if (response.success) {
-      setCurrentUser(null);
-      setToken(null);
-      toast.success(response.message);
+    console.log("response: ", response);
 
-      navigate("/login");
+    if (response.success) {
+      // set timeout to allow toast to show
+      toast.success(response.message);
+      setTimeout(() => {
+        setCurrentUser(null);
+        setToken(null);
+        navigate("/login");
+      }, 1000);
     } else {
-      setErrors(response.errors);
       toast.error(response.message);
     }
   };
