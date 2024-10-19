@@ -194,7 +194,6 @@ export default function UsersPage() {
             Add New User
           </Button>
         </div>
-        <div></div>
       </div>
     </>
   );
