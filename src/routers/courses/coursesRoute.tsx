@@ -1,6 +1,8 @@
 import MemberLayout from "@/layouts/MemberLayout";
 import ErrorPage from "@/pages/ErrorPage";
 import CoursesPage from "@/pages/user/courses/CoursesPage";
+import { withRoleBasedRoute } from "../RoleBasedRoute";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 
 const coursesRoute = [
   {
@@ -10,7 +12,11 @@ const coursesRoute = [
     children: [
       {
         index: true,
-        element: <CoursesPage />,
+        element: withRoleBasedRoute(<CoursesPage />, [
+          UserRolesEnum.ADMIN,
+          UserRolesEnum.TEACHER,
+          UserRolesEnum.STUDENT,
+        ]),
       },
     ],
   },
