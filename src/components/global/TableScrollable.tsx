@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
@@ -27,11 +28,11 @@ export default function TableScrollable({
   resetSelected,
   children,
 }: TableScrollableProps) {
-  const [selected, setSelected] = useState<string>("");
+  const [selected, setSelected] = useState<number | null>(null);
 
   useEffect(() => {
     if (resetSelected === true) {
-      setSelected("");
+      setSelected(null);
     }
   }, [resetSelected]);
 
@@ -39,7 +40,7 @@ export default function TableScrollable({
   //   console.log("selected id test: ", selected);
   // }, [selected]);
 
-  function handleSelectedRow(id: string) {
+  function handleSelectedRow(id: number) {
     if (handleSelectedItem) {
       handleSelectedItem(id);
     }
@@ -78,7 +79,7 @@ export default function TableScrollable({
                     <Avatar>
                       <AvatarImage src={user.avatar} />
                       <AvatarFallback>
-                        {user.fullName.slice(0, 2).toUpperCase()}
+                        {user.name.slice(0, 2).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   </TableCell>
@@ -87,9 +88,10 @@ export default function TableScrollable({
                       <div className="flex items-center">
                         <div className="">
                           <h2 className="text-sm font-sans font-bold text-black break-all">
-                            {user.fullName}
+                            {user.name}
                           </h2>
-                          <Badge variant="default">{user.userCode}</Badge>
+                          {/* TODO: maybe change to user code (like NISN or whatever) */}
+                          <Badge variant="default">{user.username}</Badge>
                         </div>
                       </div>
                     </div>
