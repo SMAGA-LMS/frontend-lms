@@ -1,14 +1,9 @@
 import MemberLayout from "@/layouts/MemberLayout";
 import ErrorPage from "@/pages/ErrorPage";
-import RoleBasedRoute from "../RoleBasedRoute";
+import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import UsersPage from "@/pages/user/users/UsersPage";
-import AddNewUserScreen from "@/pages/user/users/AddNewUserPage";
-
-const withRoleBasedRoute = (
-  element: JSX.Element,
-  allowedRoles: UserRolesEnum[]
-) => <RoleBasedRoute allowedRoles={allowedRoles}>{element}</RoleBasedRoute>;
+import AddNewUserPage from "@/pages/user/users/AddNewUserPage";
 
 const usersRoute = [
   {
@@ -22,9 +17,7 @@ const usersRoute = [
       },
       {
         path: "create",
-        element: withRoleBasedRoute(<AddNewUserScreen />, [
-          UserRolesEnum.ADMIN,
-        ]),
+        element: withRoleBasedRoute(<AddNewUserPage />, [UserRolesEnum.ADMIN]),
       },
     ],
   },
