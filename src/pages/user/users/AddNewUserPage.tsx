@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import PopUpCard from "@/components/global/PopUpCard";
 import {
   Select,
   SelectContent,
@@ -19,95 +18,85 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import UserGenderEnum from "@/enums/UserGenderEnum";
 import UserRolesEnum from "@/enums/UserRoleEnum";
-import axiosClient from "@/services/axiosClient";
 import { InfoIcon, Terminal } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { AxiosResponse } from "axios";
+import userService from "@/services/apis/users/userService";
+import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
+
+export interface addNewUserPayload {
+  name: string;
+  username: string;
+  role: string;
+  avatar?: string;
+  password: string;
+}
 
 export default function AddNewUserPage() {
   const pageTitle = "Tambah User";
-  const [roles, setRoles] = useState<UserRolesEnum[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [errors, setErrors] = useState<string[]>([]);
-  const [responseData, setResponseData] = useState<any | null>(null);
 
-  useEffect(() => {
-    async function getRoles() {
-      try {
-        const response = await axiosClient.get("/roles");
-        setRoles(response.data.data);
-      } catch (error) {
-        toast.error("Something went wrong, failed to get data roles");
-      }
-    }
-    getRoles();
-  }, []);
-
-  interface response {
-    message: string;
-    data: {
-      username: string;
-      password: string;
-    };
-  }
-
-  async function addNewUser(payload: formData) {
-    setLoading(true);
-    try {
-      const response = await axiosClient.post("/users", payload);
-      if (response.status === 201) {
-        toast.success(response.data.message);
-        // setIsPopUpDisplayed(true);
-        setResponseData(response.data.data);
-        setFormData(initialFormData);
-        setErrors([]);
-      }
-      toast.success(response.data.message);
-    } catch (error) {
-      if (error.response) {
-        setErrors(error.response.data.errors);
-      } else {
-        toast.error("Something went wrong, failed to add new user");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  interface formData {
-    fullName: string;
-    roleId: string;
-    gender: string;
-    birthDate: string;
-  }
-
-  const initialFormData: formData = {
-    fullName: "",
-    roleId: "",
-    gender: "",
-    birthDate: "",
+  const initialFormData: addNewUserPayload = {
+    name: "",
+    username: "",
+    role: UserRolesEnum.STUDENT,
+    password: "",
   };
 
-  const [formData, setFormData] = useState<formData>(initialFormData);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<Errors | null>(null);
+  const [formData, setFormData] = useState<addNewUserPayload>(initialFormData);
+  const [responseData, setResponseData] = useState<addNewUserPayload | null>(
+    null
+  );
 
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    addNewUser(formData);
+  const roles: string[] = Object.values(UserRolesEnum);
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const username = formData.name.trim().substring(0, 16).toLowerCase();
+    const payload: addNewUserPayload = {
+      name: formData.name,
+      username: username,
+      role: formData.role,
+      password: username,
+    };
+
+    // Conditionally add the avatar field if it has a value
+    if (formData.avatar) {
+      payload.avatar = formData.avatar;
+    }
+
+    setLoading(true);
+    const response = await userService.addNewUser(payload);
+    setLoading(false);
+
+    if (response.success && response.data) {
+      const responseData: addNewUserPayload = {
+        name: response.data.name,
+        username: response.data.username,
+        role: response.data.role,
+        password: response.data.username,
+      };
+
+      setResponseData(responseData);
+      setErrors(null);
+      toast.success(response.message);
+    } else {
+      setErrors(response.errors);
+      toast.error(response.message);
+    }
   }
 
-  function handleStringToInt(val: string): number {
-    return parseInt(val);
-  }
-
-  function handleInputChange(e) {
-    const { name, value } = e.target;
+  function handleInputChange(event) {
+    const { name, value } = event.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+    setResponseData(null);
+    setErrors(null);
   }
 
   return (
@@ -132,8 +121,6 @@ export default function AddNewUserPage() {
                     <ol className="list-decimal ml-4">
                       <li>Nama lengkap</li>
                       <li>Role user yang akan ditambahkan</li>
-                      <li>Gender</li>
-                      <li>Tanggal lahir</li>
                     </ol>
                     <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
                       Username dan password akan dibuatkan secara otomatis,
@@ -146,15 +133,15 @@ export default function AddNewUserPage() {
           </div>
           <div className="grid gap-4 py-4 rounded-lg">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullName" className="text-right">
+              <Label htmlFor="name" className="text-right">
                 Nama Lengkap
               </Label>
               <Input
-                id="fullName"
-                name="fullName"
+                id="name"
+                name="name"
                 placeholder="M. Syauqi Frizman"
                 className="col-span-2"
-                value={formData.fullName}
+                value={formData.name}
                 onChange={handleInputChange}
               />
             </div>
@@ -168,8 +155,8 @@ export default function AddNewUserPage() {
                   onValueChange={(val) => {
                     const event = {
                       target: {
-                        name: "role_id",
-                        value: handleStringToInt(val),
+                        name: "role",
+                        value: val,
                       },
                     };
                     handleInputChange(event);
@@ -188,56 +175,8 @@ export default function AddNewUserPage() {
                 </Select>
               </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="gender" className="text-right">
-                Gender
-              </Label>
-              <div className="col-span-2">
-                <Select
-                  onValueChange={(val) => {
-                    const event = {
-                      target: {
-                        name: "gender",
-                        value: val,
-                      },
-                    };
-                    handleInputChange(event);
-                  }}
-                >
-                  <SelectTrigger className="w-full" id="gender" name="gender">
-                    <SelectValue placeholder="Pilih Gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={`${UserGenderEnum.MALE}`}>
-                      MALE
-                    </SelectItem>
-                    <SelectItem value={`${UserGenderEnum.FEMALE}`}>
-                      FEMALE
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="birth_date" className="text-right">
-                Tanggal Lahir
-              </Label>
-              <Input
-                id="birth_date"
-                name="birth_date"
-                type="date"
-                className="col-span-2"
-                onChange={handleInputChange}
-              />
-            </div>
           </div>
-          {errors && (
-            <div className="text-red-500 text-sm text-center my-2">
-              {Object.keys(errors).map((key) => (
-                <p key={key}>{errors[key]}</p>
-              ))}
-            </div>
-          )}
+          {errors && <ErrorDisplay errors={errors} />}
           {responseData && (
             <div>
               <p className="text-center py-1 italic">
@@ -246,7 +185,7 @@ export default function AddNewUserPage() {
               <p className="p-4 bg-green-200 rounded-lg mb-4 font-bold italic">
                 Username: {responseData.username}
                 <br />
-                Password: {responseData.username}
+                Password: {responseData.password}
               </p>
             </div>
           )}
@@ -268,34 +207,20 @@ export default function AddNewUserPage() {
                         <div className="grid gap-2 py-2 rounded-lg">
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label
-                              htmlFor="fullName"
+                              htmlFor="name"
                               className="text-right col-span-1"
                             >
                               Nama Lengkap
                             </Label>
                             <div className="col-span-2 text-wrap">
-                              {formData.fullName}
+                              {formData.name}
                             </div>
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="role" className="text-right">
                               Role
                             </Label>
-                            <div className="col-span-2">{formData.roleId}</div>
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="gender" className="text-right">
-                              Gender
-                            </Label>
-                            <div className="col-span-2">{formData.gender}</div>
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="birth_date" className="text-right">
-                              Tanggal Lahir
-                            </Label>
-                            <div className="col-span-2">
-                              {formData.birthDate}
-                            </div>
+                            <div className="col-span-2">{formData.role}</div>
                           </div>
                         </div>
                       </AlertDescription>
