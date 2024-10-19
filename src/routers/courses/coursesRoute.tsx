@@ -3,6 +3,7 @@ import ErrorPage from "@/pages/ErrorPage";
 import CoursesPage from "@/pages/user/courses/CoursesPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
+import CourseDetailPage from "@/pages/user/courses/CourseDetailPage";
 
 const coursesRoute = [
   {
@@ -13,6 +14,14 @@ const coursesRoute = [
       {
         index: true,
         element: withRoleBasedRoute(<CoursesPage />, [
+          UserRolesEnum.ADMIN,
+          UserRolesEnum.TEACHER,
+          UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: ":id",
+        element: withRoleBasedRoute(<CourseDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,

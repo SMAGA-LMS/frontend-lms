@@ -25,11 +25,11 @@ export default function CardUserItem({
   children,
 }: CardUserItemProps) {
   const defaultUser: UserDto = {
-    fullName: "Dummy Teacher",
-    userCode: "DT",
+    id: 1234,
+    name: "Dummy Teacher",
+    username: "dummyteacher",
     role: UserRolesEnum.TEACHER,
-    id: "12345678",
-    createdAt: new Date(),
+    avatar: "https://xsgames.co/randomusers/avatar.php?g=female",
   };
 
   const displayUser = user || defaultUser;
@@ -42,14 +42,14 @@ export default function CardUserItem({
           <Avatar>
             <AvatarImage src={displayUser.avatar} />
             <AvatarFallback>
-              {displayUser.fullName.slice(0, 2).toUpperCase()}
+              {displayUser.name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="ml-4">
             <h2 className={`text-sm font-sans font-bold ${textFullnameColor}`}>
-              {displayUser.fullName}
+              {displayUser.name}
             </h2>
-            <Badge variant={defaultBadgeStyle}>{displayUser.userCode}</Badge>
+            <Badge variant={defaultBadgeStyle}>{displayUser.id}</Badge>
           </div>
         </div>
 
