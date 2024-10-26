@@ -3,7 +3,7 @@ import { ClassroomDto } from "@/components/classrooms/classrooms";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -11,8 +11,8 @@ import classroomService from "@/services/apis/classrooms/classroomService";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 
 export default function ClassroomsPage() {
-  const pageTitle = "Class Period List";
-  const heightTable = "h-[40vh]";
+  const pageTitle = "Classroom List";
+  const heightTable = "h-[68vh]";
 
   const navigate = useNavigate();
 
@@ -45,6 +45,8 @@ export default function ClassroomsPage() {
     navigate("/classrooms/create");
     return;
   };
+
+  const isClassroomEmpty = classrooms.length === 0;
 
   // useEffect(() => {
   //   async function getAcademicTerms() {
@@ -196,24 +198,33 @@ export default function ClassroomsPage() {
                 </Label>
               </div>
               <div>
-                {classrooms.length === 0 && (
-                  <Label className="text-sm text-gray-500">
-                    Tidak ada kelas yang tersedia
-                  </Label>
+                {isClassroomEmpty && (
+                  <div className={`${heightTable}`}>
+                    <Label className="text-sm text-gray-500">
+                      Tidak ada kelas yang tersedia
+                    </Label>
+                  </div>
                 )}
               </div>
             </div>
-            <ScrollArea className={`${heightTable} rounded-md`}>
-              {classrooms.map((classrooms, index) => (
-                <Link to={`/classrooms/${classrooms.id}`} key={index}>
-                  <CardClassroomItem key={index} data={classrooms} />
-                </Link>
-              ))}
-              <ScrollBar orientation="vertical" />
-            </ScrollArea>
+            {!isClassroomEmpty && (
+              <ScrollArea
+                className={`${heightTable} rounded-md overflow-y-auto`}
+              >
+                {classrooms.map((classrooms, index) => (
+                  <Link
+                    to={`/classrooms/${classrooms.id}`}
+                    key={index}
+                    className="block"
+                  >
+                    <CardClassroomItem key={index} data={classrooms} />
+                  </Link>
+                ))}
+              </ScrollArea>
+            )}
           </div>
         )}
-        <div>
+        <div className="bottom-16 left-0 w-full bg-white">
           <Button
             variant="smagaLMSGreen"
             className="w-full mt-2"
