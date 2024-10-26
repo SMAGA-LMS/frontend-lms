@@ -4,6 +4,7 @@ import CoursesPage from "@/pages/user/courses/CoursesPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import CourseDetailPage from "@/pages/user/courses/CourseDetailPage";
+import AddNewCoursePage from "@/pages/user/courses/AddNewCoursePage";
 
 const coursesRoute = [
   {
@@ -22,6 +23,14 @@ const coursesRoute = [
       {
         path: ":id",
         element: withRoleBasedRoute(<CourseDetailPage />, [
+          UserRolesEnum.ADMIN,
+          UserRolesEnum.TEACHER,
+          UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: "create",
+        element: withRoleBasedRoute(<AddNewCoursePage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,
