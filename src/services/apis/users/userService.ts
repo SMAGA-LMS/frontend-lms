@@ -2,7 +2,7 @@ import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { UsersResponseDto } from "./usersResponse";
 import { handleAxiosError } from "../handleError";
-import { AddNewResponseDto } from "./addNewUserResponse";
+import { AddNewUserResponseDto } from "./addNewUserResponse";
 import { addNewUserPayload } from "@/pages/user/users/AddNewUserPage";
 
 const userService = {
@@ -18,12 +18,12 @@ const userService = {
   },
   addNewUser: async (
     payload: addNewUserPayload
-  ): Promise<BaseResponseAPIDto<AddNewResponseDto>> => {
+  ): Promise<BaseResponseAPIDto<AddNewUserResponseDto>> => {
     try {
       const response = await axiosClient.post("/users", payload);
       return response.data;
     } catch (error) {
-      return handleAxiosError<AddNewResponseDto>(error);
+      return handleAxiosError<AddNewUserResponseDto>(error);
     }
   },
 };
