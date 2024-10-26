@@ -12,7 +12,7 @@ import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 
 export default function UsersPage() {
   const pageTitle = "User List";
-  const heightTable = "h-[48vh]";
+  const heightTable = "h-[64vh]";
 
   const navigate = useNavigate();
 
@@ -185,10 +185,10 @@ export default function UsersPage() {
             {renderTabsContent(UserRolesEnum.ADMIN)}
           </Tabs>
         </div>
-        <div>
+        <div className="bottom-16 left-0 w-full bg-white">
           <Button
             variant="smagaLMSGreen"
-            className="w-full mt-4"
+            className="w-full mt-2"
             onClick={navigateToAddNewUser}
           >
             Add New User
