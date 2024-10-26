@@ -3,7 +3,6 @@ import { CourseDto } from "@/components/courses/courses";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";
-import { ScrollBar } from "@/components/ui/scroll-area";
 import courseService from "@/services/apis/courses/courseService";
 import { Label } from "@radix-ui/react-label";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
@@ -13,17 +12,12 @@ import { toast } from "sonner";
 
 export default function CoursesPage() {
   const pageTitle = "Courses List";
-  const heightTable = "h-[40vh]";
+  const heightTable = "h-[68vh]";
 
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseDto[]>([]);
-
-  // const [classPeriods, setClassPeriods] = useState<ClassPeriodDto[]>([]);
-  // const [academicTerms, setAcademicTerms] = useState<AcademicTermDto[]>([]);
-  // const [selectedAcademicTermID, setSelectedAcademicTermID] =
-  //   useState<string>("");
 
   useEffect(() => {
     getCoursesData();
@@ -47,6 +41,8 @@ export default function CoursesPage() {
     return;
   };
 
+  const isCourseEmpty = courses.length === 0;
+
   return (
     <>
       <HeaderPageWithBackButton pageTitle={pageTitle} />
@@ -65,27 +61,36 @@ export default function CoursesPage() {
                 </Label>
               </div>
               <div>
-                {courses.length === 0 && (
+                {isCourseEmpty && (
                   <Label className="text-sm text-gray-500">
                     Tidak ada mata pelajaran yang tersedia
                   </Label>
                 )}
               </div>
             </div>
-            <ScrollArea className={`${heightTable} rounded-md`}>
-              {courses.map((courses, index) => (
-                <Link to={`/courses/${courses.id}`} key={index}>
-                  <CardCourseItem key={index} data={courses} />
-                </Link>
-              ))}
-              <ScrollBar orientation="vertical" />
-            </ScrollArea>
+            {!isCourseEmpty && (
+              <ScrollArea
+                className={`${heightTable} rounded-md overflow-y-auto`}
+              >
+                <div className="space-y-2">
+                  {courses.map((course, index) => (
+                    <Link
+                      to={`/courses/${course.id}`}
+                      key={index}
+                      className="block"
+                    >
+                      <CardCourseItem key={index} data={course} />
+                    </Link>
+                  ))}
+                </div>
+              </ScrollArea>
+            )}
           </div>
         )}
-        <div>
+        <div className="w-full my-2">
           <Button
             variant="smagaLMSGreen"
-            className="w-full mt-2"
+            className="w-full"
             onClick={navigateToAddNewCourse}
           >
             Add New Course
