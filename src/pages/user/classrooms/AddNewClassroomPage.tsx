@@ -62,7 +62,7 @@ export default function AddNewClassRoomPage() {
 
     if (response.success && response.data) {
       toast.success(response.message);
-      navigate("/classrooms");
+      navigate("/classrooms", { replace: true });
     } else {
       setErrors(response.errors);
       toast.error(response.message);
