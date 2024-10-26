@@ -62,9 +62,11 @@ export default function CoursesPage() {
               </div>
               <div>
                 {isCourseEmpty && (
-                  <Label className="text-sm text-gray-500">
-                    Tidak ada mata pelajaran yang tersedia
-                  </Label>
+                  <div className={`${heightTable}`}>
+                    <Label className="text-sm text-gray-500">
+                      Tidak ada mata pelajaran yang tersedia
+                    </Label>
+                  </div>
                 )}
               </div>
             </div>
@@ -87,10 +89,10 @@ export default function CoursesPage() {
             )}
           </div>
         )}
-        <div className="w-full my-2">
+        <div className="bottom-16 left-0 w-full bg-white">
           <Button
             variant="smagaLMSGreen"
-            className="w-full"
+            className="w-full mt-2"
             onClick={navigateToAddNewCourse}
           >
             Add New Course
