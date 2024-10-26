@@ -1,3 +1,3 @@
 import { CourseDto } from "@/components/courses/courses";
 
-export type CourseDetailResponseDto = CourseDto;
+export type CourseResponseDto = CourseDto;
