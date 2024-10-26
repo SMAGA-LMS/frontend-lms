@@ -1,29 +1,29 @@
 import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "../baseResponseAPI";
-import { UsersResponseDto } from "./usersResponse";
+import { ListUsersResponseDto } from "./listUsersResponse";
 import { handleAxiosError } from "../handleError";
-import { AddNewUserResponseDto } from "./addNewUserResponse";
+import { UserResponseDto } from "./userResponse";
 import { addNewUserPayload } from "@/pages/user/users/AddNewUserPage";
 
 const userService = {
   getUsers: async (
     userRoleName: string
-  ): Promise<BaseResponseAPIDto<UsersResponseDto>> => {
+  ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
     try {
       const response = await axiosClient.get(`/users?role=${userRoleName}`);
       return response.data;
     } catch (error) {
-      return handleAxiosError<UsersResponseDto>(error);
+      return handleAxiosError<ListUsersResponseDto>(error);
     }
   },
   addNewUser: async (
     payload: addNewUserPayload
-  ): Promise<BaseResponseAPIDto<AddNewUserResponseDto>> => {
+  ): Promise<BaseResponseAPIDto<UserResponseDto>> => {
     try {
       const response = await axiosClient.post("/users", payload);
       return response.data;
     } catch (error) {
-      return handleAxiosError<AddNewUserResponseDto>(error);
+      return handleAxiosError<UserResponseDto>(error);
     }
   },
 };

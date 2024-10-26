@@ -1,3 +1,3 @@
 import { UserDto } from "@/components/users/users";
 
-export type AddNewUserResponseDto = UserDto;
+export type ListUsersResponseDto = UserDto[];
