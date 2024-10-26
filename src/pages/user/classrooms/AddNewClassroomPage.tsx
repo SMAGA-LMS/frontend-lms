@@ -117,7 +117,7 @@ export default function AddNewClassRoomPage() {
                     handleInputChange(event);
                   }}
                 >
-                  <SelectTrigger className="w-full" id="role" name="role">
+                  <SelectTrigger className="w-full" id="grade" name="grade">
                     <SelectValue placeholder="Pilih tingkatan kelas" />
                   </SelectTrigger>
                   <SelectContent>
