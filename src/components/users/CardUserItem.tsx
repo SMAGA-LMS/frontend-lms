@@ -29,7 +29,6 @@ export default function CardUserItem({
     name: "Dummy Teacher",
     username: "dummyteacher",
     role: UserRolesEnum.TEACHER,
-    avatar: "https://xsgames.co/randomusers/avatar.php?g=female",
   };
 
   const displayUser = user || defaultUser;
