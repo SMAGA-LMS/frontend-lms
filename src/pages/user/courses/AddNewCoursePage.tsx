@@ -266,9 +266,9 @@ export default function AddNewCoursePage() {
                         </div>
                       </div>
                     </AlertDescription>
-                    <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
+                    {/* <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
                       kode kelas dapat dilihat setelah anda mengirimkan data
-                    </p>
+                    </p> */}
                   </Alert>
                 </AccordionContent>
               </AccordionItem>
