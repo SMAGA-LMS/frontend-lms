@@ -5,6 +5,7 @@ import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import CourseDetailPage from "@/pages/user/courses/CourseDetailPage";
 import AddNewCoursePage from "@/pages/user/courses/AddNewCoursePage";
+import AssignNewTeacherToCoursePage from "@/pages/user/courses/AssignNewTeacherToCoursePage";
 
 const coursesRoute = [
   {
@@ -26,6 +27,12 @@ const coursesRoute = [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: ":id/assign-teacher",
+        element: withRoleBasedRoute(<AssignNewTeacherToCoursePage />, [
+          UserRolesEnum.ADMIN,
         ]),
       },
       {

@@ -7,11 +7,13 @@ import CardUserItem from "@/components/users/CardUserItem";
 import courseService from "@/services/apis/courses/courseService";
 import { EditIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function CourseDetailPage() {
   const pageTitle = "Detail Mata Pelajaran";
+
+  const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,6 +40,12 @@ export default function CourseDetailPage() {
 
     getCourseDetail();
   }, [id]);
+
+  const navigateToAssignNewTeacher = () => {
+    console.log(`/courses/${id}/assign-teacher`);
+    navigate(`/courses/${id}/assign-teacher`);
+    return;
+  };
 
   return (
     <>
@@ -69,9 +77,7 @@ export default function CourseDetailPage() {
               size="icon"
               variant="ghost"
               className="hover:bg-smagaLMS-green"
-              onClickAction={() => {
-                toast.info("Fitur ini belum tersedia");
-              }}
+              onClickAction={() => navigateToAssignNewTeacher()}
             >
               <EditIcon size={20} className="text-white " />
             </ButtonWithIcon>
