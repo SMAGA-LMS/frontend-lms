@@ -30,14 +30,14 @@ import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface assignNewTeacherPayload {
-  userID?: string;
+  userID?: string | null;
 }
 
 export default function AssignNewTeacherToCoursePage() {
   const pageTitle = "Pengajar Mata Pelajaran";
 
   const initialFormData: assignNewTeacherPayload = {
-    userID: "",
+    userID: null,
   };
 
   const { id } = useParams<{ id: string }>();
@@ -52,7 +52,7 @@ export default function AssignNewTeacherToCoursePage() {
 
   useEffect(() => {
     const noTeacher: UserDto = {
-      name: "null",
+      name: "<<hapus pengajar>>",
       username: "null",
       role: UserRolesEnum.TEACHER,
       id: 0,
@@ -87,8 +87,8 @@ export default function AssignNewTeacherToCoursePage() {
         setCourse(response.data);
         setFormData((prevFormData) => ({
           ...prevFormData,
-          userID: response.data?.user?.id?.toString() || "",
-          courseID: response.data?.id?.toString() || "",
+          userID: response.data?.user?.id?.toString() || null,
+          courseID: response.data?.id?.toString() || null,
         }));
       } else {
         toast.error(response.message);
@@ -108,11 +108,15 @@ export default function AssignNewTeacherToCoursePage() {
 
     const payload: assignNewTeacherPayload = {};
 
-    if (course?.user) {
-      payload.userID = formData.userID;
+    payload.userID = formData.userID;
+    if (formData.userID === "0" || formData.userID === null) {
+      payload.userID = null;
     }
 
-    console.log("payload", payload);
+    if (course?.user === null && payload.userID === null) {
+      toast.error("Pilih pengajar terlebih dahulu");
+      return;
+    }
 
     setLoading(true);
     const response = await courseService.assignNewTeacher(payload, id);
@@ -166,7 +170,7 @@ export default function AssignNewTeacherToCoursePage() {
                       };
                       handleInputChange(event);
                     }}
-                    value={formData.userID}
+                    value={formData.userID?.toString() || undefined}
                   >
                     <SelectTrigger
                       className="w-full"

@@ -40,9 +40,9 @@ const courseService = {
     courseID: string
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
-      const response = await axiosClient.post(
+      const response = await axiosClient.put(
         `/courses/${courseID}/teachers`,
-        payload.userID
+        payload
       );
       return response.data;
     } catch (error) {
