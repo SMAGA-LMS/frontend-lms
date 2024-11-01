@@ -1,7 +1,7 @@
 import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { handleAxiosError } from "../handleError";
 import axiosClient from "@/services/axiosClient";
-import { ListCoursesResponseDto } from "./ListCoursesResponse";
+import { ListCoursesResponseDto } from "./listCoursesResponse";
 import { addNewCoursePayload } from "@/pages/user/courses/AddNewCoursePage";
 import { CourseResponseDto } from "./courseResponse";
 import { assignNewTeacherPayload } from "@/pages/user/courses/AssignNewTeacherToCoursePage";
