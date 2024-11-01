@@ -16,6 +16,16 @@ const classroomService = {
       return handleAxiosError<ListClassroomsResponseDto>(error);
     }
   },
+  getClassroomDetailByID: async (
+    classroomID: string
+  ): Promise<BaseResponseAPIDto<ClassroomResponseDto>> => {
+    try {
+      const response = await axiosClient.get(`/classrooms/${classroomID}`);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ClassroomResponseDto>(error);
+    }
+  },
   addNewClassroom: async (
     payload: addNewClassroomPayload
   ): Promise<BaseResponseAPIDto<ClassroomResponseDto>> => {
