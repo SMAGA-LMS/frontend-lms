@@ -26,7 +26,7 @@ import courseService from "@/services/apis/courses/courseService";
 import userService from "@/services/apis/users/userService";
 import { Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface assignNewTeacherPayload {
@@ -35,6 +35,8 @@ export interface assignNewTeacherPayload {
 
 export default function AssignNewTeacherToCoursePage() {
   const pageTitle = "Pengajar Mata Pelajaran";
+
+  const navigate = useNavigate();
 
   const initialFormData: assignNewTeacherPayload = {
     userID: null,
@@ -123,8 +125,10 @@ export default function AssignNewTeacherToCoursePage() {
     setLoading(false);
 
     if (response.success) {
-      toast.success("Pengajar berhasil diubah");
+      toast.success(response.message);
+      navigate(`/courses/${id}`, { replace: true });
     } else {
+      setErrors(response.errors);
       toast.error(response.message);
     }
   };
