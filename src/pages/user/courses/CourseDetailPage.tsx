@@ -4,6 +4,7 @@ import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
+import ErrorPage from "@/pages/ErrorPage";
 import courseService from "@/services/apis/courses/courseService";
 import { EditIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,13 +18,13 @@ export default function CourseDetailPage() {
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [course, setCourse] = useState<CourseDto>();
 
   useEffect(() => {
     const getCourseDetail = async () => {
       if (!id) {
-        toast.error("Invalid course ID");
         return;
       }
 
@@ -35,11 +36,16 @@ export default function CourseDetailPage() {
         setCourse(response.data);
       } else {
         toast.error(response.message);
+        setHasErrorPage(true);
       }
     };
 
     getCourseDetail();
   }, [id]);
+
+  if (hasErrorPage) {
+    return <ErrorPage />;
+  }
 
   const navigateToAssignNewTeacher = () => {
     console.log(`/courses/${id}/assign-teacher`);
