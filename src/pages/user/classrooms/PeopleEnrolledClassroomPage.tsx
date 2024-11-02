@@ -168,17 +168,26 @@ export default function PeopleEnrolledClassroomPage() {
           <BasicSkelenton additionalClassName="mx-4" />
         ) : (
           <div className="mx-4 mt-4">
-            <h1 className="font-bold font-sans text-lg">
-              {classroom?.name} | {classroom?.grade}
-            </h1>
-            <Badge variant="default">{classroom?.id}</Badge>
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="font-bold font-sans text-lg">
+                  {classroom?.name} | {classroom?.grade}
+                </h1>
+                <Badge variant="default">{classroom?.id}</Badge>
+              </div>
+            </div>
           </div>
         )}
       </div>
       <div className="bg-slate-200 rounded-t-3xl pb-2">
         <div className="mx-4 pt-4">
-          <div>
-            <Label className="font-bold">Siswa</Label>
+          <div className="flex justify-between items-center">
+            <Label className="font-bold">Tabel Siswa Kelas</Label>
+            <div className="flex items-center gap-1 text-smaga text-sm">
+              <div className="">Total: </div>
+              <div className="font-extrabold">{stundentEnrollment?.length}</div>
+              <div className="font-extrabold">siswa</div>
+            </div>
           </div>
           {/* <div>
             <Label className="font-bold">Wali Kelas</Label>

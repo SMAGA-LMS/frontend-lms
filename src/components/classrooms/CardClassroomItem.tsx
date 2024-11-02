@@ -15,13 +15,6 @@ export default function CardClassroomItem({ data }: CardClassItemProps) {
             {data.grade}
           </Badge>
         </div>
-        <div className="text-center">
-          <div className="text-2xl font-extrabold text-smaga">
-            {/* {data.totalStudentsEnrolled} */}
-            100
-          </div>
-          <div className="text-sm">anak</div>
-        </div>
       </div>
     </>
   );
