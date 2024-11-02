@@ -6,6 +6,7 @@ import ClassroomsPage from "@/pages/user/classrooms/ClassroomsPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import ClassroomDetailPage from "@/pages/user/classrooms/ClassroomDetailPage";
 import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/PeopleEnrolledClassroomPage";
+import AssignNewStudentToClassroomPage from "@/pages/user/classrooms/AssignNewStudentToClassroomPage";
 
 const classroomsRoute = [
   {
@@ -35,6 +36,12 @@ const classroomsRoute = [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: ":id/people/create",
+        element: withRoleBasedRoute(<AssignNewStudentToClassroomPage />, [
+          UserRolesEnum.ADMIN,
         ]),
       },
       {
