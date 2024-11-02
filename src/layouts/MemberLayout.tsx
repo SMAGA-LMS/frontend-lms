@@ -64,21 +64,20 @@ export default function MemberLayout() {
     );
   }
 
-  const shouldRenderBottomNav = bottomNavPaths.some((path) => {
-    console.log("path", path);
-    console.log("location.pathname", location.pathname);
-    console.log("location.pathname === path", location.pathname === path);
-    return location.pathname === path;
-  });
+  const shouldRenderBottomNav = bottomNavPaths.some(
+    (path) => location.pathname === path
+  );
 
   console.log("shouldRenderBottomNav", shouldRenderBottomNav);
 
   return (
     <>
       <WithToaster>
-        <div>
-          <Outlet />
-        </div>
+        {currentUser && (
+          <div>
+            <Outlet />
+          </div>
+        )}
         {shouldRenderBottomNav && currentUser?.role === UserRolesEnum.ADMIN && (
           <AdminBottomNavLayout />
         )}
