@@ -5,6 +5,7 @@ import AddNewClassRoomPage from "@/pages/user/classrooms/AddNewClassroomPage";
 import ClassroomsPage from "@/pages/user/classrooms/ClassroomsPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import ClassroomDetailPage from "@/pages/user/classrooms/ClassroomDetailPage";
+import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/PeopleEnrolledClassroomPage";
 
 const classroomsRoute = [
   {
@@ -23,6 +24,14 @@ const classroomsRoute = [
       {
         path: ":id",
         element: withRoleBasedRoute(<ClassroomDetailPage />, [
+          UserRolesEnum.ADMIN,
+          UserRolesEnum.TEACHER,
+          UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: ":id/people",
+        element: withRoleBasedRoute(<PeopleEnrolledClassroomPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,

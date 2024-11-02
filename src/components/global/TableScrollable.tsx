@@ -52,7 +52,7 @@ export default function TableScrollable({
       <div className="">
         <ScrollArea className={`${heightTable} rounded-md border`}>
           <Table className="">
-            <TableHeader className="bg-secondary">
+            <TableHeader className="sticky top-0 z-10 bg-secondary">
               <TableRow>
                 <TableHead className="px-4 w-4">No</TableHead>
                 <TableHead className="w-4">Profile</TableHead>
