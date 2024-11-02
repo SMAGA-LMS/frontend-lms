@@ -1,6 +1,7 @@
 import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import { ReactNode } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface RoleBasedRouteProps {
@@ -8,10 +9,12 @@ interface RoleBasedRouteProps {
   children: ReactNode;
 }
 
-export default function RoleBasedRoute({
-  allowedRoles,
-  children,
-}: RoleBasedRouteProps) {
+const withRoleBasedRoute = (
+  element: JSX.Element,
+  allowedRoles: UserRolesEnum[]
+) => <RoleBasedRoute allowedRoles={allowedRoles}>{element}</RoleBasedRoute>;
+
+function RoleBasedRoute({ allowedRoles, children }: RoleBasedRouteProps) {
   const { currentUser } = useStateContext();
 
   if (!currentUser) {
@@ -25,3 +28,5 @@ export default function RoleBasedRoute({
 
   return <>{children}</>;
 }
+
+export { withRoleBasedRoute };

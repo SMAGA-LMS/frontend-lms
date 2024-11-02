@@ -11,32 +11,38 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import CardUserItem from "@/components/users/CardUserItem";
+import { UserDto } from "@/components/users/users";
 import GradeEnum from "@/enums/GradeEnum";
-import classroomService from "@/services/apis/classrooms/classroomService";
+import UserRolesEnum from "@/enums/UserRoleEnum";
+import courseService from "@/services/apis/courses/courseService";
+import userService from "@/services/apis/users/userService";
 import { Label } from "@radix-ui/react-label";
-import { Terminal } from "lucide-react";
-import { useState } from "react";
+import { Select } from "@radix-ui/react-select";
+import { InfoIcon, Terminal } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export interface addNewClassroomPayload {
+export interface addNewCoursePayload {
   name: string;
   grade: string;
+  userID?: string;
 }
 
-export default function AddNewClassRoomPage() {
-  const pageTitle = "Tambah Kelas";
-  // const heightTable = "h-[38vh]";
+export default function AddNewCoursePage() {
+  const pageTitle = "Tambah Mata Pelajaran Baru";
+  //   const heightTable = "h-[38vh]";
 
   const navigate = useNavigate();
 
-  const initialFormData: addNewClassroomPayload = {
+  const initialFormData: addNewCoursePayload = {
     name: "",
     grade: "",
   };
@@ -44,32 +50,54 @@ export default function AddNewClassRoomPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [formData, setFormData] =
-    useState<addNewClassroomPayload>(initialFormData);
-
+    useState<addNewCoursePayload>(initialFormData);
+  const [teachers, setTeachers] = useState<UserDto[]>([]);
   const grades: string[] = Object.values(GradeEnum);
+
+  useEffect(() => {
+    const getTeachers = async () => {
+      setLoading(true);
+      const response = await userService.getUsers(UserRolesEnum.TEACHER);
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setTeachers(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+    getTeachers();
+  }, []);
 
   async function handleFormSubmit(event) {
     event.preventDefault();
 
-    const payload: addNewClassroomPayload = {
+    const payload: addNewCoursePayload = {
       name: formData.name,
       grade: formData.grade,
     };
 
+    // Conditionally add the teacher field if it has a value
+    if (formData.userID) {
+      payload.userID = formData.userID;
+    }
+
     setLoading(true);
-    const response = await classroomService.addNewClassroom(payload);
+    const response = await courseService.addNewCourse(payload);
     setLoading(false);
 
     if (response.success && response.data) {
+      setErrors(null);
       toast.success(response.message);
-      navigate("/classrooms", { replace: true });
+      navigate("/courses", { replace: true });
+      return;
     } else {
       setErrors(response.errors);
       toast.error(response.message);
     }
   }
 
-  function handleInputChange(event) {
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
     console.log(name, value);
     setFormData({
@@ -77,7 +105,15 @@ export default function AddNewClassRoomPage() {
       [name]: value,
     });
     setErrors(null);
-  }
+  };
+
+  const getUserById = (id: string): UserDto | undefined => {
+    const user = teachers.find((u) => u.id.toString() === id);
+    if (!user) {
+      return undefined;
+    }
+    return user;
+  };
 
   return (
     <>
@@ -85,15 +121,38 @@ export default function AddNewClassRoomPage() {
 
       <div className="mx-4">
         <form onSubmit={handleFormSubmit} method="post">
+          <div>
+            <Accordion type="single" collapsible className="">
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="font-semibold">
+                  <InfoIcon size="24" />
+                  Info Penting!
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div>
+                    <p>
+                      Menambahkan mata pelajaran baru ke dalam sistem dibutuhkan
+                      data terkait:
+                    </p>
+                    <ol className="list-decimal ml-4">
+                      <li>Nama Mata Pelajaran</li>
+                      <li>Tingkatan Kelas</li>
+                      <li>Guru atau Pengajar (Opsional)</li>
+                    </ol>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
           <div className="grid gap-4 py-4 rounded-lg">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name" className="text-right">
-                Nama Kelas
+                Nama Mata Pelajaran
               </Label>
               <Input
                 id="name"
                 name="name"
-                placeholder="XII IPA 4"
+                placeholder="Matematika Wajib"
                 className="col-span-2"
                 value={formData.name}
                 onChange={handleInputChange}
@@ -116,6 +175,7 @@ export default function AddNewClassRoomPage() {
                     };
                     handleInputChange(event);
                   }}
+                  required
                 >
                   <SelectTrigger className="w-full" id="grade" name="grade">
                     <SelectValue placeholder="Pilih tingkatan kelas" />
@@ -130,20 +190,50 @@ export default function AddNewClassRoomPage() {
                 </Select>
               </div>
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="teacher" className="text-right">
+                Pengajar
+              </Label>
+
+              <div className="col-span-2">
+                <Select
+                  onValueChange={(val) => {
+                    const event = {
+                      target: {
+                        name: "userID",
+                        value: val,
+                      },
+                    };
+                    handleInputChange(event);
+                  }}
+                >
+                  <SelectTrigger className="w-full" id="teacher" name="teacher">
+                    <SelectValue placeholder="Pilih pengajar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {teachers.map((teacher) => (
+                      <SelectItem key={teacher.id} value={`${teacher.id}`}>
+                        {teacher.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
           {errors && <ErrorDisplay errors={errors} />}
-
+          <Separator />
           <div>
             <Accordion type="single" collapsible className="">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
-                  Lihat kelas yang akan ditambahkan :
+                  Lihat mata pelajaran yang akan ditambahkan :
                 </AccordionTrigger>
                 <AccordionContent>
                   <Alert>
                     <Terminal className="h-4 w-4" />
                     <AlertTitle className="font-semibold">
-                      Informasi kelas berdasarkan input anda:
+                      Informasi mata pelajaran berdasarkan input anda:
                     </AlertTitle>
                     <AlertDescription>
                       <div className="grid gap-2 py-2 rounded-lg">
@@ -152,7 +242,7 @@ export default function AddNewClassRoomPage() {
                             htmlFor="name"
                             className="text-right col-span-1"
                           >
-                            Nama Kelas
+                            Nama Mata Pelajaran
                           </Label>
                           <div className="col-span-2">{formData.name}</div>
                         </div>
@@ -161,6 +251,18 @@ export default function AddNewClassRoomPage() {
                             Tingkatan Kelas
                           </Label>
                           <div className="col-span-2">{formData.grade}</div>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="teacher" className="text-right">
+                            Pengajar
+                          </Label>
+                          <div className="col-span-3">
+                            {formData.userID && (
+                              <CardUserItem
+                                user={getUserById(formData.userID)}
+                              />
+                            )}
+                          </div>
                         </div>
                       </div>
                     </AlertDescription>
@@ -182,7 +284,7 @@ export default function AddNewClassRoomPage() {
             <Button
               type="submit"
               variant="smagaLMSGreen"
-              className="w-full mt-2 mb-4"
+              className="w-full mt-2 mb-16"
             >
               Submit
             </Button>

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useStateContext } from "@/contexts/ContextProvider";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import AdminBottomNavLayout from "./admin/AdminBottomNavLayout";
@@ -11,10 +11,12 @@ import StudentBottomNavLayout from "./student/StudentBottomNavLayout";
 import authService from "@/services/apis/auth/authService";
 import Lottie from "lottie-react";
 import waveLoadingAnimation from "@/assets/lotties/wave-loading-animation.json";
+import bottomNavPaths from "./bottomNavPaths";
 
 export default function MemberLayout() {
   const { currentUser, setCurrentUser, token, setToken } = useStateContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
   const hasFetchedUser = useRef(false);
 
@@ -62,16 +64,31 @@ export default function MemberLayout() {
     );
   }
 
+  const shouldRenderBottomNav = bottomNavPaths.some(
+    (path) => location.pathname === path
+  );
+
+  console.log("shouldRenderBottomNav", shouldRenderBottomNav);
+
   return (
     <>
       <WithToaster>
-        {currentUser?.role === UserRolesEnum.ADMIN && <AdminBottomNavLayout />}
-        {currentUser?.role === UserRolesEnum.TEACHER && (
-          <TeacherBottomNavLayout />
+        {currentUser && (
+          <div>
+            <Outlet />
+          </div>
         )}
-        {currentUser?.role === UserRolesEnum.STUDENT && (
-          <StudentBottomNavLayout />
+        {shouldRenderBottomNav && currentUser?.role === UserRolesEnum.ADMIN && (
+          <AdminBottomNavLayout />
         )}
+        {shouldRenderBottomNav &&
+          currentUser?.role === UserRolesEnum.TEACHER && (
+            <TeacherBottomNavLayout />
+          )}
+        {shouldRenderBottomNav &&
+          currentUser?.role === UserRolesEnum.STUDENT && (
+            <StudentBottomNavLayout />
+          )}
       </WithToaster>
     </>
   );

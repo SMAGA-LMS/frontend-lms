@@ -1,23 +1,24 @@
 import { Badge } from "@/components/ui/badge";
-import { ClassPeriodDto } from "./classrooms";
+import { ClassroomDto } from "./classrooms";
 
 interface CardClassItemProps {
-  data: ClassPeriodDto;
+  data: ClassroomDto;
 }
 
-export default function CardClassItem({ data }: CardClassItemProps) {
+export default function CardClassroomItem({ data }: CardClassItemProps) {
   return (
     <>
       <div className="flex w-full bg-secondary rounded-md p-4 mb-2 justify-between">
         <div className="mr-4 text-left">
-          <div className="font-bold">{data.classPeriodName}</div>
+          <div className="font-bold">{data.name}</div>
           <Badge variant="default" className="rounded-lg">
-            {data.classPeriodCode}
+            {data.grade}
           </Badge>
         </div>
         <div className="text-center">
           <div className="text-2xl font-extrabold text-smaga">
-            {data.totalStudentsEnrolled}
+            {/* {data.totalStudentsEnrolled} */}
+            100
           </div>
           <div className="text-sm">anak</div>
         </div>
