@@ -55,9 +55,6 @@ export default function AssignNewStudentToClassroomPage() {
   const [classroom, setClassroom] = useState<ClassroomDto>();
   const [students, setStudents] = useState<UserDto[]>([]);
 
-  const [studentEnrollment, setStudentEnrollment] =
-    useState<StudentEnrollmentDto>();
-
   useEffect(() => {
     if (!id) {
       return;
