@@ -12,7 +12,7 @@ export default function ErrorPage() {
   console.log(error);
 
   const navigateToHome = () => {
-    navigate("/");
+    navigate("/home");
   };
 
   return (
