@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { UserDto } from "@/components/users/users";
 import classroomService from "@/services/apis/classrooms/classroomService";
@@ -13,10 +13,13 @@ import TableScrollable from "@/components/global/TableScrollable";
 import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { ClassroomDto } from "@/components/classrooms/classrooms";
 import { Label } from "@/components/ui/label";
+import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 
 export default function PeopleEnrolledClassroomPage() {
   const pageTitle = "List Siswa Kelas";
   const heightTable = "h-[60vh]";
+
+  const navigate = useNavigate();
 
   // const { classroomCode } = useParams() as { classroomCode: string };
   const { id } = useParams() as { id: string };
@@ -67,7 +70,8 @@ export default function PeopleEnrolledClassroomPage() {
       }
 
       setLoading(true);
-      const response = await classroomService.getPeopleEnrolledClassroom(id);
+      const response =
+        await studentEnrollmentService.getPeopleEnrolledClassroom(id);
       setLoading(false);
 
       if (response.success && response.data) {
@@ -114,9 +118,9 @@ export default function PeopleEnrolledClassroomPage() {
     return <ErrorPage />;
   }
 
-  // function handleNavigateToAddNewStudent() {
-  //   navigate("/admin/class-periods/detail/people/new");
-  // }
+  const navigateToAddNewStudent = () => {
+    navigate(`/classrooms/${id}/people/create`);
+  };
 
   // function handleSearchUser(value: string) {
   //   // setSelectedUser(null);
@@ -224,7 +228,7 @@ export default function PeopleEnrolledClassroomPage() {
               variant="smagaLMSGreen"
               className="w-full"
               type="submit"
-              onClick={() => toast.info("Fitur ini belum tersedia")}
+              onClick={navigateToAddNewStudent}
             >
               Tambah Siswa
             </Button>
