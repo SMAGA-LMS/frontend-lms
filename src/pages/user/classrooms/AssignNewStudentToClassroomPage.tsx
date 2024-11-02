@@ -2,7 +2,6 @@ import { ClassroomDto } from "@/components/classrooms/classrooms";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
-import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import {
   Accordion,
   AccordionContent,
