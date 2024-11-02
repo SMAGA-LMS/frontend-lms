@@ -27,7 +27,7 @@ import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 
 export interface addNewUserPayload {
   name: string;
-  username: string;
+  username?: string;
   role: string;
   avatar?: string;
   password: string;
@@ -38,7 +38,6 @@ export default function AddNewUserPage() {
 
   const initialFormData: addNewUserPayload = {
     name: "",
-    username: "",
     role: UserRolesEnum.STUDENT,
     password: "",
   };
@@ -55,13 +54,21 @@ export default function AddNewUserPage() {
   async function handleFormSubmit(event) {
     event.preventDefault();
 
-    const username = formData.name.trim().substring(0, 16).toLowerCase();
+    console.log("Form data", formData);
+
+    const username = formData.name
+      .split(" ")
+      .join("")
+      .substring(0, 16)
+      .toLowerCase();
+    const password = username;
     const payload: addNewUserPayload = {
       name: formData.name,
-      username: username,
       role: formData.role,
-      password: username,
+      password: password,
     };
+
+    console.log("Payload", payload);
 
     // Conditionally add the avatar field if it has a value
     if (formData.avatar) {
