@@ -12,10 +12,11 @@ import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import TableScrollable from "@/components/global/TableScrollable";
 import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { Label } from "@/components/ui/label";
 
 export default function PeopleEnrolledClassroomPage() {
   const pageTitle = "List Siswa Kelas";
-  const heightTable = "h-[48vh]";
+  const heightTable = "h-[60vh]";
 
   // const { classroomCode } = useParams() as { classroomCode: string };
   const { id } = useParams() as { id: string };
@@ -172,6 +173,9 @@ export default function PeopleEnrolledClassroomPage() {
       </div>
       <div className="bg-slate-200 rounded-t-3xl pb-2">
         <div className="mx-4 pt-4">
+          <div>
+            <Label className="font-bold">Siswa</Label>
+          </div>
           {/* <div>
             <Label className="font-bold">Wali Kelas</Label>
             {loading ? (
@@ -215,7 +219,7 @@ export default function PeopleEnrolledClassroomPage() {
               </div>
             )}
           </div>
-          <div className="bottom-16 left-0 w-full bg-white my-1 rounded-md">
+          <div className="bottom-0 left-0 w-full bg-white my-1 rounded-md">
             <Button
               variant="smagaLMSGreen"
               className="w-full"
