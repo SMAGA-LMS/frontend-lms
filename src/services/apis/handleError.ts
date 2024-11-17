@@ -10,8 +10,7 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
   if (!axiosError.response) {
     return {
       success: false,
-      message:
-        "Backend server is not active. Please contact the author or try again later!",
+      message: axiosError.message,
       errors: { general: [error.message] },
     };
   }
@@ -28,7 +27,7 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
   if (axiosError.response && axiosError.response.status === 401) {
     return {
       success: false,
-      message: `${axiosError.response.data.message}. Please refresh the page.`,
+      message: axiosError.response.data.message,
       errors: { general: [axiosError.response.data.message] },
     };
   }
