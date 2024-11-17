@@ -8,7 +8,7 @@ import ClassroomDetailPage from "@/pages/user/classrooms/ClassroomDetailPage";
 import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/PeopleEnrolledClassroomPage";
 import AssignNewStudentToClassroomPage from "@/pages/user/classrooms/AssignNewStudentToClassroomPage";
 
-const classroomsRoute = [
+const classroomRoutes = [
   {
     path: "/classrooms",
     element: <MemberLayout />,
@@ -54,4 +54,4 @@ const classroomsRoute = [
   },
 ];
 
-export default classroomsRoute;
+export default classroomRoutes;

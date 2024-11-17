@@ -3,7 +3,7 @@ import ErrorPage from "@/pages/ErrorPage";
 import { Navigate } from "react-router-dom";
 import LoginPage from "@/pages/login/LoginPage";
 
-const guestRoute = [
+const guestRoutes = [
   {
     path: "/",
     element: <GuestLayout />,
@@ -21,4 +21,4 @@ const guestRoute = [
   },
 ];
 
-export default guestRoute;
+export default guestRoutes;

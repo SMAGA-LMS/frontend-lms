@@ -7,7 +7,7 @@ import CourseDetailPage from "@/pages/user/courses/CourseDetailPage";
 import AddNewCoursePage from "@/pages/user/courses/AddNewCoursePage";
 import AssignNewTeacherToCoursePage from "@/pages/user/courses/AssignNewTeacherToCoursePage";
 
-const coursesRoute = [
+const courseRoutes = [
   {
     path: "/courses",
     element: <MemberLayout />,
@@ -47,4 +47,4 @@ const coursesRoute = [
   },
 ];
 
-export default coursesRoute;
+export default courseRoutes;

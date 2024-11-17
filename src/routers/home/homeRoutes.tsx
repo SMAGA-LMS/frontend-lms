@@ -1,19 +1,19 @@
 import MemberLayout from "@/layouts/MemberLayout";
 import ErrorPage from "@/pages/ErrorPage";
-import ProfilePage from "@/pages/user/profile/ProfilePage";
+import HomePage from "@/pages/user/home/HomePage";
 
-const profileRoute = [
+const homeRoutes = [
   {
-    path: "/profile",
+    path: "/home",
     element: <MemberLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        element: <ProfilePage />,
+        element: <HomePage />,
       },
     ],
   },
 ];
 
-export default profileRoute;
+export default homeRoutes;
