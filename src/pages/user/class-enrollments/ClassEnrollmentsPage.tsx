@@ -3,9 +3,9 @@ import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollme
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
-import { Label } from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -40,7 +40,7 @@ export default function ClassEnrollmentsPage() {
   };
 
   const navigateToAddNewClassEnrollment = () => {
-    navigate("/class-enrollment/create");
+    navigate("/class-enrollments/create");
     return;
   };
 

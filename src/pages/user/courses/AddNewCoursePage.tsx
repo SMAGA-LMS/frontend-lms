@@ -10,7 +10,9 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -23,8 +25,6 @@ import GradeEnum from "@/enums/GradeEnum";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import courseService from "@/services/apis/courses/courseService";
 import userService from "@/services/apis/users/userService";
-import { Label } from "@radix-ui/react-label";
-import { Select } from "@radix-ui/react-select";
 import { InfoIcon, Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
