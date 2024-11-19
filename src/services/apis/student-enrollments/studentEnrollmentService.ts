@@ -7,7 +7,7 @@ import { ListUsersResponseDto } from "../users/listUsersResponse";
 
 const studentEnrollmentService = {
   getPeopleEnrolledClassroom: async (
-    classroomID: string
+    classroomID: number
   ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
     try {
       const response = await axiosClient.get(

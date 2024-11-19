@@ -6,6 +6,7 @@ import MemberLayout from "@/layouts/MemberLayout";
 import AddNewClassEnrollmentPage from "@/pages/user/class-enrollments/AddNewClassEnrollmentPage";
 import ClassEnrollmentDetailPage from "@/pages/user/class-enrollments/ClassEnrollmentDetailPage";
 import AssignNewTeacherToClassEnrollmentPage from "@/pages/user/class-enrollments/AssignNewTeacherToClassEnrollmentPage";
+import PeopleEnrolledClassEnrollmentPage from "@/pages/user/class-enrollments/PeopleEnrolledClassEnrollmentPage";
 
 const classEnrollmentRoutes = [
   {
@@ -24,6 +25,14 @@ const classEnrollmentRoutes = [
       {
         path: ":id",
         element: withRoleBasedRoute(<ClassEnrollmentDetailPage />, [
+          UserRolesEnum.ADMIN,
+          UserRolesEnum.TEACHER,
+          UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: ":id/people",
+        element: withRoleBasedRoute(<PeopleEnrolledClassEnrollmentPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,

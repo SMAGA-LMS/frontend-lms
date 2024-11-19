@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
-import { EditIcon } from "lucide-react";
+import { EditIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -52,9 +52,27 @@ export default function ClassEnrollmentDetailPage() {
     return;
   };
 
+  const navigateToPeople = () => {
+    navigate(`/class-enrollments/${id}/people`);
+  };
+
   return (
     <>
-      <HeaderPageWithBackButton pageTitle={pageTitle} />
+      <HeaderPageWithBackButton pageTitle={pageTitle}>
+        {loading ? (
+          <BasicSkelenton />
+        ) : (
+          <ButtonWithIcon
+            size="icon"
+            variant="outline"
+            className="bg-secondary"
+            type="button"
+            onClickAction={navigateToPeople}
+          >
+            <UsersIcon size={20} className="text-black" />
+          </ButtonWithIcon>
+        )}
+      </HeaderPageWithBackButton>
 
       <div className="mt-4 pb-24 bg-smagaLMS-gradient-linear">
         {loading ? (
