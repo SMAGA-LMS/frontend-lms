@@ -2,7 +2,7 @@ import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { StudentEnrollmentResponseDto } from "./studentEnrollmentResponse";
 import { handleAxiosError } from "../handleError";
-import { assignNewStudentPayload } from "@/pages/user/classrooms/AssignNewStudentToClassroomPage";
+import { assignNewStudentPayload } from "@/pages/user/classrooms/people/AssignNewStudentToClassroomPage";
 import { ListUsersResponseDto } from "../users/listUsersResponse";
 
 const studentEnrollmentService = {

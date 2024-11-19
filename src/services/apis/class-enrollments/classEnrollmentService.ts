@@ -4,7 +4,7 @@ import { ListClassEnrollmentsResponseDto } from "./listClassEnrollmentsResponse"
 import { handleAxiosError } from "../handleError";
 import { ClassEnrollmentResponseDto } from "./classEnrollmentResponse";
 import { addNewClassEnrollmentPayload } from "@/pages/user/class-enrollments/AddNewClassEnrollmentPage";
-import { assignNewTeacherToClassEnrollmentPayload } from "@/pages/user/class-enrollments/AssignNewTeacherToClassEnrollmentPage";
+import { assignNewTeacherToClassEnrollmentPayload } from "@/pages/user/class-enrollments/people/AssignNewTeacherToClassEnrollmentPage";
 
 const classEnrollmentService = {
   getClassEnrollments: async (): Promise<

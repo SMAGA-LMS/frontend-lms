@@ -5,8 +5,8 @@ import AddNewClassRoomPage from "@/pages/user/classrooms/AddNewClassroomPage";
 import ClassroomsPage from "@/pages/user/classrooms/ClassroomsPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import ClassroomDetailPage from "@/pages/user/classrooms/ClassroomDetailPage";
-import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/PeopleEnrolledClassroomPage";
-import AssignNewStudentToClassroomPage from "@/pages/user/classrooms/AssignNewStudentToClassroomPage";
+import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/people/PeopleEnrolledClassroomPage";
+import AssignNewStudentToClassroomPage from "@/pages/user/classrooms/people/AssignNewStudentToClassroomPage";
 
 const classroomRoutes = [
   {

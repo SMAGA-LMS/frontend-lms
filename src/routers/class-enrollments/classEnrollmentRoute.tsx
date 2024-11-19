@@ -5,8 +5,8 @@ import UserRolesEnum from "@/enums/UserRoleEnum";
 import MemberLayout from "@/layouts/MemberLayout";
 import AddNewClassEnrollmentPage from "@/pages/user/class-enrollments/AddNewClassEnrollmentPage";
 import ClassEnrollmentDetailPage from "@/pages/user/class-enrollments/ClassEnrollmentDetailPage";
-import AssignNewTeacherToClassEnrollmentPage from "@/pages/user/class-enrollments/AssignNewTeacherToClassEnrollmentPage";
-import PeopleEnrolledClassEnrollmentPage from "@/pages/user/class-enrollments/PeopleEnrolledClassEnrollmentPage";
+import AssignNewTeacherToClassEnrollmentPage from "@/pages/user/class-enrollments/people/AssignNewTeacherToClassEnrollmentPage";
+import PeopleEnrolledClassEnrollmentPage from "@/pages/user/class-enrollments/people/PeopleEnrolledClassEnrollmentPage";
 
 const classEnrollmentRoutes = [
   {
