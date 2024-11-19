@@ -69,7 +69,7 @@ export default function PeopleEnrolledClassroomPage() {
 
       setLoading(true);
       const response =
-        await studentEnrollmentService.getPeopleEnrolledClassroom(id);
+        await studentEnrollmentService.getPeopleEnrolledClassroom(Number(id));
       setLoading(false);
 
       if (response.success && response.data) {
