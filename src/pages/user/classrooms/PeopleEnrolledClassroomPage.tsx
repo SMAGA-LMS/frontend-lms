@@ -115,7 +115,7 @@ export default function PeopleEnrolledClassroomPage() {
   }
 
   const navigateToAddNewStudent = () => {
-    navigate(`/classrooms/${id}/people/create`);
+    navigate(`/classrooms/${id}/people/assign-student`);
   };
 
   // function handleSearchUser(value: string) {

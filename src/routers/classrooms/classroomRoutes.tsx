@@ -39,7 +39,7 @@ const classroomRoutes = [
         ]),
       },
       {
-        path: ":id/people/create",
+        path: ":id/people/assign-student",
         element: withRoleBasedRoute(<AssignNewStudentToClassroomPage />, [
           UserRolesEnum.ADMIN,
         ]),
