@@ -117,7 +117,7 @@ export default function AddNewClassEnrollmentPage() {
     if (response.success && response.data) {
       setErrors(null);
       toast.success(response.message);
-      navigate("/class-enrollments", { replace: true });
+      navigate(`/class-enrollments/${response.data.id}`, { replace: true });
       return;
     } else {
       setErrors(response.errors);

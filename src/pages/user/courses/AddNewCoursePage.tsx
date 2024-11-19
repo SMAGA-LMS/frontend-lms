@@ -89,7 +89,7 @@ export default function AddNewCoursePage() {
     if (response.success && response.data) {
       setErrors(null);
       toast.success(response.message);
-      navigate("/courses", { replace: true });
+      navigate(`/courses/${response.data.id}`, { replace: true });
       return;
     } else {
       setErrors(response.errors);
