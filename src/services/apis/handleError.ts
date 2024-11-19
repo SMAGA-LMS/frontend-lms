@@ -11,6 +11,7 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
     return {
       success: false,
       message: axiosError.message,
+      data: null,
       errors: { general: [error.message] },
     };
   }
@@ -20,6 +21,7 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
     return {
       success: false,
       message: "Internal server error.",
+      data: null,
       errors: { general: ["Internal server error."] },
     };
   }
@@ -28,6 +30,7 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
     return {
       success: false,
       message: axiosError.response.data.message,
+      data: null,
       errors: { general: [axiosError.response.data.message] },
     };
   }
