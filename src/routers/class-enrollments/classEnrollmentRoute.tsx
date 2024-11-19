@@ -3,6 +3,7 @@ import ClassEnrollmentsPage from "@/pages/user/class-enrollments/ClassEnrollment
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import MemberLayout from "@/layouts/MemberLayout";
+import AddNewClassEnrollmentPage from "@/pages/user/class-enrollments/AddNewClassEnrollmentPage";
 
 const classEnrollmentRoutes = [
   {
@@ -16,6 +17,12 @@ const classEnrollmentRoutes = [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: "create",
+        element: withRoleBasedRoute(<AddNewClassEnrollmentPage />, [
+          UserRolesEnum.ADMIN,
         ]),
       },
     ],
