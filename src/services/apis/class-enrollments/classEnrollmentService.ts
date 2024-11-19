@@ -16,6 +16,16 @@ const classEnrollmentService = {
       return handleAxiosError<ListClassEnrollmentsResponseDto>(error);
     }
   },
+  getClassEnrollmentByID: async (
+    id: string
+  ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
+    try {
+      const response = await axiosClient.get(`/class-enrollments/${id}`);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ClassEnrollmentResponseDto>(error);
+    }
+  },
   addNewClassEnrollment: async (
     payload: addNewClassEnrollmentPayload
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
