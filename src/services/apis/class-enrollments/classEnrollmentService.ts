@@ -4,6 +4,7 @@ import { ListClassEnrollmentsResponseDto } from "./listClassEnrollmentsResponse"
 import { handleAxiosError } from "../handleError";
 import { ClassEnrollmentResponseDto } from "./classEnrollmentResponse";
 import { addNewClassEnrollmentPayload } from "@/pages/user/class-enrollments/AddNewClassEnrollmentPage";
+import { assignNewTeacherToClassEnrollmentPayload } from "@/pages/user/class-enrollments/AssignNewTeacherToClassEnrollmentPage";
 
 const classEnrollmentService = {
   getClassEnrollments: async (): Promise<
@@ -31,6 +32,20 @@ const classEnrollmentService = {
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.post(`/class-enrollments`, payload);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ClassEnrollmentResponseDto>(error);
+    }
+  },
+  assignNewTeacher: async (
+    payload: assignNewTeacherToClassEnrollmentPayload,
+    classEnrollmentID: string
+  ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
+    try {
+      const response = await axiosClient.put(
+        `/class-enrollments/${classEnrollmentID}/teachers`,
+        payload
+      );
       return response.data;
     } catch (error) {
       return handleAxiosError<ClassEnrollmentResponseDto>(error);
