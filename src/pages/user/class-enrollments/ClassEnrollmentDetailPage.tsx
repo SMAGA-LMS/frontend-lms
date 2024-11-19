@@ -48,7 +48,7 @@ export default function ClassEnrollmentDetailPage() {
   }
 
   const navigateToAssignNewTeacher = () => {
-    navigate(`/class-enrollments/${id}/assign-teacher`);
+    navigate(`/class-enrollments/${id}/people/assign-teacher`);
     return;
   };
 
