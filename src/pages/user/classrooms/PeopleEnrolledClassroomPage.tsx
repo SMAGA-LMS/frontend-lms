@@ -10,7 +10,6 @@ import classroomService from "@/services/apis/classrooms/classroomService";
 import ErrorPage from "@/pages/ErrorPage";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import TableScrollable from "@/components/global/TableScrollable";
-import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { ClassroomDto } from "@/components/classrooms/classrooms";
 import { Label } from "@/components/ui/label";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
@@ -27,8 +26,7 @@ export default function PeopleEnrolledClassroomPage() {
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [classroom, setClassroom] = useState<ClassroomDto>();
-  const [stundentEnrollment, setStundentEnrollment] =
-    useState<StudentEnrollmentDto[]>();
+  const [enrolledStudents, setEnrolledStudents] = useState<UserDto[]>([]);
 
   // const [classroom, setClassroom] = useState<ClassroomDto>({
   //   classPeriod: {
@@ -40,7 +38,7 @@ export default function PeopleEnrolledClassroomPage() {
   //   teacher: null,
   // });
 
-  const [users, setUsers] = useState<UserDto[]>([]);
+  // const [users, setUsers] = useState<UserDto[]>([]);
   // const [virtualUsers, setVirtualUsers] = useState<UserDto[]>([]);
   // const [errors, setErrors] = useState<string[]>([]);
 
@@ -75,7 +73,7 @@ export default function PeopleEnrolledClassroomPage() {
       setLoading(false);
 
       if (response.success && response.data) {
-        setStundentEnrollment(response.data);
+        setEnrolledStudents(response.data);
       } else {
         toast.error(response.message);
       }
@@ -83,15 +81,13 @@ export default function PeopleEnrolledClassroomPage() {
     getPeopleEnrolledClassroom();
   }, [id]);
 
-  useEffect(() => {
-    if (stundentEnrollment) {
-      const studentEnrollment = stundentEnrollment.map((enrollment) => {
-        return enrollment.user;
-      });
-
-      setUsers(studentEnrollment);
-    }
-  }, [stundentEnrollment]);
+  // useEffect(() => {
+  //   if (enrolledStudents) {
+  //     const studentEnrollment = enrolledStudents.map((student) => {
+  //       return student;
+  //     });
+  //   }
+  // }, [stundentEnrollment]);
 
   // useEffect(() => {
   //   async function getEnrolledStudentsData() {
@@ -185,7 +181,7 @@ export default function PeopleEnrolledClassroomPage() {
             <Label className="font-bold">Tabel Siswa Kelas</Label>
             <div className="flex items-center gap-1 text-smaga text-sm">
               <div className="">Total: </div>
-              <div className="font-extrabold">{stundentEnrollment?.length}</div>
+              <div className="font-extrabold">{enrolledStudents?.length}</div>
               <div className="font-extrabold">siswa</div>
             </div>
           </div>
@@ -228,7 +224,10 @@ export default function PeopleEnrolledClassroomPage() {
                   handleSelectedItem={handleSelectedUser}
                   resetSelected={resetSelected}
                 /> */}
-                <TableScrollable data={users} heightTable={heightTable} />
+                <TableScrollable
+                  data={enrolledStudents}
+                  heightTable={heightTable}
+                />
               </div>
             )}
           </div>
