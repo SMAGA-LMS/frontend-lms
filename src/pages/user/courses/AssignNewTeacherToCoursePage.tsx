@@ -34,7 +34,7 @@ export interface assignNewTeacherPayload {
 }
 
 export default function AssignNewTeacherToCoursePage() {
-  const pageTitle = "Pengajar Mata Pelajaran";
+  const pageTitle = "PIC Mata Pelajaran";
 
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ export default function AssignNewTeacherToCoursePage() {
 
   useEffect(() => {
     const noTeacher: UserDto = {
-      name: "<<hapus pengajar>>",
+      name: "<<hapus PIC>>",
       username: "null",
       role: UserRolesEnum.TEACHER,
       id: 0,
@@ -116,7 +116,7 @@ export default function AssignNewTeacherToCoursePage() {
     }
 
     if (course?.user === null && payload.userID === null) {
-      toast.error("Pilih pengajar terlebih dahulu");
+      toast.error("Pilih PIC terlebih dahulu");
       return;
     }
 
@@ -160,7 +160,7 @@ export default function AssignNewTeacherToCoursePage() {
             <div className="grid gap-4 py-4 rounded-lg">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="teacher" className="text-right">
-                  Pengajar
+                  PIC Mata Pelajaran
                 </Label>
 
                 <div className="col-span-2">
@@ -181,7 +181,7 @@ export default function AssignNewTeacherToCoursePage() {
                       id="teacher"
                       name="teacher"
                     >
-                      <SelectValue placeholder="Pilih pengajar" />
+                      <SelectValue placeholder="Pilih PIC mata pelajaran" />
                     </SelectTrigger>
                     <SelectContent>
                       {teachers
@@ -202,13 +202,13 @@ export default function AssignNewTeacherToCoursePage() {
               <Accordion type="single" collapsible className="">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="font-semibold">
-                    Lihat pengajar yang akan ditambahkan :
+                    Lihat PIC mata pelajaran yang akan ditambahkan :
                   </AccordionTrigger>
                   <AccordionContent>
                     <Alert>
                       <Terminal className="h-4 w-4" />
                       <AlertTitle className="font-semibold">
-                        Informasi pengajar berdasarkan input anda:
+                        Informasi PIC mata pelajaran berdasarkan input anda:
                       </AlertTitle>
                       <AlertDescription>
                         <div className="grid gap-2 py-2 rounded-lg">
@@ -229,7 +229,7 @@ export default function AssignNewTeacherToCoursePage() {
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="teacher" className="text-right">
-                              Pengajar
+                              PIC Mata Pelajaran
                             </Label>
                             <div className="col-span-3">
                               {formData.userID && (
@@ -243,8 +243,8 @@ export default function AssignNewTeacherToCoursePage() {
                       </AlertDescription>
                       {formData.userID === "0" && (
                         <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
-                          Pengajar sebelumnya akan dihapus dari mata pelajaran
-                          ini
+                          PIC mata pelajaran sebelumnya akan dihapus dari mata
+                          pelajaran ini
                         </p>
                       )}
                     </Alert>
