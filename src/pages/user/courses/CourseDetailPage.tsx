@@ -95,14 +95,16 @@ export default function CourseDetailPage() {
               textFullnameColor="text-secondary"
               defaultBadgeStyle="secondary"
             >
-              <ButtonWithIcon
-                size="icon"
-                variant="ghost"
-                className="hover:bg-smagaLMS-green"
-                onClickAction={() => navigateToAssignNewTeacher()}
-              >
-                <EditIcon size={20} className="text-white " />
-              </ButtonWithIcon>
+              {currentUser?.role === UserRolesEnum.ADMIN && (
+                <ButtonWithIcon
+                  size="icon"
+                  variant="ghost"
+                  className="hover:bg-smagaLMS-green"
+                  onClickAction={() => navigateToAssignNewTeacher()}
+                >
+                  <EditIcon size={20} className="text-white " />
+                </ButtonWithIcon>
+              )}
             </CardUserItem>
           </div>
         )}
