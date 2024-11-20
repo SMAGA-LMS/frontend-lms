@@ -16,18 +16,12 @@ const classroomRoutes = [
     children: [
       {
         index: true,
-        element: withRoleBasedRoute(<ClassroomsPage />, [
-          UserRolesEnum.ADMIN,
-          UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
-        ]),
+        element: withRoleBasedRoute(<ClassroomsPage />, [UserRolesEnum.ADMIN]),
       },
       {
         path: ":id",
         element: withRoleBasedRoute(<ClassroomDetailPage />, [
           UserRolesEnum.ADMIN,
-          UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
       {
