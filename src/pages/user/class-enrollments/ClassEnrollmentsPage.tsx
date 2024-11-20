@@ -2,6 +2,7 @@ import CardClassEnrollmentItem from "@/components/class-enrollments/CardClassEnr
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
+import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -24,6 +25,29 @@ export default function ClassEnrollmentsPage() {
   const [classEnrollments, setClassEnrollments] = useState<
     ClassEnrollmentDto[]
   >([]);
+  const [studentEnrollment, setStudentEnrollment] =
+    useState<StudentEnrollmentDto>();
+
+  useEffect(() => {
+    const getStudentEnrollmentData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) return;
+
+      setLoading(true);
+      const response =
+        await studentEnrollmentService.getStudentEnrollmentByStudentID(
+          currentUser.id
+        );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentEnrollment(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentEnrollmentData();
+  }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentsData = async () => {
@@ -40,9 +64,12 @@ export default function ClassEnrollmentsPage() {
           currentUser.id
         );
       } else if (currentUser.role === UserRolesEnum.STUDENT) {
-        response = await studentEnrollmentService.getClassEnrollmentByStudentID(
-          currentUser.id
-        );
+        if (studentEnrollment?.classroom.id !== undefined) {
+          response =
+            await classEnrollmentService.getClassEnrollmentByClassroomID(
+              studentEnrollment.classroom.id
+            );
+        }
       }
       setLoading(false);
 
@@ -55,7 +82,7 @@ export default function ClassEnrollmentsPage() {
       }
     };
     getClassEnrollmentsData();
-  }, [currentUser]);
+  }, [currentUser, studentEnrollment]);
 
   const navigateToAddNewClassEnrollment = () => {
     navigate("/class-enrollments/create");

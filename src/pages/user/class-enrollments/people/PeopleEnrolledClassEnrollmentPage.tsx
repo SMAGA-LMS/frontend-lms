@@ -6,6 +6,8 @@ import TableScrollable from "@/components/global/TableScrollable";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { UserDto } from "@/components/users/users";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
@@ -16,6 +18,8 @@ import { toast } from "sonner";
 export default function PeopleEnrolledClassEnrollmentPage() {
   const pageTitle = "List Siswa Kelas";
   const heightTable = "h-[60vh]";
+
+  const { currentUser } = useStateContext();
 
   // const { classroomCode } = useParams() as { classroomCode: string };
   const { id } = useParams() as { id: string };
@@ -80,6 +84,23 @@ export default function PeopleEnrolledClassEnrollmentPage() {
     }
     getPeopleEnrolledClassroom();
   }, [classEnrollment?.classroom.id]);
+
+  useEffect(() => {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    if (
+      currentUser?.id !== classEnrollment?.user?.id &&
+      currentUser?.role !== UserRolesEnum.ADMIN
+    ) {
+      setHasErrorPage(true);
+    }
+  }, [classEnrollment, currentUser]);
+
+  if (hasErrorPage) {
+    return <ErrorPage />;
+  }
 
   // useEffect(() => {
   //   if (enrolledStudents) {
