@@ -232,16 +232,6 @@ export default function PeopleEnrolledClassEnrollmentPage() {
               </div>
             )}
           </div>
-          {/* <div className="bottom-0 left-0 w-full bg-white my-1 rounded-md">
-            <Button
-              variant="smagaLMSGreen"
-              className="w-full"
-              type="submit"
-              onClick={navigateToAddNewStudent}
-            >
-              Tambah Siswa
-            </Button>
-          </div> */}
         </div>
       </div>
     </>
