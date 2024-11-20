@@ -5,6 +5,8 @@ import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +17,7 @@ export default function ClassEnrollmentsPage() {
   const heightTable = "h-[68vh]";
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [classEnrollments, setClassEnrollments] = useState<
@@ -22,22 +25,32 @@ export default function ClassEnrollmentsPage() {
   >([]);
 
   useEffect(() => {
+    const getClassEnrollmentsData = async () => {
+      if (!currentUser) {
+        return;
+      }
+
+      let response;
+      setLoading(true);
+      if (currentUser.role === UserRolesEnum.ADMIN) {
+        response = await classEnrollmentService.getClassEnrollments();
+      } else if (currentUser.role === UserRolesEnum.TEACHER) {
+        response = await classEnrollmentService.getClassEnrollments(
+          currentUser.id
+        );
+      }
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setClassEnrollments(response.data);
+        // setVirtualClassPeriods(response.data);
+      } else {
+        console.log("render: ", response.message);
+        toast.error(response.message);
+      }
+    };
     getClassEnrollmentsData();
-  }, []);
-
-  const getClassEnrollmentsData = async () => {
-    setLoading(true);
-    const response = await classEnrollmentService.getClassEnrollments();
-    setLoading(false);
-
-    if (response.success && response.data) {
-      setClassEnrollments(response.data);
-      // setVirtualClassPeriods(response.data);
-    } else {
-      console.log("render: ", response.message);
-      toast.error(response.message);
-    }
-  };
+  }, [currentUser]);
 
   const navigateToAddNewClassEnrollment = () => {
     navigate("/class-enrollments/create");
@@ -95,15 +108,17 @@ export default function ClassEnrollmentsPage() {
             )}
           </div>
         )}
-        <div className="bottom-16 left-0 w-full bg-white">
-          <Button
-            variant="smagaLMSGreen"
-            className="w-full mt-2"
-            onClick={navigateToAddNewClassEnrollment}
-          >
-            Add New Class Enrollment
-          </Button>
-        </div>
+        {currentUser && currentUser.role === UserRolesEnum.ADMIN && (
+          <div className="bottom-16 left-0 w-full bg-white">
+            <Button
+              variant="smagaLMSGreen"
+              className="w-full mt-2"
+              onClick={navigateToAddNewClassEnrollment}
+            >
+              Add New Class Enrollment
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

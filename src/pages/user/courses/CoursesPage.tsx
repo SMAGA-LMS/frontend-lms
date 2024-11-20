@@ -46,6 +46,7 @@ export default function CoursesPage() {
     };
     getCoursesData();
   }, [currentUser]);
+
   const navigateToAddNewCourse = () => {
     navigate("/courses/create");
     return;
@@ -99,8 +100,8 @@ export default function CoursesPage() {
             )}
           </div>
         )}
-        <div className="bottom-16 left-0 w-full bg-white">
-          {currentUser && currentUser.role === UserRolesEnum.ADMIN && (
+        {currentUser && currentUser.role === UserRolesEnum.ADMIN && (
+          <div className="bottom-16 left-0 w-full bg-white">
             <Button
               variant="smagaLMSGreen"
               className="w-full mt-2"
@@ -108,8 +109,8 @@ export default function CoursesPage() {
             >
               Add New Course
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );

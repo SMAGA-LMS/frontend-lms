@@ -7,11 +7,16 @@ import { addNewClassEnrollmentPayload } from "@/pages/user/class-enrollments/Add
 import { assignNewTeacherToClassEnrollmentPayload } from "@/pages/user/class-enrollments/people/AssignNewTeacherToClassEnrollmentPage";
 
 const classEnrollmentService = {
-  getClassEnrollments: async (): Promise<
-    BaseResponseAPIDto<ListClassEnrollmentsResponseDto>
-  > => {
+  getClassEnrollments: async (
+    userID?: number
+  ): Promise<BaseResponseAPIDto<ListClassEnrollmentsResponseDto>> => {
     try {
-      const response = await axiosClient.get(`/class-enrollments`);
+      let url = "/class-enrollments";
+      if (userID) {
+        url += `?userID=${userID}`;
+      }
+
+      const response = await axiosClient.get(url);
       return response.data;
     } catch (error) {
       return handleAxiosError<ListClassEnrollmentsResponseDto>(error);
