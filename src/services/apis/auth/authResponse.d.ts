@@ -1,4 +1,4 @@
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 
 export interface AuthResponseDto {
   user: UserDto;

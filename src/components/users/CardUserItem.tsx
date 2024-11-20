@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { UserDto } from "./users";
+import { UserDto } from "./user";
 import { ReactNode } from "react";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import TeacherTypeEnum from "@/enums/TeacherTypeEnum";

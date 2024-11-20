@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import classroomService from "@/services/apis/classrooms/classroomService";

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import ErrorPage from "@/pages/ErrorPage";
 import classroomService from "@/services/apis/classrooms/classroomService";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";

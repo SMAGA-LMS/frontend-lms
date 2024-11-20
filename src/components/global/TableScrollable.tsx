@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { ReactNode, useEffect, useState } from "react";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 
 interface TableScrollableProps {
   data: UserDto[];

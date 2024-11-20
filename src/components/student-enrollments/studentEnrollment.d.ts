@@ -1,5 +1,5 @@
 import Model from "@/services/model";
-import { UserDto } from "../users/users";
+import { UserDto } from "../users/user";
 import { ClassroomDto } from "../classrooms/classroom";
 
 export interface StudentEnrollmentDto extends Model {

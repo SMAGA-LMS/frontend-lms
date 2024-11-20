@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import classroomService from "@/services/apis/classrooms/classroomService";
 import ErrorPage from "@/pages/ErrorPage";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";

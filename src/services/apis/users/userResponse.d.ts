@@ -1,3 +1,3 @@
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 
 export type UserResponseDto = UserDto;

@@ -6,7 +6,7 @@ import TableScrollable from "@/components/global/TableScrollable";
 import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
