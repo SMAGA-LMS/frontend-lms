@@ -40,6 +40,18 @@ const studentEnrollmentService = {
       return handleAxiosError<StudentEnrollmentResponseDto>(error);
     }
   },
+  getStudentEnrollmentByStudentID: async (
+    studentID: number
+  ): Promise<BaseResponseAPIDto<StudentEnrollmentResponseDto>> => {
+    try {
+      const response = await axiosClient.get(
+        `/student-enrollments/student/${studentID}/classroom`
+      );
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<StudentEnrollmentResponseDto>(error);
+    }
+  },
 };
 
 export default studentEnrollmentService;

@@ -3,9 +3,12 @@ import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import TableScrollable from "@/components/global/TableScrollable";
+import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { UserDto } from "@/components/users/users";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
@@ -17,6 +20,8 @@ export default function PeopleEnrolledClassEnrollmentPage() {
   const pageTitle = "List Siswa Kelas";
   const heightTable = "h-[60vh]";
 
+  const { currentUser } = useStateContext();
+
   // const { classroomCode } = useParams() as { classroomCode: string };
   const { id } = useParams() as { id: string };
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,6 +29,8 @@ export default function PeopleEnrolledClassEnrollmentPage() {
 
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
   const [enrolledStudents, setEnrolledStudents] = useState<UserDto[]>([]);
+  const [studentEnrollment, setStudentEnrollment] =
+    useState<StudentEnrollmentDto>();
 
   // const [classroom, setClassroom] = useState<ClassroomDto>({
   //   classPeriod: {
@@ -40,6 +47,28 @@ export default function PeopleEnrolledClassEnrollmentPage() {
   // const [errors, setErrors] = useState<string[]>([]);
 
   // const [responseData, setResponseData] = useState<any | null>(null);
+
+  useEffect(() => {
+    const getStudentEnrollmentData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) return;
+
+      setLoading(true);
+      const response =
+        await studentEnrollmentService.getStudentEnrollmentByStudentID(
+          currentUser.id
+        );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentEnrollment(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentEnrollmentData();
+  }, [currentUser]);
+
   useEffect(() => {
     const getClassEnrollmentDetail = async () => {
       if (!id) {
@@ -80,6 +109,32 @@ export default function PeopleEnrolledClassEnrollmentPage() {
     }
     getPeopleEnrolledClassroom();
   }, [classEnrollment?.classroom.id]);
+
+  useEffect(() => {
+    if (!classEnrollment || !currentUser || !studentEnrollment) {
+      return;
+    }
+
+    const isValidStudent = () => {
+      console.log(classEnrollment.id, studentEnrollment.classroom.id);
+      return classEnrollment.classroom.id === studentEnrollment.classroom.id;
+    };
+
+    // currentUser => student (10) !== classEnrollment?.user?.id (15) karena 15 teacher di classEnrollment  ==> hasilnya true
+    // currentUser => student !== ADMIN ==> hasil nya true
+    // !isValidStudent() ==> false
+    if (
+      currentUser?.id !== classEnrollment?.user?.id &&
+      currentUser?.role !== UserRolesEnum.ADMIN &&
+      !isValidStudent()
+    ) {
+      setHasErrorPage(true);
+    }
+  }, [classEnrollment, currentUser, studentEnrollment]);
+
+  if (hasErrorPage) {
+    return <ErrorPage />;
+  }
 
   // useEffect(() => {
   //   if (enrolledStudents) {

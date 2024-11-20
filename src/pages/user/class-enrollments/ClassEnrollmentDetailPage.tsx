@@ -2,10 +2,14 @@ import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollme
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
+import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
+import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 import { EditIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,12 +19,36 @@ export default function ClassEnrollmentDetailPage() {
   const pageTitle = "Detail Class Enrollment";
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
+  const [studentEnrollment, setStudentEnrollment] =
+    useState<StudentEnrollmentDto>();
+
+  useEffect(() => {
+    const getStudentEnrollmentData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) return;
+
+      setLoading(true);
+      const response =
+        await studentEnrollmentService.getStudentEnrollmentByStudentID(
+          currentUser.id
+        );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentEnrollment(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentEnrollmentData();
+  }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentDetail = async () => {
@@ -42,6 +70,28 @@ export default function ClassEnrollmentDetailPage() {
 
     getClassEnrollmentDetail();
   }, [id]);
+
+  useEffect(() => {
+    if (!classEnrollment || !currentUser || !studentEnrollment) {
+      return;
+    }
+
+    const isValidStudent = () => {
+      console.log(classEnrollment.id, studentEnrollment.classroom.id);
+      return classEnrollment.classroom.id === studentEnrollment.classroom.id;
+    };
+
+    // currentUser => student (10) !== classEnrollment?.user?.id (15) karena 15 teacher di classEnrollment  ==> hasilnya true
+    // currentUser => student !== ADMIN ==> hasil nya true
+    // !isValidStudent() ==> false
+    if (
+      currentUser?.id !== classEnrollment?.user?.id &&
+      currentUser?.role !== UserRolesEnum.ADMIN &&
+      !isValidStudent()
+    ) {
+      setHasErrorPage(true);
+    }
+  }, [classEnrollment, currentUser, studentEnrollment]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
@@ -98,14 +148,16 @@ export default function ClassEnrollmentDetailPage() {
             textFullnameColor="text-secondary"
             defaultBadgeStyle="secondary"
           >
-            <ButtonWithIcon
-              size="icon"
-              variant="ghost"
-              className="hover:bg-smagaLMS-green"
-              onClickAction={() => navigateToAssignNewTeacher()}
-            >
-              <EditIcon size={20} className="text-white " />
-            </ButtonWithIcon>
+            {currentUser?.role === UserRolesEnum.ADMIN && (
+              <ButtonWithIcon
+                size="icon"
+                variant="ghost"
+                className="hover:bg-smagaLMS-green"
+                onClickAction={() => navigateToAssignNewTeacher()}
+              >
+                <EditIcon size={20} className="text-white " />
+              </ButtonWithIcon>
+            )}
           </CardUserItem>
         )}
       </div>

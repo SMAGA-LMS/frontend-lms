@@ -1,21 +1,20 @@
 import ItemMenuWithLabel from "../global/ItemMenuWithLabel";
 import IconMenuWithBackground from "../global/IconMenuWithBackground";
-import IconMenu from "../global/IconMenu";
-import iconClassEnrollments from "@/assets/icons/class-enrollments.svg";
 import { useNavigate } from "react-router-dom";
+import { BookOpenTextIcon } from "lucide-react";
 
 export default function HomeAdminMenu() {
   const navigate = useNavigate();
 
-  const navigateToClassEnrollments = () => {
-    navigate("/class-enrollments");
+  const navigateToCourses = () => {
+    navigate("/courses");
   };
   return (
     <div className="mt-5 flex justify-center w-full">
-      <button onClick={navigateToClassEnrollments}>
-        <ItemMenuWithLabel label="Class Enrollments">
+      <button onClick={navigateToCourses}>
+        <ItemMenuWithLabel label="PIC Course">
           <IconMenuWithBackground color="smagaLMS-gray">
-            <IconMenu icon={iconClassEnrollments} />
+            <BookOpenTextIcon size={24} color="white" />
           </IconMenuWithBackground>
         </ItemMenuWithLabel>
       </button>
