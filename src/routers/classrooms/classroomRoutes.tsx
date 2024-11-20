@@ -28,8 +28,6 @@ const classroomRoutes = [
         path: ":id/people",
         element: withRoleBasedRoute(<PeopleEnrolledClassroomPage />, [
           UserRolesEnum.ADMIN,
-          UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
       {
