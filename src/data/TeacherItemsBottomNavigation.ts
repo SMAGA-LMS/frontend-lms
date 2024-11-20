@@ -1,5 +1,4 @@
 import iconHome from "../assets/icons/bottom-navigation/home.svg";
-import iconCourses from "../assets/icons/bottom-navigation/courses.svg";
 import iconAttendances from "../assets/icons/bottom-navigation/attendances.svg";
 import iconAssignments from "../assets/icons/bottom-navigation/assignments.svg";
 import iconProfile from "../assets/icons/bottom-navigation/profile.svg";
