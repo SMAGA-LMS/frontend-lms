@@ -4,6 +4,7 @@ import { StudentEnrollmentResponseDto } from "./studentEnrollmentResponse";
 import { handleAxiosError } from "../handleError";
 import { assignNewStudentPayload } from "@/pages/user/classrooms/people/AssignNewStudentToClassroomPage";
 import { ListUsersResponseDto } from "../users/listUsersResponse";
+import { ListClassEnrollmentsResponseDto } from "../class-enrollments/listClassEnrollmentsResponse";
 
 const studentEnrollmentService = {
   getPeopleEnrolledClassroom: async (
@@ -38,6 +39,21 @@ const studentEnrollmentService = {
       return response.data;
     } catch (error) {
       return handleAxiosError<StudentEnrollmentResponseDto>(error);
+    }
+  },
+  getClassEnrollmentByStudentID: async (
+    userID?: number
+  ): Promise<BaseResponseAPIDto<ListClassEnrollmentsResponseDto>> => {
+    try {
+      let url = "/student-enrollments";
+      if (userID) {
+        url += `?userID=${userID}`;
+      }
+
+      const response = await axiosClient.get(url);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ListClassEnrollmentsResponseDto>(error);
     }
   },
 };

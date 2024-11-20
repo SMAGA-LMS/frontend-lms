@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
+import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -36,6 +37,10 @@ export default function ClassEnrollmentsPage() {
         response = await classEnrollmentService.getClassEnrollments();
       } else if (currentUser.role === UserRolesEnum.TEACHER) {
         response = await classEnrollmentService.getClassEnrollments(
+          currentUser.id
+        );
+      } else if (currentUser.role === UserRolesEnum.STUDENT) {
+        response = await studentEnrollmentService.getClassEnrollmentByStudentID(
           currentUser.id
         );
       }
