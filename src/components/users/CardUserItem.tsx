@@ -15,7 +15,7 @@ interface CardUserItemProps {
     | "destructive"
     | "outline"
     | undefined;
-  teacherType?: TeacherTypeEnum;
+  // teacherType?: TeacherTypeEnum;
   children?: ReactNode;
 }
 
@@ -24,7 +24,7 @@ export default function CardUserItem({
   additionalClassName,
   textFullnameColor,
   defaultBadgeStyle,
-  teacherType,
+  // teacherType,
   children,
 }: CardUserItemProps) {
   const defaultUser: UserDto = {
@@ -34,8 +34,8 @@ export default function CardUserItem({
     role: UserRolesEnum.TEACHER,
   };
 
-  const defaultTeacherType = TeacherTypeEnum.TEACHER;
-  const displayTeacherType = teacherType || defaultTeacherType;
+  // const defaultTeacherType = TeacherTypeEnum.TEACHER;
+  // const displayTeacherType = teacherType || defaultTeacherType;
 
   const displayUser = user || defaultUser;
   return (
@@ -58,11 +58,11 @@ export default function CardUserItem({
             </h2>
             <Badge className="mr-2" variant={defaultBadgeStyle}>
               {displayUser.id}
-            </Badge>{" "}
-            |
-            <Badge className="ml-2" variant="default">
-              {displayTeacherType}
             </Badge>
+            {/* | */}
+            {/* <Badge className="ml-2" variant="default">
+              {displayTeacherType}
+            </Badge> */}
           </div>
         </div>
 
