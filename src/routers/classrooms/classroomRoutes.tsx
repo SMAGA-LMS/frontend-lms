@@ -5,10 +5,10 @@ import AddNewClassRoomPage from "@/pages/user/classrooms/AddNewClassroomPage";
 import ClassroomsPage from "@/pages/user/classrooms/ClassroomsPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import ClassroomDetailPage from "@/pages/user/classrooms/ClassroomDetailPage";
-import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/PeopleEnrolledClassroomPage";
-import AssignNewStudentToClassroomPage from "@/pages/user/classrooms/AssignNewStudentToClassroomPage";
+import PeopleEnrolledClassroomPage from "@/pages/user/classrooms/people/PeopleEnrolledClassroomPage";
+import AssignNewStudentToClassroomPage from "@/pages/user/classrooms/people/AssignNewStudentToClassroomPage";
 
-const classroomsRoute = [
+const classroomRoutes = [
   {
     path: "/classrooms",
     element: <MemberLayout />,
@@ -39,7 +39,7 @@ const classroomsRoute = [
         ]),
       },
       {
-        path: ":id/people/create",
+        path: ":id/people/assign-student",
         element: withRoleBasedRoute(<AssignNewStudentToClassroomPage />, [
           UserRolesEnum.ADMIN,
         ]),
@@ -54,4 +54,4 @@ const classroomsRoute = [
   },
 ];
 
-export default classroomsRoute;
+export default classroomRoutes;

@@ -1,6 +1,6 @@
 export interface BaseResponseAPIDto<T> {
   success: boolean;
   message: string;
-  data?: T;
-  errors?: any;
+  data: T | null;
+  errors: any | null;
 }

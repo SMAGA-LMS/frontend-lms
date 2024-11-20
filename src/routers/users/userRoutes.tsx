@@ -5,7 +5,7 @@ import UserRolesEnum from "@/enums/UserRoleEnum";
 import UsersPage from "@/pages/user/users/UsersPage";
 import AddNewUserPage from "@/pages/user/users/AddNewUserPage";
 
-const usersRoute = [
+const userRoutes = [
   {
     path: "/users",
     element: <MemberLayout />,
@@ -23,4 +23,4 @@ const usersRoute = [
   },
 ];
 
-export default usersRoute;
+export default userRoutes;

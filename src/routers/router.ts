@@ -1,21 +1,27 @@
 import { createBrowserRouter } from "react-router-dom";
-import guestRoute from "./guest/guestRoute";
-import homeRoute from "./home/homeRoute";
-import coursesRoute from "./courses/coursesRoute";
-import classroomsRoute from "./classrooms/classroomsRoute";
-import usersRoute from "./users/usersRoute";
-import profileRoute from "./profile/profileRoute";
+import guestRoutes from "./guest/guestRoutes";
+
+import homeRoutes from "./home/homeRoutes";
+import courseRoutes from "./courses/courseRoutes";
+import classroomRoutes from "./classrooms/classroomRoutes";
+import userRoutes from "./users/userRoutes";
+import profileRoutes from "./profile/profileRoutes";
+import classEnrollmentRoutes from "./class-enrollments/classEnrollmentRoute";
+import courseModuleRoutes from "./course-modules/courseModuleRoutes";
 
 export const router = createBrowserRouter([
   // guest
-  ...guestRoute,
+  ...guestRoutes,
 
   // logged user
-  ...homeRoute,
-  ...coursesRoute,
-  ...classroomsRoute,
-  ...usersRoute,
-  ...profileRoute,
+  ...homeRoutes,
+  ...courseRoutes,
+  ...classroomRoutes,
+  ...userRoutes,
+  ...profileRoutes,
+  ...classEnrollmentRoutes,
+  ...courseModuleRoutes,
+
   // {
   //   path: "/",
   //   element: <MemberLayout />,

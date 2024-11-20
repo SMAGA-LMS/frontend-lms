@@ -1,3 +1,5 @@
+import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { CourseDto } from "@/components/courses/courses";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
@@ -9,7 +11,6 @@ import {
 } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -21,8 +22,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
 import { UserDto } from "@/components/users/users";
-import GradeEnum from "@/enums/GradeEnum";
 import UserRolesEnum from "@/enums/UserRoleEnum";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
+import classroomService from "@/services/apis/classrooms/classroomService";
 import courseService from "@/services/apis/courses/courseService";
 import userService from "@/services/apis/users/userService";
 import { InfoIcon, Terminal } from "lucide-react";
@@ -30,29 +32,31 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export interface addNewCoursePayload {
-  name: string;
-  grade: string;
-  userID?: string;
+export interface addNewClassEnrollmentPayload {
+  courseID: string;
+  classroomID: string;
+  userID: string;
 }
 
-export default function AddNewCoursePage() {
-  const pageTitle = "Tambah Mata Pelajaran Baru";
+export default function AddNewClassEnrollmentPage() {
+  const pageTitle = "Daftarkan Kelas ke Course Baru";
   //   const heightTable = "h-[38vh]";
 
   const navigate = useNavigate();
 
-  const initialFormData: addNewCoursePayload = {
-    name: "",
-    grade: "",
+  const initialFormData: addNewClassEnrollmentPayload = {
+    courseID: "",
+    classroomID: "",
+    userID: "",
   };
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [formData, setFormData] =
-    useState<addNewCoursePayload>(initialFormData);
+    useState<addNewClassEnrollmentPayload>(initialFormData);
+  const [courses, setCourses] = useState<CourseDto[]>([]);
+  const [classrooms, setClassrooms] = useState<ClassroomDto[]>([]);
   const [teachers, setTeachers] = useState<UserDto[]>([]);
-  const grades: string[] = Object.values(GradeEnum);
 
   useEffect(() => {
     const getTeachers = async () => {
@@ -67,35 +71,59 @@ export default function AddNewCoursePage() {
       }
     };
     getTeachers();
+
+    const getCourses = async () => {
+      setLoading(true);
+      const response = await courseService.getCourses();
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setCourses(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+    getCourses();
+
+    const getClassrooms = async () => {
+      setLoading(true);
+      const response = await classroomService.getClassrooms();
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setClassrooms(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+    getClassrooms();
   }, []);
 
-  async function handleFormSubmit(event) {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    const payload: addNewCoursePayload = {
-      name: formData.name,
-      grade: formData.grade,
+    const payload: addNewClassEnrollmentPayload = {
+      courseID: formData.courseID,
+      classroomID: formData.classroomID,
+      userID: formData.userID,
     };
 
-    // Conditionally add the teacher field if it has a value
-    if (formData.userID) {
-      payload.userID = formData.userID;
-    }
-
     setLoading(true);
-    const response = await courseService.addNewCourse(payload);
+    const response = await classEnrollmentService.addNewClassEnrollment(
+      payload
+    );
     setLoading(false);
 
     if (response.success && response.data) {
       setErrors(null);
       toast.success(response.message);
-      navigate(`/courses/${response.data.id}`, { replace: true });
+      navigate(`/class-enrollments/${response.data.id}`, { replace: true });
       return;
     } else {
       setErrors(response.errors);
       toast.error(response.message);
     }
-  }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -105,6 +133,22 @@ export default function AddNewCoursePage() {
       [name]: value,
     });
     setErrors(null);
+  };
+
+  const getClassroomById = (id: string): ClassroomDto | undefined => {
+    const classroom = classrooms.find((c) => c.id.toString() === id);
+    if (!classroom) {
+      return undefined;
+    }
+    return classroom;
+  };
+
+  const getCourseById = (id: string): CourseDto | undefined => {
+    const course = courses.find((c) => c.id.toString() === id);
+    if (!course) {
+      return undefined;
+    }
+    return course;
   };
 
   const getUserById = (id: string): UserDto | undefined => {
@@ -131,13 +175,13 @@ export default function AddNewCoursePage() {
                 <AccordionContent>
                   <div>
                     <p>
-                      Menambahkan mata pelajaran baru ke dalam sistem dibutuhkan
-                      data terkait:
+                      Mendaftarkan kelas ke mata pelajaran pada sistem
+                      dibutuhkan data terkait:
                     </p>
                     <ol className="list-decimal ml-4">
+                      <li>Nama Kelas</li>
                       <li>Nama Mata Pelajaran</li>
-                      <li>Tingkatan Kelas</li>
-                      <li>Guru atau Pengajar (Opsional)</li>
+                      <li>Guru atau Pengajar</li>
                     </ol>
                   </div>
                 </AccordionContent>
@@ -146,22 +190,8 @@ export default function AddNewCoursePage() {
           </div>
           <div className="grid gap-4 py-4 rounded-lg">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Nama Mata Pelajaran
-              </Label>
-              <Input
-                id="name"
-                name="name"
-                placeholder="Matematika Wajib"
-                className="col-span-2"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="grade" className="text-right">
-                Tingkatan Kelas
+              <Label htmlFor="classroomID" className="text-right">
+                Nama Kelas
               </Label>
 
               <div className="col-span-2">
@@ -169,7 +199,7 @@ export default function AddNewCoursePage() {
                   onValueChange={(val) => {
                     const event = {
                       target: {
-                        name: "grade",
+                        name: "classroomID",
                         value: val,
                       },
                     };
@@ -177,13 +207,17 @@ export default function AddNewCoursePage() {
                   }}
                   required
                 >
-                  <SelectTrigger className="w-full" id="grade" name="grade">
-                    <SelectValue placeholder="Pilih tingkatan kelas" />
+                  <SelectTrigger
+                    className="w-full"
+                    id="classroomID"
+                    name="classroomID"
+                  >
+                    <SelectValue placeholder="Pilih kelas" />
                   </SelectTrigger>
                   <SelectContent>
-                    {grades.map((grade) => (
-                      <SelectItem key={grade} value={`${grade}`}>
-                        {grade}
+                    {classrooms.map((classroom) => (
+                      <SelectItem key={classroom.id} value={`${classroom.id}`}>
+                        {classroom.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -191,7 +225,42 @@ export default function AddNewCoursePage() {
               </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="teacher" className="text-right">
+              <Label htmlFor="courseID" className="text-right">
+                Nama Mata Pelajaran
+              </Label>
+
+              <div className="col-span-2">
+                <Select
+                  onValueChange={(val) => {
+                    const event = {
+                      target: {
+                        name: "courseID",
+                        value: val,
+                      },
+                    };
+                    handleInputChange(event);
+                  }}
+                  required
+                >
+                  <SelectTrigger
+                    className="w-full"
+                    id="courseID"
+                    name="courseID"
+                  >
+                    <SelectValue placeholder="Pilih mata pelajaran" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {courses.map((course) => (
+                      <SelectItem key={course.id} value={`${course.id}`}>
+                        {course.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="teacherID" className="text-right">
                 Pengajar
               </Label>
 
@@ -207,7 +276,11 @@ export default function AddNewCoursePage() {
                     handleInputChange(event);
                   }}
                 >
-                  <SelectTrigger className="w-full" id="teacher" name="teacher">
+                  <SelectTrigger
+                    className="w-full"
+                    id="teacherID"
+                    name="teacherID"
+                  >
                     <SelectValue placeholder="Pilih pengajar" />
                   </SelectTrigger>
                   <SelectContent>
@@ -227,33 +300,37 @@ export default function AddNewCoursePage() {
             <Accordion type="single" collapsible className="">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
-                  Lihat mata pelajaran yang akan ditambahkan :
+                  Lihat data yang akan ditambahkan :
                 </AccordionTrigger>
                 <AccordionContent>
                   <Alert>
                     <Terminal className="h-4 w-4" />
                     <AlertTitle className="font-semibold">
-                      Informasi mata pelajaran berdasarkan input anda:
+                      Informasi data berdasarkan input anda:
                     </AlertTitle>
                     <AlertDescription>
                       <div className="grid gap-2 py-2 rounded-lg">
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label
-                            htmlFor="name"
+                            htmlFor="classroomID"
                             className="text-right col-span-1"
                           >
+                            Nama Kelas
+                          </Label>
+                          <div className="col-span-2">
+                            {getClassroomById(formData.classroomID)?.name}
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="courseID" className="text-right">
                             Nama Mata Pelajaran
                           </Label>
-                          <div className="col-span-2">{formData.name}</div>
+                          <div className="col-span-2">
+                            {getCourseById(formData.courseID)?.name}
+                          </div>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="grade" className="text-right">
-                            Tingkatan Kelas
-                          </Label>
-                          <div className="col-span-2">{formData.grade}</div>
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="teacher" className="text-right">
+                          <Label htmlFor="teacherID" className="text-right">
                             Pengajar
                           </Label>
                           <div className="col-span-3">

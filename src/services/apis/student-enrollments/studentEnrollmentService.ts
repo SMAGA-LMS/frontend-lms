@@ -2,20 +2,20 @@ import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { StudentEnrollmentResponseDto } from "./studentEnrollmentResponse";
 import { handleAxiosError } from "../handleError";
-import { assignNewStudentPayload } from "@/pages/user/classrooms/AssignNewStudentToClassroomPage";
+import { assignNewStudentPayload } from "@/pages/user/classrooms/people/AssignNewStudentToClassroomPage";
 import { ListUsersResponseDto } from "../users/listUsersResponse";
 
 const studentEnrollmentService = {
   getPeopleEnrolledClassroom: async (
-    classroomID: string
-  ): Promise<BaseResponseAPIDto<StudentEnrollmentResponseDto>> => {
+    classroomID: number
+  ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
     try {
       const response = await axiosClient.get(
         `/student-enrollments?classroomID=${classroomID}`
       );
       return response.data;
     } catch (error) {
-      return handleAxiosError<StudentEnrollmentResponseDto>(error);
+      return handleAxiosError<ListUsersResponseDto>(error);
     }
   },
   getAvailableStudents: async (
@@ -23,7 +23,7 @@ const studentEnrollmentService = {
   ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/student-enrollments/available?classroomID=${classroomID}`
+        `/student-enrollments?classroomID=${classroomID}&isAvailable=true`
       );
       return response.data;
     } catch (error) {

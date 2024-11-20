@@ -10,6 +10,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -19,7 +20,6 @@ import {
 } from "@/components/ui/select";
 import GradeEnum from "@/enums/GradeEnum";
 import classroomService from "@/services/apis/classrooms/classroomService";
-import { Label } from "@radix-ui/react-label";
 import { Terminal } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -62,7 +62,7 @@ export default function AddNewClassRoomPage() {
 
     if (response.success && response.data) {
       toast.success(response.message);
-      navigate("/classrooms", { replace: true });
+      navigate(`/classrooms/${response.data.id}`, { replace: true });
     } else {
       setErrors(response.errors);
       toast.error(response.message);

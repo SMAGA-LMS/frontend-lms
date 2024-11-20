@@ -1,4 +1,4 @@
-import { CourseDto } from "@/components/courses/courses";
+import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
@@ -22,51 +22,44 @@ import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
 import { UserDto } from "@/components/users/users";
 import UserRolesEnum from "@/enums/UserRoleEnum";
-import courseService from "@/services/apis/courses/courseService";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import userService from "@/services/apis/users/userService";
 import { Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export interface assignNewTeacherPayload {
-  userID?: string | null;
+export interface assignNewTeacherToClassEnrollmentPayload {
+  userID: string;
 }
 
-export default function AssignNewTeacherToCoursePage() {
-  const pageTitle = "PIC Mata Pelajaran";
+export default function AssignNewTeacherToClassEnrollmentPage() {
+  const pageTitle = "Pengajar Mata Pelajaran";
 
   const navigate = useNavigate();
 
-  const initialFormData: assignNewTeacherPayload = {
-    userID: null,
+  const initialFormData: assignNewTeacherToClassEnrollmentPayload = {
+    userID: "",
   };
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [formData, setFormData] =
-    useState<assignNewTeacherPayload>(initialFormData);
+    useState<assignNewTeacherToClassEnrollmentPayload>(initialFormData);
 
   const [teachers, setTeachers] = useState<UserDto[]>([]);
 
-  const [course, setCourse] = useState<CourseDto>();
+  const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
 
   useEffect(() => {
-    const noTeacher: UserDto = {
-      name: "<<hapus PIC>>",
-      username: "null",
-      role: UserRolesEnum.TEACHER,
-      id: 0,
-    };
-
     const getTeachers = async () => {
       setLoading(true);
       const response = await userService.getUsers(UserRolesEnum.TEACHER);
       setLoading(false);
 
       if (response.success && response.data) {
-        setTeachers([noTeacher, ...response.data]);
+        setTeachers(response.data);
       } else {
         toast.error(response.message);
       }
@@ -75,58 +68,57 @@ export default function AssignNewTeacherToCoursePage() {
   }, []);
 
   useEffect(() => {
-    const getCourseDetail = async () => {
+    const getClassEnrollmentDetail = async () => {
       if (!id) {
-        toast.error("Invalid course ID");
+        toast.error("Invalid class enrollment ID");
         return;
       }
 
       setLoading(true);
-      const response = await courseService.getCourseDetailByID(id);
+      const response = await classEnrollmentService.getClassEnrollmentByID(id);
       setLoading(false);
 
       if (response.success && response.data) {
-        setCourse(response.data);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          userID: response.data?.user?.id?.toString() || null,
-          courseID: response.data?.id?.toString() || null,
-        }));
+        setClassEnrollment(response.data);
+        setFormData({
+          userID: response.data.user.id.toString(),
+        });
       } else {
         toast.error(response.message);
       }
     };
 
-    getCourseDetail();
+    getClassEnrollmentDetail();
   }, [id]);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     if (!id) {
-      toast.error("Invalid course ID");
+      toast.error("Invalid class enrollment ID");
       return;
     }
 
-    const payload: assignNewTeacherPayload = {};
+    const payload: assignNewTeacherToClassEnrollmentPayload = {
+      userID: formData.userID,
+    };
 
-    payload.userID = formData.userID;
-    if (formData.userID === "0" || formData.userID === null) {
-      payload.userID = null;
-    }
-
-    if (course?.user === null && payload.userID === null) {
-      toast.error("Pilih PIC terlebih dahulu");
+    if (
+      payload.userID === undefined ||
+      payload.userID === "" ||
+      payload.userID === null
+    ) {
+      toast.error("Pilih pengajar terlebih dahulu");
       return;
     }
 
     setLoading(true);
-    const response = await courseService.assignNewTeacher(payload, id);
+    const response = await classEnrollmentService.assignNewTeacher(payload, id);
     setLoading(false);
 
     if (response.success) {
       toast.success(response.message);
-      navigate(`/courses/${id}`, { replace: true });
+      navigate(`/class-enrollments/${id}`, { replace: true });
     } else {
       setErrors(response.errors);
       toast.error(response.message);
@@ -160,7 +152,7 @@ export default function AssignNewTeacherToCoursePage() {
             <div className="grid gap-4 py-4 rounded-lg">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="teacher" className="text-right">
-                  PIC Mata Pelajaran
+                  Pengajar
                 </Label>
 
                 <div className="col-span-2">
@@ -181,11 +173,13 @@ export default function AssignNewTeacherToCoursePage() {
                       id="teacher"
                       name="teacher"
                     >
-                      <SelectValue placeholder="Pilih PIC mata pelajaran" />
+                      <SelectValue placeholder="Pilih pengajar" />
                     </SelectTrigger>
                     <SelectContent>
                       {teachers
-                        .filter((teacher) => course?.user || teacher.id !== 0)
+                        .filter(
+                          (teacher) => classEnrollment?.user || teacher.id !== 0
+                        )
                         .map((teacher) => (
                           <SelectItem key={teacher.id} value={`${teacher.id}`}>
                             {teacher.name}
@@ -202,13 +196,13 @@ export default function AssignNewTeacherToCoursePage() {
               <Accordion type="single" collapsible className="">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="font-semibold">
-                    Lihat PIC mata pelajaran yang akan ditambahkan :
+                    Lihat pengajar yang akan ditambahkan :
                   </AccordionTrigger>
                   <AccordionContent>
                     <Alert>
                       <Terminal className="h-4 w-4" />
                       <AlertTitle className="font-semibold">
-                        Informasi PIC mata pelajaran berdasarkan input anda:
+                        Informasi pengajar berdasarkan input anda:
                       </AlertTitle>
                       <AlertDescription>
                         <div className="grid gap-2 py-2 rounded-lg">
@@ -219,17 +213,21 @@ export default function AssignNewTeacherToCoursePage() {
                             >
                               Nama Mata Pelajaran
                             </Label>
-                            <div className="col-span-2">{course?.name}</div>
+                            <div className="col-span-2">
+                              {classEnrollment?.course.name}
+                            </div>
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="grade" className="text-right">
                               Tingkatan Kelas
                             </Label>
-                            <div className="col-span-2">{course?.grade}</div>
+                            <div className="col-span-2">
+                              {classEnrollment?.classroom.grade}
+                            </div>
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="teacher" className="text-right">
-                              PIC Mata Pelajaran
+                              Pengajar
                             </Label>
                             <div className="col-span-3">
                               {formData.userID && (
@@ -243,8 +241,8 @@ export default function AssignNewTeacherToCoursePage() {
                       </AlertDescription>
                       {formData.userID === "0" && (
                         <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
-                          PIC mata pelajaran sebelumnya akan dihapus dari mata
-                          pelajaran ini
+                          Pengajar sebelumnya akan dihapus dari mata pelajaran
+                          ini
                         </p>
                       )}
                     </Alert>

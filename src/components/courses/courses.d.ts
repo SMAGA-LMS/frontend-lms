@@ -3,6 +3,6 @@ import { UserDto } from "../users/users";
 
 export interface CourseDto extends Model {
   name: string;
-  user: UserDto;
+  user?: UserDto;
   grade: string;
 }

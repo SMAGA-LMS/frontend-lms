@@ -10,8 +10,8 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
   if (!axiosError.response) {
     return {
       success: false,
-      message:
-        "Backend server is not active. Please contact the author or try again later!",
+      message: axiosError.message,
+      data: null,
       errors: { general: [error.message] },
     };
   }
@@ -21,6 +21,7 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
     return {
       success: false,
       message: "Internal server error.",
+      data: null,
       errors: { general: ["Internal server error."] },
     };
   }
@@ -28,7 +29,8 @@ const handleAxiosError = <T>(error: any): BaseResponseAPIDto<T> => {
   if (axiosError.response && axiosError.response.status === 401) {
     return {
       success: false,
-      message: `${axiosError.response.data.message}. Please refresh the page.`,
+      message: axiosError.response.data.message,
+      data: null,
       errors: { general: [axiosError.response.data.message] },
     };
   }

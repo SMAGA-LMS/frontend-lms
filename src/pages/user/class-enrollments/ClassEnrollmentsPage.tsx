@@ -1,47 +1,50 @@
-import CardCourseItem from "@/components/courses/CardCourseItem";
-import { CourseDto } from "@/components/courses/courses";
+import CardClassEnrollmentItem from "@/components/class-enrollments/CardClassEnrollmentItem";
+import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import courseService from "@/services/apis/courses/courseService";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function CoursesPage() {
-  const pageTitle = "Courses List";
+export default function ClassEnrollmentsPage() {
+  const pageTitle = "Class Enrollment List";
   const heightTable = "h-[68vh]";
 
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [courses, setCourses] = useState<CourseDto[]>([]);
+  const [classEnrollments, setClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
 
   useEffect(() => {
-    getCoursesData();
+    getClassEnrollmentsData();
   }, []);
 
-  const getCoursesData = async () => {
+  const getClassEnrollmentsData = async () => {
     setLoading(true);
-    const response = await courseService.getCourses();
+    const response = await classEnrollmentService.getClassEnrollments();
     setLoading(false);
 
     if (response.success && response.data) {
-      setCourses(response.data);
+      setClassEnrollments(response.data);
       // setVirtualClassPeriods(response.data);
     } else {
+      console.log("render: ", response.message);
       toast.error(response.message);
     }
   };
 
-  const navigateToAddNewCourse = () => {
-    navigate("/courses/create");
+  const navigateToAddNewClassEnrollment = () => {
+    navigate("/class-enrollments/create");
     return;
   };
 
-  const isCourseEmpty = courses.length === 0;
+  const isClassEnrollmentsEmpty = classEnrollments.length === 0;
 
   return (
     <>
@@ -57,31 +60,34 @@ export default function CoursesPage() {
             <div className="my-3">
               <div>
                 <Label className="font-semibold">
-                  Total Mata Pelajaran: {courses.length}
+                  Total Class Enrollments: {classEnrollments.length}
                 </Label>
               </div>
               <div>
-                {isCourseEmpty && (
+                {isClassEnrollmentsEmpty && (
                   <div className={`${heightTable}`}>
                     <Label className="text-sm text-gray-500">
-                      Tidak ada mata pelajaran yang tersedia
+                      Tidak ada Class Enrollment yang tersedia
                     </Label>
                   </div>
                 )}
               </div>
             </div>
-            {!isCourseEmpty && (
+            {!isClassEnrollmentsEmpty && (
               <ScrollArea
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {courses.map((course, index) => (
+                  {classEnrollments.map((classEnrollment, index) => (
                     <Link
-                      to={`/courses/${course.id}`}
+                      to={`/class-enrollments/${classEnrollment.id}`}
                       key={index}
                       className="block"
                     >
-                      <CardCourseItem key={index} data={course} />
+                      <CardClassEnrollmentItem
+                        key={index}
+                        data={classEnrollment}
+                      />
                     </Link>
                   ))}
                 </div>
@@ -93,9 +99,9 @@ export default function CoursesPage() {
           <Button
             variant="smagaLMSGreen"
             className="w-full mt-2"
-            onClick={navigateToAddNewCourse}
+            onClick={navigateToAddNewClassEnrollment}
           >
-            Add New Course
+            Add New Class Enrollment
           </Button>
         </div>
       </div>

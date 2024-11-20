@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { UserDto } from "./users";
 import { ReactNode } from "react";
 import UserRolesEnum from "@/enums/UserRoleEnum";
+import TeacherTypeEnum from "@/enums/TeacherTypeEnum";
 
 interface CardUserItemProps {
   user?: UserDto;
@@ -14,6 +15,7 @@ interface CardUserItemProps {
     | "destructive"
     | "outline"
     | undefined;
+  // teacherType?: TeacherTypeEnum;
   children?: ReactNode;
 }
 
@@ -22,6 +24,7 @@ export default function CardUserItem({
   additionalClassName,
   textFullnameColor,
   defaultBadgeStyle,
+  // teacherType,
   children,
 }: CardUserItemProps) {
   const defaultUser: UserDto = {
@@ -30,6 +33,9 @@ export default function CardUserItem({
     username: "dummyteacher",
     role: UserRolesEnum.TEACHER,
   };
+
+  // const defaultTeacherType = TeacherTypeEnum.TEACHER;
+  // const displayTeacherType = teacherType || defaultTeacherType;
 
   const displayUser = user || defaultUser;
   return (
@@ -45,10 +51,18 @@ export default function CardUserItem({
             </AvatarFallback>
           </Avatar>
           <div className="ml-4">
-            <h2 className={`text-sm font-sans font-bold ${textFullnameColor}`}>
+            <h2
+              className={`text-sm font-sans font-bold ${textFullnameColor} flex items-center`}
+            >
               {displayUser.name}
             </h2>
-            <Badge variant={defaultBadgeStyle}>{displayUser.id}</Badge>
+            <Badge className="mr-2" variant={defaultBadgeStyle}>
+              {displayUser.id}
+            </Badge>
+            {/* | */}
+            {/* <Badge className="ml-2" variant="default">
+              {displayTeacherType}
+            </Badge> */}
           </div>
         </div>
 
