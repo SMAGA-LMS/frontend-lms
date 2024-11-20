@@ -1,4 +1,4 @@
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 import { CourseDto } from "@/components/courses/courses";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";

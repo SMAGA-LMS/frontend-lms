@@ -1,5 +1,5 @@
 import CardClassroomItem from "@/components/classrooms/CardClassroomItem";
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";

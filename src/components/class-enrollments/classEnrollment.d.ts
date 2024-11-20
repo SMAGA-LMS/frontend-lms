@@ -1,5 +1,5 @@
 import Model from "@/services/model";
-import { ClassroomDto } from "../classrooms/classrooms";
+import { ClassroomDto } from "../classrooms/classroom";
 import { CourseDto } from "../courses/courses";
 import { UserDto } from "../users/users";
 

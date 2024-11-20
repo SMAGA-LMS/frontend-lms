@@ -1,3 +1,3 @@
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 
 export type ListClassroomsResponseDto = ClassroomDto[];

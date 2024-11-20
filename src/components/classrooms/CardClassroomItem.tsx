@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { ClassroomDto } from "./classrooms";
+import { ClassroomDto } from "./classroom";
 
 interface CardClassItemProps {
   data: ClassroomDto;

@@ -10,7 +10,7 @@ import classroomService from "@/services/apis/classrooms/classroomService";
 import ErrorPage from "@/pages/ErrorPage";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import TableScrollable from "@/components/global/TableScrollable";
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 import { Label } from "@/components/ui/label";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 

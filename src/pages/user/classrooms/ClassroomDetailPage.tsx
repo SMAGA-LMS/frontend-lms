@@ -6,7 +6,7 @@ import { UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 import classroomService from "@/services/apis/classrooms/classroomService";
 import ErrorPage from "@/pages/ErrorPage";
 
