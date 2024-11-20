@@ -7,7 +7,7 @@ import classroomRoutes from "./classrooms/classroomRoutes";
 import userRoutes from "./users/userRoutes";
 import profileRoutes from "./profile/profileRoutes";
 import classEnrollmentRoutes from "./class-enrollments/classEnrollmentRoute";
-import moduleRoutes from "./modules/moduleRoutes";
+import courseModuleRoutes from "./course-modules/courseModuleRoutes";
 
 export const router = createBrowserRouter([
   // guest
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
   ...userRoutes,
   ...profileRoutes,
   ...classEnrollmentRoutes,
-  ...moduleRoutes,
+  ...courseModuleRoutes,
 
   // {
   //   path: "/",

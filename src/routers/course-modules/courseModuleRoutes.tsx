@@ -2,11 +2,11 @@ import MemberLayout from "@/layouts/MemberLayout";
 import ErrorPage from "@/pages/ErrorPage";
 import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
-import ModulesPage from "@/pages/user/courses/modules/ModulesPage";
-import AddNewModulePage from "@/pages/user/courses/modules/AddNewModulePage";
-import ModuleDetailPage from "@/pages/user/courses/modules/ModuleDetailPage";
+import CourseModulesPage from "@/pages/user/courses/modules/CourseModulesPage";
+import AddNewCourseModulePage from "@/pages/user/courses/modules/AddNewCourseModulePage";
+import ModuleDetailPage from "@/pages/user/modules/ModuleDetailPage";
 
-const moduleRoutes = [
+const courseModuleRoutes = [
   {
     path: "/courses/:id/modules",
     element: <MemberLayout />,
@@ -14,7 +14,7 @@ const moduleRoutes = [
     children: [
       {
         index: true,
-        element: withRoleBasedRoute(<ModulesPage />, [
+        element: withRoleBasedRoute(<CourseModulesPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,
@@ -29,7 +29,7 @@ const moduleRoutes = [
       },
       {
         path: "create",
-        element: withRoleBasedRoute(<AddNewModulePage />, [
+        element: withRoleBasedRoute(<AddNewCourseModulePage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
         ]),
@@ -38,4 +38,4 @@ const moduleRoutes = [
   },
 ];
 
-export default moduleRoutes;
+export default courseModuleRoutes;

@@ -1,21 +1,21 @@
+import { CourseModuleDto } from "@/components/course-modules/courseModule";
 import { CourseDto } from "@/components/courses/courses";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import CardModule from "@/components/modules/CardModule";
-import { ModuleDto } from "@/components/modules/module";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ErrorPage from "@/pages/ErrorPage";
+import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import courseService from "@/services/apis/courses/courseService";
-import moduleService from "@/services/apis/modules/moduleService";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function ModulesPage() {
+export default function CourseModulesPage() {
   const pageTitle = "List Modules";
   const heightTable = "h-[60vh]";
 
@@ -26,7 +26,7 @@ export default function ModulesPage() {
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [course, setCourse] = useState<CourseDto>();
-  const [modules, setModules] = useState<ModuleDto[]>([]);
+  const [courseModules, setCourseModules] = useState<CourseModuleDto[]>([]);
 
   useEffect(() => {
     const getCourseDetail = async () => {
@@ -49,11 +49,11 @@ export default function ModulesPage() {
 
     const getModulesData = async () => {
       setLoading(true);
-      const response = await moduleService.getCourseModules(Number(id));
+      const response = await courseModuleService.getCourseModules(Number(id));
       setLoading(false);
 
       if (response.success && response.data) {
-        setModules(response.data);
+        setCourseModules(response.data);
       } else {
         toast.error(response.message);
       }
@@ -70,7 +70,7 @@ export default function ModulesPage() {
     return;
   };
 
-  const isCourseModuleEmpty = modules.length === 0;
+  const isCourseModulesEmpty = courseModules.length === 0;
 
   return (
     <>
@@ -98,31 +98,31 @@ export default function ModulesPage() {
             <div className="my-3">
               <div>
                 <Label className="font-semibold">
-                  Total Module: {modules.length}
+                  Total Module Starter: {courseModules.length}
                 </Label>
               </div>
               <div>
-                {isCourseModuleEmpty && (
+                {isCourseModulesEmpty && (
                   <div className={`${heightTable}`}>
                     <Label className="text-sm text-gray-500">
-                      Tidak ada mata pelajaran yang tersedia
+                      Tidak ada module starter yang tersedia
                     </Label>
                   </div>
                 )}
               </div>
             </div>
-            {!isCourseModuleEmpty && (
+            {!isCourseModulesEmpty && (
               <ScrollArea
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {modules.map((module, index) => (
+                  {courseModules.map((courseModule, index) => (
                     <Link
-                      to={`/courses/${id}/modules/${module.id}`}
+                      to={`/courses/${id}/modules/${courseModule.module.id}`}
                       key={index}
                       className="block"
                     >
-                      <CardModule key={index} data={module} />
+                      <CardModule key={index} data={courseModule.module} />
                     </Link>
                   ))}
                 </div>

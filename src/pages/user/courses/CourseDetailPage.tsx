@@ -2,7 +2,7 @@ import { CourseDto } from "@/components/courses/courses";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
-import CardStarterKitModule from "@/components/modules/CardStarterKitModule";
+import CardStarterKitModule from "@/components/course-modules/CardStarterKitCourseModule";
 import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import ErrorPage from "@/pages/ErrorPage";

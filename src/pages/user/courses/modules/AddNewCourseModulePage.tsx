@@ -10,24 +10,25 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ErrorPage from "@/pages/ErrorPage";
 import courseService from "@/services/apis/courses/courseService";
-import moduleService from "@/services/apis/modules/moduleService";
 import { EyeIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 
-export interface addNewModulePayload {
+export interface addNewCourseModulePayload {
   courseID: number;
+
   name: string;
   description: string;
   file?: File | null;
 }
 
-export default function AddNewModulePage() {
+export default function AddNewCourseModulePage() {
   const pageTitle = "Tambah Modul";
   const { id } = useParams<{ id: string }>();
 
-  const initialFormData: addNewModulePayload = {
+  const initialFormData: addNewCourseModulePayload = {
     courseID: Number(id),
     name: "",
     description: "",
@@ -41,7 +42,7 @@ export default function AddNewModulePage() {
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [formData, setFormData] =
-    useState<addNewModulePayload>(initialFormData);
+    useState<addNewCourseModulePayload>(initialFormData);
   const [course, setCourse] = useState<CourseDto>();
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function AddNewModulePage() {
     return <ErrorPage />;
   }
 
-  const createFormData = (data: addNewModulePayload) => {
+  const createFormData = (data: addNewCourseModulePayload) => {
     const formData = new FormData();
     formData.append("courseID", data.courseID.toString());
     formData.append("name", data.name);
@@ -87,7 +88,7 @@ export default function AddNewModulePage() {
 
     console.log("Form data", formData);
 
-    const payload: addNewModulePayload = {
+    const payload: addNewCourseModulePayload = {
       courseID: Number(id),
       name: formData.name,
       description: formData.description,
@@ -102,7 +103,9 @@ export default function AddNewModulePage() {
     console.log("Payload", payload);
 
     setLoading(true);
-    const response = await moduleService.addNewModule(payloadFormData);
+    const response = await courseModuleService.addNewCourseModule(
+      payloadFormData
+    );
     setLoading(false);
 
     if (response.success && response.data) {

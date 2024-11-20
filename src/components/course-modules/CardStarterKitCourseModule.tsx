@@ -1,13 +1,13 @@
 import { CourseDto } from "../courses/courses";
 import { Badge } from "../ui/badge";
 
-interface CardStarterKitModuleProps {
+interface CardStarterKitCourseModuleProps {
   data: CourseDto;
 }
 
-export default function CardStarterKitModule({
+export default function CardStarterKitCourseModule({
   data,
-}: CardStarterKitModuleProps) {
+}: CardStarterKitCourseModuleProps) {
   return (
     <div className="flex w-full bg-secondary rounded-md p-4 mb-2 justify-between">
       <div className="mr-4 text-left">

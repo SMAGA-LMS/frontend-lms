@@ -1,3 +1,3 @@
 import { ModuleDto } from "@/components/modules/module";
 
-export type ListModulesResponseDto = ModuleDto[];
+export type ListModuleResponseDto = ModuleDto[];
