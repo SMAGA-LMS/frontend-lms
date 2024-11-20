@@ -6,7 +6,7 @@ import courseRoutes from "./courses/courseRoutes";
 import classroomRoutes from "./classrooms/classroomRoutes";
 import userRoutes from "./users/userRoutes";
 import profileRoutes from "./profile/profileRoutes";
-import classEnrollmentRoutes from "./class-enrollments/classEnrollmentRoute";
+import classEnrollmentRoutes from "./class-enrollments/classEnrollmentRoutes";
 import courseModuleRoutes from "./course-modules/courseModuleRoutes";
 
 export const router = createBrowserRouter([
