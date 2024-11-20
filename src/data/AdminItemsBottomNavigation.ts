@@ -9,26 +9,31 @@ const AdminItemsBottomNavigation = [
     icon: iconHome,
     label: "Home",
     slug: "/home",
+    active: true,
   },
   {
     icon: iconClassEnrollment,
     label: "Class",
     slug: "/class-enrollments",
+    active: true,
   },
   {
     icon: iconClassrooms,
     label: "Classroom",
     slug: "/classrooms",
+    active: true,
   },
   {
     icon: iconUsers,
     label: "User List",
     slug: "/users",
+    active: true,
   },
   {
     icon: iconProfile,
     label: "Profile",
     slug: "/profile",
+    active: true,
   },
 ];
 

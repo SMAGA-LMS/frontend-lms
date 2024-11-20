@@ -9,26 +9,31 @@ const TeacherItemsBottomNavigation = [
     icon: iconHome,
     label: "Home",
     slug: "/home",
+    active: true,
   },
   {
     icon: iconClassEnrollment,
     label: "Class",
     slug: "/class-enrollments",
+    active: true,
   },
   {
     icon: iconAttendances,
     label: "",
     slug: "/attendances",
+    active: false,
   },
   {
     icon: iconAssignments,
     label: "Assignments",
     slug: "/assignments",
+    active: false,
   },
   {
     icon: iconProfile,
     label: "Profile",
     slug: "/profile",
+    active: true,
   },
 ];
 
