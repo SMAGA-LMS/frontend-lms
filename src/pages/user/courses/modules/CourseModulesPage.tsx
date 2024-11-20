@@ -47,7 +47,7 @@ export default function CourseModulesPage() {
     };
     getCourseDetail();
 
-    const getModulesData = async () => {
+    const getCourseModulesData = async () => {
       setLoading(true);
       const response = await courseModuleService.getCourseModules(Number(id));
       setLoading(false);
@@ -58,7 +58,7 @@ export default function CourseModulesPage() {
         toast.error(response.message);
       }
     };
-    getModulesData();
+    getCourseModulesData();
   }, [id]);
 
   if (hasErrorPage) {
