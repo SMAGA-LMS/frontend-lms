@@ -4,6 +4,7 @@ import { withRoleBasedRoute } from "../RoleBasedRoute";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import ModulesPage from "@/pages/user/courses/modules/ModulesPage";
 import AddNewModulePage from "@/pages/user/courses/modules/AddNewModulePage";
+import ModuleDetailPage from "@/pages/user/courses/modules/ModuleDetailPage";
 
 const moduleRoutes = [
   {
@@ -17,6 +18,13 @@ const moduleRoutes = [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
           UserRolesEnum.STUDENT,
+        ]),
+      },
+      {
+        path: ":moduleID",
+        element: withRoleBasedRoute(<ModuleDetailPage />, [
+          UserRolesEnum.ADMIN,
+          UserRolesEnum.TEACHER,
         ]),
       },
       {

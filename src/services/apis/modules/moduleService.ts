@@ -24,6 +24,16 @@ const moduleService = {
       return handleAxiosError<ModuleResponseDto[]>(error);
     }
   },
+  getModuleDetailByID: async (
+    moduleID: number
+  ): Promise<BaseResponseAPIDto<ModuleResponseDto>> => {
+    try {
+      const response = await axiosClient.get(`/modules/${moduleID}`);
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ModuleResponseDto>(error);
+    }
+  },
 };
 
 export default moduleService;
