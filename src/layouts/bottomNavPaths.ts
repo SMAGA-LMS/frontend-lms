@@ -4,6 +4,7 @@ const bottomNavPaths = [
   "/classrooms",
   "/users",
   "/profile",
+  "/class-enrollments",
 ];
 
 export default bottomNavPaths;
