@@ -2,13 +2,14 @@ import { CourseDto } from "@/components/courses/courses";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
+import CardStarterKitModule from "@/components/modules/CardStarterKitModule";
 import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import ErrorPage from "@/pages/ErrorPage";
 import courseService from "@/services/apis/courses/courseService";
 import { EditIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function CourseDetailPage() {
@@ -56,7 +57,6 @@ export default function CourseDetailPage() {
   return (
     <>
       <HeaderPageWithBackButton pageTitle={pageTitle} />
-
       <div className="mt-4 pb-24 bg-smagaLMS-gradient-linear">
         {loading ? (
           <BasicSkelenton additionalClassName="mx-4" />
@@ -73,22 +73,32 @@ export default function CourseDetailPage() {
         {loading ? (
           <BasicSkelenton />
         ) : (
-          <CardUserItem
-            user={course?.user}
-            additionalClassName="-mt-8 bg-[#3C7A89] rounded-xl"
-            textFullnameColor="text-secondary"
-            defaultBadgeStyle="secondary"
-          >
-            <ButtonWithIcon
-              size="icon"
-              variant="ghost"
-              className="hover:bg-smagaLMS-green"
-              onClickAction={() => navigateToAssignNewTeacher()}
+          <div>
+            <CardUserItem
+              user={course?.user}
+              additionalClassName="-mt-8 bg-[#3C7A89] rounded-xl"
+              textFullnameColor="text-secondary"
+              defaultBadgeStyle="secondary"
             >
-              <EditIcon size={20} className="text-white " />
-            </ButtonWithIcon>
-          </CardUserItem>
+              <ButtonWithIcon
+                size="icon"
+                variant="ghost"
+                className="hover:bg-smagaLMS-green"
+                onClickAction={() => navigateToAssignNewTeacher()}
+              >
+                <EditIcon size={20} className="text-white " />
+              </ButtonWithIcon>
+            </CardUserItem>
+          </div>
         )}
+        <div className="mt-4">
+          <p className="font-semibold text-sm my-2">Starter Kit Modules</p>
+          {course && (
+            <Link to={`/courses/${id}/modules`} key={id} className="block">
+              <CardStarterKitModule data={course} />
+            </Link>
+          )}
+        </div>
       </div>
     </>
   );
