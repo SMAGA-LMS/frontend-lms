@@ -11,7 +11,12 @@ const courseService = {
     userID?: number
   ): Promise<BaseResponseAPIDto<ListCoursesResponseDto>> => {
     try {
-      const response = await axiosClient.get(`/courses?userID=${userID}`);
+      let url = "/courses";
+      if (userID) {
+        url += `?userID=${userID}`;
+      }
+
+      const response = await axiosClient.get(url);
       return response.data;
     } catch (error) {
       return handleAxiosError<ListCoursesResponseDto>(error);
