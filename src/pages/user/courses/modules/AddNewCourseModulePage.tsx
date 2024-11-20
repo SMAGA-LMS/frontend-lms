@@ -1,4 +1,4 @@
-import { CourseDto } from "@/components/courses/courses";
+import { CourseDto } from "@/components/courses/course";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";

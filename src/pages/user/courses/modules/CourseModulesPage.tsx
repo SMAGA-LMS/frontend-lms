@@ -1,5 +1,5 @@
 import { CourseModuleDto } from "@/components/course-modules/courseModule";
-import { CourseDto } from "@/components/courses/courses";
+import { CourseDto } from "@/components/courses/course";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";

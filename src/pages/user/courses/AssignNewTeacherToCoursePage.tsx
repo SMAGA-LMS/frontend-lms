@@ -1,4 +1,4 @@
-import { CourseDto } from "@/components/courses/courses";
+import { CourseDto } from "@/components/courses/course";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";

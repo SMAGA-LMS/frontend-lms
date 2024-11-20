@@ -1,4 +1,4 @@
-import { CourseDto } from "../courses/courses";
+import { CourseDto } from "../courses/course";
 import { Badge } from "../ui/badge";
 
 interface CardStarterKitCourseModuleProps {
