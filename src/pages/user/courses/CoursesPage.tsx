@@ -3,9 +3,11 @@ import { CourseDto } from "@/components/courses/courses";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import courseService from "@/services/apis/courses/courseService";
+import { Label } from "@radix-ui/react-label";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -15,27 +17,35 @@ export default function CoursesPage() {
   const heightTable = "h-[68vh]";
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseDto[]>([]);
 
   useEffect(() => {
+    const getCoursesData = async () => {
+      if (!currentUser) {
+        return;
+      }
+
+      let response;
+      setLoading(true);
+      if (currentUser.role === UserRolesEnum.ADMIN) {
+        response = await courseService.getCourses();
+      } else if (currentUser.role === UserRolesEnum.TEACHER) {
+        response = await courseService.getCourses(currentUser.id);
+      }
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setCourses(response.data);
+        // setVirtualClassPeriods(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
     getCoursesData();
-  }, []);
-
-  const getCoursesData = async () => {
-    setLoading(true);
-    const response = await courseService.getCourses();
-    setLoading(false);
-
-    if (response.success && response.data) {
-      setCourses(response.data);
-      // setVirtualClassPeriods(response.data);
-    } else {
-      toast.error(response.message);
-    }
-  };
-
+  }, [currentUser]);
   const navigateToAddNewCourse = () => {
     navigate("/courses/create");
     return;
@@ -90,13 +100,15 @@ export default function CoursesPage() {
           </div>
         )}
         <div className="bottom-16 left-0 w-full bg-white">
-          <Button
-            variant="smagaLMSGreen"
-            className="w-full mt-2"
-            onClick={navigateToAddNewCourse}
-          >
-            Add New Course
-          </Button>
+          {currentUser && currentUser.role === UserRolesEnum.ADMIN && (
+            <Button
+              variant="smagaLMSGreen"
+              className="w-full mt-2"
+              onClick={navigateToAddNewCourse}
+            >
+              Add New Course
+            </Button>
+          )}
         </div>
       </div>
     </>

@@ -7,9 +7,16 @@ import { CourseResponseDto } from "./courseResponse";
 import { assignNewTeacherPayload } from "@/pages/user/courses/AssignNewTeacherToCoursePage";
 
 const courseService = {
-  getCourses: async (): Promise<BaseResponseAPIDto<ListCoursesResponseDto>> => {
+  getCourses: async (
+    userID?: number
+  ): Promise<BaseResponseAPIDto<ListCoursesResponseDto>> => {
     try {
-      const response = await axiosClient.get(`/courses`);
+      let url = "/courses";
+      if (userID) {
+        url += `?userID=${userID}`;
+      }
+
+      const response = await axiosClient.get(url);
       return response.data;
     } catch (error) {
       return handleAxiosError<ListCoursesResponseDto>(error);

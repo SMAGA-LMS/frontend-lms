@@ -37,7 +37,7 @@ export default function ProfilePage() {
         setCurrentUser(null);
         setToken(null);
         navigate("/login");
-      }, 1000);
+      }, 200);
     } else {
       toast.error(response.message);
     }
