@@ -25,7 +25,6 @@ const courseRoutes = [
         element: withRoleBasedRoute(<CourseDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
       {
@@ -38,8 +37,6 @@ const courseRoutes = [
         path: "create",
         element: withRoleBasedRoute(<AddNewCoursePage />, [
           UserRolesEnum.ADMIN,
-          UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
     ],

@@ -11,11 +11,14 @@ import { EditIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 
 export default function CourseDetailPage() {
   const pageTitle = "Detail Mata Pelajaran";
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,9 +43,21 @@ export default function CourseDetailPage() {
         setHasErrorPage(true);
       }
     };
-
     getCourseDetail();
   }, [id]);
+
+  useEffect(() => {
+    if (!course || !currentUser) {
+      return;
+    }
+
+    if (
+      currentUser?.id !== course?.user?.id &&
+      currentUser?.role !== UserRolesEnum.ADMIN
+    ) {
+      setHasErrorPage(true);
+    }
+  }, [course, currentUser]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
