@@ -18,7 +18,6 @@ const courseRoutes = [
         element: withRoleBasedRoute(<CoursesPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
       {
