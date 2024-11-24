@@ -2,7 +2,6 @@ import { CourseDto } from "@/components/courses/course";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
-import CardStarterKitModule from "@/components/course-modules/CardStarterKitCourseModule";
 import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import ErrorPage from "@/pages/ErrorPage";
@@ -13,6 +12,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
+import CardStarterKitCourseModule from "@/components/course-modules/CardStarterKitCourseModule";
 
 export default function CourseDetailPage() {
   const pageTitle = "Detail Mata Pelajaran";
@@ -112,7 +112,7 @@ export default function CourseDetailPage() {
           <p className="font-semibold text-sm my-2">Starter Kit Modules</p>
           {course && (
             <Link to={`/courses/${id}/modules`} key={id} className="block">
-              <CardStarterKitModule data={course} />
+              <CardStarterKitCourseModule data={course} />
             </Link>
           )}
         </div>

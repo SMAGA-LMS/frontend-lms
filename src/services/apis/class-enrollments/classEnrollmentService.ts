@@ -48,7 +48,7 @@ const classEnrollmentService = {
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.put(
-        `/class-enrollments/${classEnrollmentID}/teachers`,
+        `/class-enrollments/${classEnrollmentID}`,
         payload
       );
       return response.data;
