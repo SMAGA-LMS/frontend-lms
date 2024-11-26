@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "@/services/apis/baseResponseAPI";
 import { FormData } from "@/pages/login/LoginPage";

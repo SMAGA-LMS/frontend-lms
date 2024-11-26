@@ -11,7 +11,7 @@ const studentEnrollmentService = {
   ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/student-enrollments?classroomID=${classroomID}`
+        `/student-enrollments?classroom_id=${classroomID}`
       );
       return response.data;
     } catch (error) {
@@ -19,11 +19,11 @@ const studentEnrollmentService = {
     }
   },
   getAvailableStudents: async (
-    classroomID: string
+    classroomID: number
   ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/student-enrollments?classroomID=${classroomID}&isAvailable=true`
+        `/student-enrollments?classroom_id=${classroomID}&is_available=true`
       );
       return response.data;
     } catch (error) {

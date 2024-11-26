@@ -30,7 +30,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface assignNewTeacherPayload {
-  userID?: string | null;
+  userID?: number | null;
 }
 
 export default function AssignNewTeacherToCoursePage() {
@@ -82,15 +82,15 @@ export default function AssignNewTeacherToCoursePage() {
       }
 
       setLoading(true);
-      const response = await courseService.getCourseDetailByID(id);
+      const response = await courseService.getCourseDetailByID(Number(id));
       setLoading(false);
 
       if (response.success && response.data) {
         setCourse(response.data);
         setFormData((prevFormData) => ({
           ...prevFormData,
-          userID: response.data?.user?.id?.toString() || null,
-          courseID: response.data?.id?.toString() || null,
+          userID: response.data?.user?.id || null,
+          courseID: response.data?.id || null, // ini apa ya? lupa lagi, tapi jalan-jalan aja
         }));
       } else {
         toast.error(response.message);
@@ -111,7 +111,7 @@ export default function AssignNewTeacherToCoursePage() {
     const payload: assignNewTeacherPayload = {};
 
     payload.userID = formData.userID;
-    if (formData.userID === "0" || formData.userID === null) {
+    if (formData.userID === 0 || formData.userID === null) {
       payload.userID = null;
     }
 
@@ -121,7 +121,7 @@ export default function AssignNewTeacherToCoursePage() {
     }
 
     setLoading(true);
-    const response = await courseService.assignNewTeacher(payload, id);
+    const response = await courseService.assignNewTeacher(payload, Number(id));
     setLoading(false);
 
     if (response.success) {
@@ -142,8 +142,8 @@ export default function AssignNewTeacherToCoursePage() {
     setErrors(null);
   };
 
-  const getUserById = (id: string): UserDto | undefined => {
-    const user = teachers.find((u) => u.id.toString() === id);
+  const getUserById = (id: number): UserDto | undefined => {
+    const user = teachers.find((u) => u.id === id);
     console.log("user", user?.name);
     if (!user) {
       return undefined;
@@ -241,7 +241,7 @@ export default function AssignNewTeacherToCoursePage() {
                           </div>
                         </div>
                       </AlertDescription>
-                      {formData.userID === "0" && (
+                      {formData.userID === 0 && (
                         <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
                           PIC mata pelajaran sebelumnya akan dihapus dari mata
                           pelajaran ini

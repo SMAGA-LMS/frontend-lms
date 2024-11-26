@@ -20,7 +20,7 @@ const courseModuleService = {
   ): Promise<BaseResponseAPIDto<ListCourseModulesResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/course-modules?courseID=${courseID}`
+        `/course-modules?course_id=${courseID}`
       );
       return response.data;
     } catch (error) {

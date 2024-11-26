@@ -17,7 +17,7 @@ const classroomService = {
     }
   },
   getClassroomDetailByID: async (
-    classroomID: string
+    classroomID: number
   ): Promise<BaseResponseAPIDto<ClassroomResponseDto>> => {
     try {
       const response = await axiosClient.get(`/classrooms/${classroomID}`);

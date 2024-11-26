@@ -13,7 +13,7 @@ const courseService = {
     try {
       let url = "/courses";
       if (userID) {
-        url += `?userID=${userID}`;
+        url += `?user_id=${userID}`;
       }
 
       const response = await axiosClient.get(url);
@@ -23,7 +23,7 @@ const courseService = {
     }
   },
   getCourseDetailByID: async (
-    courseID: string
+    courseID: number
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
       const response = await axiosClient.get(`/courses/${courseID}`);
@@ -44,7 +44,7 @@ const courseService = {
   },
   assignNewTeacher: async (
     payload: assignNewTeacherPayload,
-    courseID: string
+    courseID: number
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
       const response = await axiosClient.put(`/courses/${courseID}`, payload);

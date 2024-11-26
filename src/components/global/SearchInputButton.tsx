@@ -2,7 +2,6 @@ import { SearchIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import InputWithLabel from "./InputWithLabel";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import ButtonWithIcon from "./ButtonWithIcon";
 import { useState } from "react";
 

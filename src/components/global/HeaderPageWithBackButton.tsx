@@ -1,7 +1,6 @@
 import { ArrowLeftIcon } from "lucide-react";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
-import { useLocation, useNavigate, useNavigationType } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 import { ReactNode } from "react";
 

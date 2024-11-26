@@ -57,7 +57,9 @@ export default function ClassEnrollmentDetailPage() {
       }
 
       setLoading(true);
-      const response = await classEnrollmentService.getClassEnrollmentByID(id);
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -161,6 +163,14 @@ export default function ClassEnrollmentDetailPage() {
           </CardUserItem>
         )}
       </div>
+      {/* <div className="mt-4">
+        <p className="font-semibold text-sm my-2">Starter Kit Modules</p>
+        {course && (
+          <Link to={`/courses/${id}/modules`} key={id} className="block">
+            <CardStarterKitCourseModule data={course} />
+          </Link>
+        )}
+      </div> */}
     </>
   );
 }

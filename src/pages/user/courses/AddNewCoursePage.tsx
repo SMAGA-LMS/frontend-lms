@@ -33,7 +33,7 @@ import { toast } from "sonner";
 export interface addNewCoursePayload {
   name: string;
   grade: string;
-  userID?: string;
+  userID?: number;
 }
 
 export default function AddNewCoursePage() {
@@ -107,8 +107,8 @@ export default function AddNewCoursePage() {
     setErrors(null);
   };
 
-  const getUserById = (id: string): UserDto | undefined => {
-    const user = teachers.find((u) => u.id.toString() === id);
+  const getUserById = (id: number): UserDto | undefined => {
+    const user = teachers.find((u) => u.id === id);
     if (!user) {
       return undefined;
     }

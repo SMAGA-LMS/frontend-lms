@@ -30,8 +30,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface assignNewStudentPayload {
-  userID?: string | null;
-  classroomID?: string | null;
+  userID?: number | null;
+  classroomID?: number | null;
 }
 
 export default function AssignNewStudentToClassroomPage() {
@@ -61,7 +61,9 @@ export default function AssignNewStudentToClassroomPage() {
 
     const getClassroomDetail = async () => {
       setLoading(true);
-      const response = await classroomService.getClassroomDetailByID(id);
+      const response = await classroomService.getClassroomDetailByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -75,7 +77,9 @@ export default function AssignNewStudentToClassroomPage() {
 
     const getAvailableStudents = async () => {
       setLoading(true);
-      const response = await studentEnrollmentService.getAvailableStudents(id);
+      const response = await studentEnrollmentService.getAvailableStudents(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -100,8 +104,8 @@ export default function AssignNewStudentToClassroomPage() {
     console.log("formData", formData);
 
     payload.userID = formData.userID;
-    payload.classroomID = id;
-    if (formData.userID === "0" || formData.userID === null) {
+    payload.classroomID = Number(id);
+    if (formData.userID === 0 || formData.userID === null) {
       payload.userID = null;
     }
 
@@ -132,8 +136,8 @@ export default function AssignNewStudentToClassroomPage() {
     setErrors(null);
   };
 
-  const getUserById = (id: string): UserDto | undefined => {
-    const user = students.find((u) => u.id.toString() === id);
+  const getUserById = (id: number): UserDto | undefined => {
+    const user = students.find((u) => u.id === id);
     console.log("user", user?.name);
     if (!user) {
       return undefined;

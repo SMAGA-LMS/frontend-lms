@@ -3,7 +3,6 @@ import iconAttendances from "../assets/icons/bottom-navigation/attendances.svg";
 import iconAssignments from "../assets/icons/bottom-navigation/assignments.svg";
 import iconProfile from "../assets/icons/bottom-navigation/profile.svg";
 import iconClassEnrollment from "@/assets/icons/bottom-navigation/class-enrollments.svg";
-import { act } from "react";
 
 const StudentItemsBottomNavigation = [
   {

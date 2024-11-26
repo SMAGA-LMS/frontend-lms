@@ -1,8 +1,6 @@
 import { useState } from "react";
 import ButtonWithIcon from "./ButtonWithIcon";
-import { X } from "lucide-react";
-import CardUserItem from "../users/CardUserItem";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "../ui/label";
 
 interface Data {
   fullName: string;

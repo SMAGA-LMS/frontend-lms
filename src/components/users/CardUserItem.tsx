@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { UserDto } from "./user";
 import { ReactNode } from "react";
 import UserRolesEnum from "@/enums/UserRoleEnum";
-import TeacherTypeEnum from "@/enums/TeacherTypeEnum";
 
 interface CardUserItemProps {
   user?: UserDto;

@@ -29,7 +29,9 @@ export default function ClassroomDetailPage() {
       }
 
       setLoading(true);
-      const response = await classroomService.getClassroomDetailByID(id);
+      const response = await classroomService.getClassroomDetailByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {

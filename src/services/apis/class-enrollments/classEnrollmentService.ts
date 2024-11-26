@@ -13,7 +13,7 @@ const classEnrollmentService = {
     try {
       let url = "/class-enrollments";
       if (userID) {
-        url += `?userID=${userID}`;
+        url += `?user_id=${userID}`;
       }
 
       const response = await axiosClient.get(url);
@@ -23,7 +23,7 @@ const classEnrollmentService = {
     }
   },
   getClassEnrollmentByID: async (
-    id: string
+    id: number
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.get(`/class-enrollments/${id}`);
@@ -44,7 +44,7 @@ const classEnrollmentService = {
   },
   assignNewTeacher: async (
     payload: assignNewTeacherToClassEnrollmentPayload,
-    classEnrollmentID: string
+    classEnrollmentID: number
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.put(
@@ -61,7 +61,7 @@ const classEnrollmentService = {
   ): Promise<BaseResponseAPIDto<ListClassEnrollmentsResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/class-enrollments?classroomID=${classroomID}`
+        `/class-enrollments?classroom_id=${classroomID}`
       );
       return response.data;
     } catch (error) {
