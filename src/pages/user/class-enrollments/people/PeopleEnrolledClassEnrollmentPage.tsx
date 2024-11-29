@@ -76,7 +76,9 @@ export default function PeopleEnrolledClassEnrollmentPage() {
       }
 
       setLoading(true);
-      const response = await classEnrollmentService.getClassEnrollmentByID(id);
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {

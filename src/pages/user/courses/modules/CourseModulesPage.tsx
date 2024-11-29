@@ -35,7 +35,7 @@ export default function CourseModulesPage() {
       }
 
       setLoading(true);
-      const response = await courseService.getCourseDetailByID(id);
+      const response = await courseService.getCourseDetailByID(Number(id));
       setLoading(false);
 
       if (response.success && response.data) {

@@ -75,7 +75,9 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
       }
 
       setLoading(true);
-      const response = await classEnrollmentService.getClassEnrollmentByID(id);
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -113,7 +115,10 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
     }
 
     setLoading(true);
-    const response = await classEnrollmentService.assignNewTeacher(payload, id);
+    const response = await classEnrollmentService.assignNewTeacher(
+      payload,
+      Number(id)
+    );
     setLoading(false);
 
     if (response.success) {
