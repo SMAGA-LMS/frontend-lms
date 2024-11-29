@@ -36,7 +36,12 @@ const classEnrollmentService = {
     payload: addNewClassEnrollmentPayload
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
-      const response = await axiosClient.post(`/class-enrollments`, payload);
+      const reqPayload = {
+        course_id: payload.courseID,
+        classroom_id: payload.classroomID,
+        user_id: payload.userID,
+      };
+      const response = await axiosClient.post(`/class-enrollments`, reqPayload);
       return response.data;
     } catch (error) {
       return handleAxiosError<ClassEnrollmentResponseDto>(error);
@@ -47,9 +52,12 @@ const classEnrollmentService = {
     classEnrollmentID: number
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
+      const reqPayload = {
+        user_id: payload.userID,
+      };
       const response = await axiosClient.put(
         `/class-enrollments/${classEnrollmentID}`,
-        payload
+        reqPayload
       );
       return response.data;
     } catch (error) {

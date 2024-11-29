@@ -34,7 +34,14 @@ const studentEnrollmentService = {
     payload: assignNewStudentPayload
   ): Promise<BaseResponseAPIDto<StudentEnrollmentResponseDto>> => {
     try {
-      const response = await axiosClient.post(`/student-enrollments`, payload);
+      const reqPayload = {
+        classroom_id: payload.classroomID,
+        user_id: payload.userID,
+      };
+      const response = await axiosClient.post(
+        `/student-enrollments`,
+        reqPayload
+      );
       return response.data;
     } catch (error) {
       return handleAxiosError<StudentEnrollmentResponseDto>(error);
