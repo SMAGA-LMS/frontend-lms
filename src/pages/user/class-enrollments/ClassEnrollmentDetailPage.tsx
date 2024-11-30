@@ -1,4 +1,5 @@
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
+import CardStarterKitCourseModule from "@/components/course-modules/CardStarterKitCourseModule";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
@@ -12,7 +13,7 @@ import classEnrollmentService from "@/services/apis/class-enrollments/classEnrol
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 import { EditIcon, UsersIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function ClassEnrollmentDetailPage() {
@@ -163,14 +164,18 @@ export default function ClassEnrollmentDetailPage() {
           </CardUserItem>
         )}
       </div>
-      {/* <div className="mt-4">
+      <div className="mx-4 mt-4">
         <p className="font-semibold text-sm my-2">Starter Kit Modules</p>
-        {course && (
-          <Link to={`/courses/${id}/modules`} key={id} className="block">
-            <CardStarterKitCourseModule data={course} />
+        {classEnrollment && (
+          <Link
+            to={`/class-enrollments/${id}/modules`}
+            key={id}
+            className="block"
+          >
+            <CardStarterKitCourseModule data={classEnrollment.course} />
           </Link>
         )}
-      </div> */}
+      </div>
     </>
   );
 }
