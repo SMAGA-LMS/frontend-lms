@@ -28,7 +28,9 @@ export default function PeopleEnrolledClassEnrollmentPage() {
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
-  const [enrolledStudents, setEnrolledStudents] = useState<UserDto[]>([]);
+  const [studentEnrollments, setStudentEnrollments] = useState<
+    StudentEnrollmentDto[]
+  >([]);
   const [studentEnrollment, setStudentEnrollment] =
     useState<StudentEnrollmentDto>();
 
@@ -104,7 +106,7 @@ export default function PeopleEnrolledClassEnrollmentPage() {
       setLoading(false);
 
       if (response.success && response.data) {
-        setEnrolledStudents(response.data);
+        setStudentEnrollments(response.data);
       } else {
         toast.error(response.message);
       }
@@ -239,7 +241,7 @@ export default function PeopleEnrolledClassEnrollmentPage() {
             <Label className="font-bold">Tabel Siswa Kelas</Label>
             <div className="flex items-center gap-1 text-smaga text-sm">
               <div className="">Total: </div>
-              <div className="font-extrabold">{enrolledStudents?.length}</div>
+              <div className="font-extrabold">{studentEnrollments?.length}</div>
               <div className="font-extrabold">siswa</div>
             </div>
           </div>
@@ -283,7 +285,18 @@ export default function PeopleEnrolledClassEnrollmentPage() {
                     resetSelected={resetSelected}
                   /> */}
                 <TableScrollable
-                  data={enrolledStudents}
+                  data={studentEnrollments.map((studentEnrollment) => {
+                    const user: UserDto = {
+                      id: studentEnrollment.user.id,
+                      name: studentEnrollment.user.name,
+                      username: studentEnrollment.user.username,
+                      role: studentEnrollment.user.role,
+                      avatar: studentEnrollment.user.avatar,
+                      createdAt: studentEnrollment.user.createdAt,
+                      updatedAt: studentEnrollment.user.updatedAt,
+                    };
+                    return user;
+                  })}
                   heightTable={heightTable}
                 />
               </div>
