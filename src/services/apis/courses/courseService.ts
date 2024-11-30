@@ -52,7 +52,13 @@ const courseService = {
     courseID: number
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
-      const response = await axiosClient.put(`/courses/${courseID}`, payload);
+      const reqPayload = {
+        user_id: payload.userID,
+      };
+      const response = await axiosClient.put(
+        `/courses/${courseID}`,
+        reqPayload
+      );
       return response.data;
     } catch (error) {
       return handleAxiosError<CourseResponseDto>(error);

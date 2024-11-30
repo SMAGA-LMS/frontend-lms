@@ -143,8 +143,7 @@ export default function AssignNewTeacherToCoursePage() {
   };
 
   const getUserById = (id: number): UserDto | undefined => {
-    const user = teachers.find((u) => u.id === id);
-    console.log("user", user?.name);
+    const user = teachers.find((u) => u.id === Number(id));
     if (!user) {
       return undefined;
     }
