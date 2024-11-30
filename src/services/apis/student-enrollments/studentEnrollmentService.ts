@@ -3,31 +3,32 @@ import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { StudentEnrollmentResponseDto } from "./studentEnrollmentResponse";
 import { handleAxiosError } from "../handleError";
 import { assignNewStudentPayload } from "@/pages/user/classrooms/people/AssignNewStudentToClassroomPage";
-import { ListUsersResponseDto } from "../users/listUsersResponse";
+import { ListStudentEnrollmentResponseDto } from "./listStudentEnrollmentResponse";
+import { ListAvailableStudentsResponseDto } from "./listAvailableStudentsResponse";
 
 const studentEnrollmentService = {
   getPeopleEnrolledClassroom: async (
     classroomID: number
-  ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
+  ): Promise<BaseResponseAPIDto<ListStudentEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.get(
         `/student-enrollments?classroom_id=${classroomID}`
       );
       return response.data;
     } catch (error) {
-      return handleAxiosError<ListUsersResponseDto>(error);
+      return handleAxiosError<ListStudentEnrollmentResponseDto>(error);
     }
   },
   getAvailableStudents: async (
     classroomID: number
-  ): Promise<BaseResponseAPIDto<ListUsersResponseDto>> => {
+  ): Promise<BaseResponseAPIDto<ListAvailableStudentsResponseDto>> => {
     try {
       const response = await axiosClient.get(
         `/student-enrollments?classroom_id=${classroomID}&is_available=true`
       );
       return response.data;
     } catch (error) {
-      return handleAxiosError<ListUsersResponseDto>(error);
+      return handleAxiosError<ListAvailableStudentsResponseDto>(error);
     }
   },
   assignNewStudent: async (

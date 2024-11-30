@@ -83,7 +83,8 @@ export default function AssignNewStudentToClassroomPage() {
       setLoading(false);
 
       if (response.success && response.data) {
-        setStudents(response.data);
+        console.log("response.data", response.data.users);
+        setStudents(response.data.users);
       } else {
         toast.error(response.message);
       }
@@ -137,8 +138,7 @@ export default function AssignNewStudentToClassroomPage() {
   };
 
   const getUserById = (id: number): UserDto | undefined => {
-    const user = students.find((u) => u.id === id);
-    console.log("user", user?.name);
+    const user = students.find((u) => u.id === Number(id));
     if (!user) {
       return undefined;
     }
@@ -195,7 +195,7 @@ export default function AssignNewStudentToClassroomPage() {
             {errors && <ErrorDisplay errors={errors} />}
             <Separator />
             <div>
-              <Accordion type="single" collapsible className="">
+              <Accordion type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="font-semibold">
                     Lihat siswa yang akan ditambahkan :
