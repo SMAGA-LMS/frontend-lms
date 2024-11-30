@@ -38,7 +38,7 @@ export default function AddNewClassRoomPage() {
 
   const initialFormData: addNewClassroomPayload = {
     name: "",
-    grade: "",
+    grade: GradeEnum.X,
   };
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,7 +52,7 @@ export default function AddNewClassRoomPage() {
     event.preventDefault();
 
     const payload: addNewClassroomPayload = {
-      name: formData.name,
+      name: formData.grade + " " + formData.name.toUpperCase(),
       grade: formData.grade,
     };
 
@@ -86,17 +86,27 @@ export default function AddNewClassRoomPage() {
       <div className="mx-4">
         <form onSubmit={handleFormSubmit} method="post">
           <div className="grid gap-4 py-4 rounded-lg">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+            <div className="grid grid-cols-12 items-center gap-4">
+              <Label htmlFor="name" className="text-right col-span-3">
                 Nama Kelas
               </Label>
               <Input
+                id="gradePrefix"
+                name="gradePrefix"
+                value={formData.grade}
+                className="col-span-2"
+                readOnly
+              />
+              <Input
                 id="name"
                 name="name"
-                placeholder="XII IPA 4"
-                className="col-span-2"
-                value={formData.name}
-                onChange={handleInputChange}
+                placeholder="IPA 4"
+                className="col-span-4 w-auto"
+                value={formData.name.toUpperCase()}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                  handleInputChange(e);
+                }}
                 required
               />
             </div>
@@ -116,6 +126,7 @@ export default function AddNewClassRoomPage() {
                     };
                     handleInputChange(event);
                   }}
+                  value={formData.grade}
                 >
                   <SelectTrigger className="w-full" id="grade" name="grade">
                     <SelectValue placeholder="Pilih tingkatan kelas" />
@@ -154,7 +165,9 @@ export default function AddNewClassRoomPage() {
                           >
                             Nama Kelas
                           </Label>
-                          <div className="col-span-2">{formData.name}</div>
+                          <div className="col-span-2">
+                            {formData.grade + " " + formData.name.toUpperCase()}
+                          </div>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="grade" className="text-right">
