@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import userService from "@/services/apis/users/userService";
@@ -30,7 +30,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface assignNewTeacherToClassEnrollmentPayload {
-  userID: string;
+  userID: number;
 }
 
 export default function AssignNewTeacherToClassEnrollmentPage() {
@@ -39,7 +39,7 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
   const navigate = useNavigate();
 
   const initialFormData: assignNewTeacherToClassEnrollmentPayload = {
-    userID: "",
+    userID: 0,
   };
 
   const { id } = useParams<{ id: string }>();
@@ -75,13 +75,15 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
       }
 
       setLoading(true);
-      const response = await classEnrollmentService.getClassEnrollmentByID(id);
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
         setClassEnrollment(response.data);
         setFormData({
-          userID: response.data.user.id.toString(),
+          userID: response.data.user.id,
         });
       } else {
         toast.error(response.message);
@@ -105,7 +107,7 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
 
     if (
       payload.userID === undefined ||
-      payload.userID === "" ||
+      payload.userID === 0 ||
       payload.userID === null
     ) {
       toast.error("Pilih pengajar terlebih dahulu");
@@ -113,7 +115,10 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
     }
 
     setLoading(true);
-    const response = await classEnrollmentService.assignNewTeacher(payload, id);
+    const response = await classEnrollmentService.assignNewTeacher(
+      payload,
+      Number(id)
+    );
     setLoading(false);
 
     if (response.success) {
@@ -134,9 +139,8 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
     setErrors(null);
   };
 
-  const getUserById = (id: string): UserDto | undefined => {
-    const user = teachers.find((u) => u.id.toString() === id);
-    console.log("user", user?.name);
+  const getUserById = (id: number): UserDto | undefined => {
+    const user = teachers.find((u) => u.id === Number(id));
     if (!user) {
       return undefined;
     }
@@ -239,7 +243,7 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
                           </div>
                         </div>
                       </AlertDescription>
-                      {formData.userID === "0" && (
+                      {formData.userID === 0 && (
                         <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
                           Pengajar sebelumnya akan dihapus dari mata pelajaran
                           ini

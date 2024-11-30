@@ -13,7 +13,7 @@ const classEnrollmentService = {
     try {
       let url = "/class-enrollments";
       if (userID) {
-        url += `?userID=${userID}`;
+        url += `?user_id=${userID}`;
       }
 
       const response = await axiosClient.get(url);
@@ -23,7 +23,7 @@ const classEnrollmentService = {
     }
   },
   getClassEnrollmentByID: async (
-    id: string
+    id: number
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.get(`/class-enrollments/${id}`);
@@ -36,7 +36,12 @@ const classEnrollmentService = {
     payload: addNewClassEnrollmentPayload
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
-      const response = await axiosClient.post(`/class-enrollments`, payload);
+      const reqPayload = {
+        course_id: payload.courseID,
+        classroom_id: payload.classroomID,
+        user_id: payload.userID,
+      };
+      const response = await axiosClient.post(`/class-enrollments`, reqPayload);
       return response.data;
     } catch (error) {
       return handleAxiosError<ClassEnrollmentResponseDto>(error);
@@ -44,12 +49,15 @@ const classEnrollmentService = {
   },
   assignNewTeacher: async (
     payload: assignNewTeacherToClassEnrollmentPayload,
-    classEnrollmentID: string
+    classEnrollmentID: number
   ): Promise<BaseResponseAPIDto<ClassEnrollmentResponseDto>> => {
     try {
+      const reqPayload = {
+        user_id: payload.userID,
+      };
       const response = await axiosClient.put(
-        `/class-enrollments/${classEnrollmentID}/teachers`,
-        payload
+        `/class-enrollments/${classEnrollmentID}`,
+        reqPayload
       );
       return response.data;
     } catch (error) {
@@ -61,7 +69,7 @@ const classEnrollmentService = {
   ): Promise<BaseResponseAPIDto<ListClassEnrollmentsResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/class-enrollments?classroomID=${classroomID}`
+        `/class-enrollments?classroom_id=${classroomID}`
       );
       return response.data;
     } catch (error) {

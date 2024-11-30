@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import HomeAdminMenu from "@/components/home/HomeAdminMenu";
 import HomeStudentMenu from "@/components/home/HomeStudentMenu";
 import HomeTeacherMenu from "@/components/home/HomeTeacherMenu";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 
 export default function HomePage() {
   const { currentUser } = useStateContext() as { currentUser: UserDto };

@@ -29,24 +29,24 @@ export default function ClassEnrollmentsPage() {
     useState<StudentEnrollmentDto>();
 
   useEffect(() => {
-    const getStudentEnrollmentData = async () => {
-      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) return;
+    if (currentUser?.role === UserRolesEnum.STUDENT) {
+      const getStudentEnrollmentData = async () => {
+        setLoading(true);
+        const response =
+          await studentEnrollmentService.getStudentEnrollmentByStudentID(
+            currentUser.id
+          );
+        setLoading(false);
 
-      setLoading(true);
-      const response =
-        await studentEnrollmentService.getStudentEnrollmentByStudentID(
-          currentUser.id
-        );
-      setLoading(false);
+        if (response.success && response.data) {
+          setStudentEnrollment(response.data);
+        } else {
+          toast.error(response.message);
+        }
+      };
 
-      if (response.success && response.data) {
-        setStudentEnrollment(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    };
-
-    getStudentEnrollmentData();
+      getStudentEnrollmentData();
+    }
   }, [currentUser]);
 
   useEffect(() => {

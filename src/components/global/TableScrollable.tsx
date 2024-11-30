@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { ReactNode, useEffect, useState } from "react";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 
 interface TableScrollableProps {
   data: UserDto[];
@@ -26,8 +25,8 @@ export default function TableScrollable({
   heightTable,
   handleSelectedItem,
   resetSelected,
-  children,
-}: TableScrollableProps) {
+}: // children,
+TableScrollableProps) {
   const [selected, setSelected] = useState<number | null>(null);
 
   useEffect(() => {

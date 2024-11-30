@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function ModuleDetailPage() {
+export default function ClassEnrollmentModuleDetailPage() {
   const pageTitle = "Modul";
   const { moduleID } = useParams<{ moduleID: string }>();
 

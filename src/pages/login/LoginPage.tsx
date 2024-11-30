@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import authService from "@/services/apis/auth/authService";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 
-export interface FormData {
+export interface loginPayload {
   username: string;
   password: string;
   deviceName?: string;
@@ -20,7 +20,7 @@ export interface FormData {
 export default function LoginPage() {
   const navigate = useNavigate();
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-  const formDataRef = useRef<FormData>({
+  const formDataRef = useRef<loginPayload>({
     username: "",
     password: "",
   });
@@ -40,7 +40,7 @@ export default function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const payload: FormData = {
+    const payload: loginPayload = {
       username: formDataRef.current.username,
       password: formDataRef.current.password,
       deviceName: navigator.userAgent,

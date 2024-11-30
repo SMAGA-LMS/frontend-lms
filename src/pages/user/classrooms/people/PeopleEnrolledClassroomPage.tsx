@@ -5,14 +5,15 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import classroomService from "@/services/apis/classrooms/classroomService";
 import ErrorPage from "@/pages/ErrorPage";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import TableScrollable from "@/components/global/TableScrollable";
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 import { Label } from "@/components/ui/label";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
+import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 
 export default function PeopleEnrolledClassroomPage() {
   const pageTitle = "List Siswa Kelas";
@@ -26,7 +27,9 @@ export default function PeopleEnrolledClassroomPage() {
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [classroom, setClassroom] = useState<ClassroomDto>();
-  const [enrolledStudents, setEnrolledStudents] = useState<UserDto[]>([]);
+  const [studentEnrollments, setStudentEnrollments] = useState<
+    StudentEnrollmentDto[]
+  >([]);
 
   // const [classroom, setClassroom] = useState<ClassroomDto>({
   //   classPeriod: {
@@ -50,7 +53,9 @@ export default function PeopleEnrolledClassroomPage() {
       }
 
       setLoading(true);
-      const response = await classroomService.getClassroomDetailByID(id);
+      const response = await classroomService.getClassroomDetailByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -73,7 +78,7 @@ export default function PeopleEnrolledClassroomPage() {
       setLoading(false);
 
       if (response.success && response.data) {
-        setEnrolledStudents(response.data);
+        setStudentEnrollments(response.data);
       } else {
         toast.error(response.message);
       }
@@ -181,7 +186,7 @@ export default function PeopleEnrolledClassroomPage() {
             <Label className="font-bold">Tabel Siswa Kelas</Label>
             <div className="flex items-center gap-1 text-smaga text-sm">
               <div className="">Total: </div>
-              <div className="font-extrabold">{enrolledStudents?.length}</div>
+              <div className="font-extrabold">{studentEnrollments?.length}</div>
               <div className="font-extrabold">siswa</div>
             </div>
           </div>
@@ -218,14 +223,19 @@ export default function PeopleEnrolledClassroomPage() {
               </div>
             ) : (
               <div className="bg-white rounded-lg">
-                {/* <TableWithActionFeature
-                  dataTable={virtualUsers}
-                  heightTable={heightTable}
-                  handleSelectedItem={handleSelectedUser}
-                  resetSelected={resetSelected}
-                /> */}
                 <TableScrollable
-                  data={enrolledStudents}
+                  data={studentEnrollments.map((studentEnrollment) => {
+                    const user: UserDto = {
+                      id: studentEnrollment.user.id,
+                      name: studentEnrollment.user.name,
+                      username: studentEnrollment.user.username,
+                      role: studentEnrollment.user.role,
+                      avatar: studentEnrollment.user.avatar,
+                      createdAt: studentEnrollment.user.createdAt,
+                      updatedAt: studentEnrollment.user.updatedAt,
+                    };
+                    return user;
+                  })}
                   heightTable={heightTable}
                 />
               </div>

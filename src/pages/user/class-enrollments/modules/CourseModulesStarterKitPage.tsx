@@ -1,55 +1,63 @@
+import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import { CourseModuleDto } from "@/components/course-modules/courseModule";
-import { CourseDto } from "@/components/courses/course";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import CardModule from "@/components/modules/CardModule";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ErrorPage from "@/pages/ErrorPage";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
-import courseService from "@/services/apis/courses/courseService";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function CourseModulesPage() {
+export default function CourseModulesStarterKitPage() {
   const pageTitle = "List Modules";
   const heightTable = "h-[60vh]";
-
-  const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
-  const [course, setCourse] = useState<CourseDto>();
+  const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
   const [courseModules, setCourseModules] = useState<CourseModuleDto[]>([]);
 
   useEffect(() => {
-    const getCourseDetail = async () => {
+    const getClassEnrollmentDetail = async () => {
       if (!id) {
         return;
       }
 
       setLoading(true);
-      const response = await courseService.getCourseDetailByID(Number(id));
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
-        setCourse(response.data);
+        setClassEnrollment(response.data);
       } else {
         toast.error(response.message);
         setHasErrorPage(true);
       }
     };
-    getCourseDetail();
+
+    getClassEnrollmentDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!classEnrollment) {
+      return;
+    }
 
     const getCourseModulesData = async () => {
       setLoading(true);
-      const response = await courseModuleService.getCourseModules(Number(id));
+      const response = await courseModuleService.getCourseModules(
+        classEnrollment.course.id
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -59,16 +67,11 @@ export default function CourseModulesPage() {
       }
     };
     getCourseModulesData();
-  }, [id]);
+  }, [classEnrollment, id]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
   }
-
-  const navigateToAddNewModule = () => {
-    navigate(`/courses/${id}/modules/create`);
-    return;
-  };
 
   const isCourseModulesEmpty = courseModules.length === 0;
 
@@ -81,9 +84,9 @@ export default function CourseModulesPage() {
         ) : (
           <div className="mx-4 mt-4">
             <h1 className="font-bold font-sans text-lg">
-              {course?.name} | {course?.grade}
+              {classEnrollment?.course?.name} | {classEnrollment?.course?.grade}
             </h1>
-            <Badge variant="default">{course?.id}</Badge>
+            <Badge variant="default">{classEnrollment?.course?.id}</Badge>
           </div>
         )}
       </div>
@@ -118,7 +121,7 @@ export default function CourseModulesPage() {
                 <div className="space-y-2">
                   {courseModules.map((courseModule, index) => (
                     <Link
-                      to={`/courses/${id}/modules/${courseModule.module.id}`}
+                      to={`/class-enrollments/${id}/modules/starter-kit/${courseModule.module.id}`}
                       key={index}
                       className="block"
                     >
@@ -130,16 +133,6 @@ export default function CourseModulesPage() {
             )}
           </div>
         )}
-        <div className="bottom-16 left-0 w-full bg-white">
-          <Button
-            variant="smagaLMSGreen"
-            className="w-full"
-            type="submit"
-            onClick={navigateToAddNewModule}
-          >
-            Tambah Modul
-          </Button>
-        </div>
       </div>
     </>
   );

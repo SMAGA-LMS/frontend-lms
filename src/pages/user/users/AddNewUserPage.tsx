@@ -30,7 +30,6 @@ export interface addNewUserPayload {
   username?: string;
   role: string;
   avatar?: string;
-  password: string;
 }
 
 export default function AddNewUserPage() {
@@ -39,7 +38,6 @@ export default function AddNewUserPage() {
   const initialFormData: addNewUserPayload = {
     name: "",
     role: UserRolesEnum.STUDENT,
-    password: "",
   };
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,16 +54,9 @@ export default function AddNewUserPage() {
 
     console.log("Form data", formData);
 
-    const username = formData.name
-      .split(" ")
-      .join("")
-      .substring(0, 16)
-      .toLowerCase();
-    const password = username;
     const payload: addNewUserPayload = {
       name: formData.name,
       role: formData.role,
-      password: password,
     };
 
     console.log("Payload", payload);
@@ -84,7 +75,6 @@ export default function AddNewUserPage() {
         name: response.data.name,
         username: response.data.username,
         role: response.data.role,
-        password: response.data.username,
       };
 
       setResponseData(responseData);
@@ -150,6 +140,7 @@ export default function AddNewUserPage() {
                 className="col-span-2"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
@@ -168,6 +159,7 @@ export default function AddNewUserPage() {
                     };
                     handleInputChange(event);
                   }}
+                  value={formData.role}
                 >
                   <SelectTrigger className="w-full" id="role" name="role">
                     <SelectValue placeholder="Pilih role" />
@@ -192,7 +184,7 @@ export default function AddNewUserPage() {
               <p className="p-4 bg-green-200 rounded-lg mb-4 font-bold italic">
                 Username: {responseData.username}
                 <br />
-                Password: {responseData.password}
+                Password: {responseData.username}
               </p>
             </div>
           )}

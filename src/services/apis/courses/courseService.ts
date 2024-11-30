@@ -13,7 +13,7 @@ const courseService = {
     try {
       let url = "/courses";
       if (userID) {
-        url += `?userID=${userID}`;
+        url += `?user_id=${userID}`;
       }
 
       const response = await axiosClient.get(url);
@@ -23,7 +23,7 @@ const courseService = {
     }
   },
   getCourseDetailByID: async (
-    courseID: string
+    courseID: number
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
       const response = await axiosClient.get(`/courses/${courseID}`);
@@ -36,7 +36,12 @@ const courseService = {
     payload: addNewCoursePayload
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
-      const response = await axiosClient.post("/courses", payload);
+      const reqPayload = {
+        name: payload.name,
+        grade: payload.grade,
+        user_id: payload.userID,
+      };
+      const response = await axiosClient.post("/courses", reqPayload);
       return response.data;
     } catch (error) {
       return handleAxiosError<CourseResponseDto>(error);
@@ -44,12 +49,15 @@ const courseService = {
   },
   assignNewTeacher: async (
     payload: assignNewTeacherPayload,
-    courseID: string
+    courseID: number
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
+      const reqPayload = {
+        user_id: payload.userID,
+      };
       const response = await axiosClient.put(
-        `/courses/${courseID}/teachers`,
-        payload
+        `/courses/${courseID}`,
+        reqPayload
       );
       return response.data;
     } catch (error) {

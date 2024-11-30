@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import TableScrollable from "@/components/global/TableScrollable";
 import { toast } from "sonner";
 import UserRolesEnum from "@/enums/UserRoleEnum";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import userService from "@/services/apis/users/userService";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 

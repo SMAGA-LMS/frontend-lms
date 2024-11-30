@@ -1,8 +1,6 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "@/services/apis/baseResponseAPI";
-import { FormData } from "@/pages/login/LoginPage";
+import { loginPayload } from "@/pages/login/LoginPage";
 import { LoginResponseDto } from "./loginResponse";
 import { AuthResponseDto } from "./authResponse";
 import { handleAxiosError } from "../handleError";
@@ -11,11 +9,15 @@ type LogoutResponseDto = null;
 
 const authService = {
   login: async (
-    payload: FormData
+    payload: loginPayload
   ): Promise<BaseResponseAPIDto<LoginResponseDto>> => {
     try {
-      const response = await axiosClient.post("/auth/login", payload);
-      // success
+      const reqPayload = {
+        username: payload.username,
+        password: payload.password,
+        device_name: payload.deviceName,
+      };
+      const response = await axiosClient.post("/auth/login", reqPayload);
       return response.data;
     } catch (error: any) {
       return handleAxiosError<LoginResponseDto>(error);

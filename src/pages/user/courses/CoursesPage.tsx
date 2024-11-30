@@ -1,5 +1,5 @@
 import CardCourseItem from "@/components/courses/CardCourseItem";
-import { CourseDto } from "@/components/courses/courses";
+import { CourseDto } from "@/components/courses/course";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";

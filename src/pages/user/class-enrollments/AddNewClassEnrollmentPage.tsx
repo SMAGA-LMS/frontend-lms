@@ -1,5 +1,5 @@
-import { ClassroomDto } from "@/components/classrooms/classrooms";
-import { CourseDto } from "@/components/courses/courses";
+import { ClassroomDto } from "@/components/classrooms/classroom";
+import { CourseDto } from "@/components/courses/course";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import classroomService from "@/services/apis/classrooms/classroomService";
@@ -297,7 +297,7 @@ export default function AddNewClassEnrollmentPage() {
           {errors && <ErrorDisplay errors={errors} />}
           <Separator />
           <div>
-            <Accordion type="single" collapsible className="">
+            <Accordion type="single" collapsible defaultValue="item-1">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
                   Lihat data yang akan ditambahkan :

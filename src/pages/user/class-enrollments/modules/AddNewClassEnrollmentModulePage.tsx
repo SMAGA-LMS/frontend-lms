@@ -1,4 +1,3 @@
-import { CourseDto } from "@/components/courses/course";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
@@ -9,27 +8,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ErrorPage from "@/pages/ErrorPage";
-import courseService from "@/services/apis/courses/courseService";
 import { EyeIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import courseModuleService from "@/services/apis/course-modules/courseModuleService";
+import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
+import classEnrollmentModuleService from "@/services/apis/class-enrollment-modules/classEnrollmentModuleService";
 
-export interface addNewCourseModulePayload {
-  courseID: number;
+export interface addNewClassEnrollmentModulePayload {
+  classEnrollmentID: number;
 
   name: string;
   description: string;
   file?: File | null;
 }
 
-export default function AddNewCourseModulePage() {
+export default function AddNewClassEnrollmentModulePage() {
   const pageTitle = "Tambah Modul";
   const { id } = useParams<{ id: string }>();
 
-  const initialFormData: addNewCourseModulePayload = {
-    courseID: Number(id),
+  const initialFormData: addNewClassEnrollmentModulePayload = {
+    classEnrollmentID: Number(id),
     name: "",
     description: "",
     file: null,
@@ -42,28 +42,30 @@ export default function AddNewCourseModulePage() {
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [formData, setFormData] =
-    useState<addNewCourseModulePayload>(initialFormData);
-  const [course, setCourse] = useState<CourseDto>();
+    useState<addNewClassEnrollmentModulePayload>(initialFormData);
+  const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
 
   useEffect(() => {
-    const getCourseDetail = async () => {
+    const getClassEnrollmentDetail = async () => {
       if (!id) {
         return;
       }
 
       setLoading(true);
-      const response = await courseService.getCourseDetailByID(Number(id));
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
-        setCourse(response.data);
+        setClassEnrollment(response.data);
       } else {
         toast.error(response.message);
         setHasErrorPage(true);
       }
     };
 
-    getCourseDetail();
+    getClassEnrollmentDetail();
   }, [id]);
 
   const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
@@ -72,9 +74,9 @@ export default function AddNewCourseModulePage() {
     return <ErrorPage />;
   }
 
-  const createFormData = (data: addNewCourseModulePayload) => {
+  const createFormData = (data: addNewClassEnrollmentModulePayload) => {
     const formData = new FormData();
-    formData.append("courseID", data.courseID.toString());
+    formData.append("classEnrollmentID", data.classEnrollmentID.toString());
     formData.append("name", data.name);
     formData.append("description", data.description);
     if (data.file) {
@@ -88,8 +90,8 @@ export default function AddNewCourseModulePage() {
 
     console.log("Form data", formData);
 
-    const payload: addNewCourseModulePayload = {
-      courseID: Number(id),
+    const payload: addNewClassEnrollmentModulePayload = {
+      classEnrollmentID: Number(id),
       name: formData.name,
       description: formData.description,
     };
@@ -103,15 +105,16 @@ export default function AddNewCourseModulePage() {
     console.log("Payload", payload);
 
     setLoading(true);
-    const response = await courseModuleService.addNewCourseModule(
-      payloadFormData
-    );
+    const response =
+      await classEnrollmentModuleService.addNewClassEnrollmentModule(
+        payloadFormData
+      );
     setLoading(false);
 
     if (response.success && response.data) {
       setErrors(null);
       toast.success(response.message);
-      navigate(`/courses/${id}/modules`, { replace: true });
+      navigate(`/class-enrollments/${id}/modules`, { replace: true });
       return;
     } else {
       setErrors(response.errors);
@@ -157,9 +160,9 @@ export default function AddNewCourseModulePage() {
         ) : (
           <div className="mx-4 mt-4">
             <h1 className="font-bold font-sans text-lg">
-              {course?.name} | {course?.grade}
+              {classEnrollment?.course?.name} | {classEnrollment?.course?.grade}
             </h1>
-            <Badge variant="default">{course?.id}</Badge>
+            <Badge variant="outline">{classEnrollment?.classroom.name}</Badge>
           </div>
         )}
       </div>

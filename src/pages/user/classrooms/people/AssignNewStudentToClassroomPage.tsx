@@ -1,4 +1,4 @@
-import { ClassroomDto } from "@/components/classrooms/classrooms";
+import { ClassroomDto } from "@/components/classrooms/classroom";
 import { ButtonLoading } from "@/components/global/ButtonLoading";
 import ErrorDisplay, { Errors } from "@/components/global/ErrorDisplay";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
-import { UserDto } from "@/components/users/users";
+import { UserDto } from "@/components/users/user";
 import ErrorPage from "@/pages/ErrorPage";
 import classroomService from "@/services/apis/classrooms/classroomService";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
@@ -30,8 +30,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface assignNewStudentPayload {
-  userID?: string | null;
-  classroomID?: string | null;
+  userID?: number | null;
+  classroomID?: number | null;
 }
 
 export default function AssignNewStudentToClassroomPage() {
@@ -61,7 +61,9 @@ export default function AssignNewStudentToClassroomPage() {
 
     const getClassroomDetail = async () => {
       setLoading(true);
-      const response = await classroomService.getClassroomDetailByID(id);
+      const response = await classroomService.getClassroomDetailByID(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -75,11 +77,14 @@ export default function AssignNewStudentToClassroomPage() {
 
     const getAvailableStudents = async () => {
       setLoading(true);
-      const response = await studentEnrollmentService.getAvailableStudents(id);
+      const response = await studentEnrollmentService.getAvailableStudents(
+        Number(id)
+      );
       setLoading(false);
 
       if (response.success && response.data) {
-        setStudents(response.data);
+        console.log("response.data", response.data.users);
+        setStudents(response.data.users);
       } else {
         toast.error(response.message);
       }
@@ -100,8 +105,8 @@ export default function AssignNewStudentToClassroomPage() {
     console.log("formData", formData);
 
     payload.userID = formData.userID;
-    payload.classroomID = id;
-    if (formData.userID === "0" || formData.userID === null) {
+    payload.classroomID = Number(id);
+    if (formData.userID === 0 || formData.userID === null) {
       payload.userID = null;
     }
 
@@ -132,9 +137,8 @@ export default function AssignNewStudentToClassroomPage() {
     setErrors(null);
   };
 
-  const getUserById = (id: string): UserDto | undefined => {
-    const user = students.find((u) => u.id.toString() === id);
-    console.log("user", user?.name);
+  const getUserById = (id: number): UserDto | undefined => {
+    const user = students.find((u) => u.id === Number(id));
     if (!user) {
       return undefined;
     }
@@ -191,7 +195,7 @@ export default function AssignNewStudentToClassroomPage() {
             {errors && <ErrorDisplay errors={errors} />}
             <Separator />
             <div>
-              <Accordion type="single" collapsible className="">
+              <Accordion type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="font-semibold">
                     Lihat siswa yang akan ditambahkan :

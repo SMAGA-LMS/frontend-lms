@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import TableScrollable from "./TableScrollable";
-import { UserDto } from "../users/users";
+import { UserDto } from "../users/user";
 
 interface TableWithActionFeatureProps {
   dataTable: UserDto[];

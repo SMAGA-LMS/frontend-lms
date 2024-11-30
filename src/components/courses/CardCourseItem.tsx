@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { CourseDto } from "./courses";
+import { CourseDto } from "./course";
 
 interface CardCourseItemProps {
   data: CourseDto;
