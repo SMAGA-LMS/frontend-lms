@@ -108,7 +108,9 @@ export default function AddNewCoursePage() {
   };
 
   const getUserById = (id: number): UserDto | undefined => {
-    const user = teachers.find((u) => u.id === id);
+    const user = teachers.find((u) => {
+      return u.id === Number(id);
+    });
     if (!user) {
       return undefined;
     }
@@ -224,7 +226,7 @@ export default function AddNewCoursePage() {
           {errors && <ErrorDisplay errors={errors} />}
           <Separator />
           <div>
-            <Accordion type="single" collapsible className="">
+            <Accordion type="single" collapsible defaultValue="item-1">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
                   Lihat mata pelajaran yang akan ditambahkan :
