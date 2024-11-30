@@ -108,9 +108,7 @@ export default function AddNewCoursePage() {
   };
 
   const getUserById = (id: number): UserDto | undefined => {
-    const user = teachers.find((u) => {
-      return u.id === Number(id);
-    });
+    const user = teachers.find((u) => u.id === Number(id));
     if (!user) {
       return undefined;
     }
