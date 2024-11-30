@@ -297,7 +297,7 @@ export default function AddNewClassEnrollmentPage() {
           {errors && <ErrorDisplay errors={errors} />}
           <Separator />
           <div>
-            <Accordion type="single" collapsible className="">
+            <Accordion type="single" collapsible defaultValue="item-1">
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
                   Lihat data yang akan ditambahkan :
