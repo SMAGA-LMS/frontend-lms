@@ -1,29 +1,34 @@
+import { ClassEnrollmentModuleDto } from "@/components/class-enrollment-modules/classEnrollmentModule";
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
-import { CourseModuleDto } from "@/components/course-modules/courseModule";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import CardModule from "@/components/modules/CardModule";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ErrorPage from "@/pages/ErrorPage";
+import classEnrollmentModuleService from "@/services/apis/class-enrollment-modules/classEnrollmentModuleService";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
-import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function CourseModulesStarterKitPage() {
+export default function ClassEnrollmentModulesPage() {
   const pageTitle = "List Modules";
   const heightTable = "h-[60vh]";
+
+  const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
-  const [courseModules, setCourseModules] = useState<CourseModuleDto[]>([]);
+  const [classEnrollmentModules, setClassEnrollmentModules] = useState<
+    ClassEnrollmentModuleDto[]
+  >([]);
 
   useEffect(() => {
     const getClassEnrollmentDetail = async () => {
@@ -44,36 +49,35 @@ export default function CourseModulesStarterKitPage() {
         setHasErrorPage(true);
       }
     };
-
     getClassEnrollmentDetail();
-  }, [id]);
 
-  useEffect(() => {
-    if (!classEnrollment) {
-      return;
-    }
-
-    const getCourseModulesData = async () => {
+    const getClassEnrollmentModulesData = async () => {
       setLoading(true);
-      const response = await courseModuleService.getCourseModules(
-        classEnrollment.course.id
-      );
+      const response =
+        await classEnrollmentModuleService.getClassEnrollmentModules(
+          Number(id)
+        );
       setLoading(false);
 
       if (response.success && response.data) {
-        setCourseModules(response.data);
+        setClassEnrollmentModules(response.data);
       } else {
         toast.error(response.message);
       }
     };
-    getCourseModulesData();
-  }, [classEnrollment, id]);
+    getClassEnrollmentModulesData();
+  }, [id]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
   }
 
-  const isCourseModulesEmpty = courseModules.length === 0;
+  const navigateToAddNewModule = () => {
+    navigate(`/class-enrollments/${id}/modules/create`);
+    return;
+  };
+
+  const isClassEnrollmentModulesEmpty = classEnrollmentModules.length === 0;
 
   return (
     <>
@@ -84,9 +88,9 @@ export default function CourseModulesStarterKitPage() {
         ) : (
           <div className="mx-4 mt-4">
             <h1 className="font-bold font-sans text-lg">
-              {classEnrollment?.course?.name} | {classEnrollment?.course?.grade}
+              {classEnrollment?.course.name} | {classEnrollment?.course?.grade}
             </h1>
-            <Badge variant="default">{classEnrollment?.course?.id}</Badge>
+            <Badge variant="outline">{classEnrollment?.classroom.name}</Badge>
           </div>
         )}
       </div>
@@ -101,38 +105,53 @@ export default function CourseModulesStarterKitPage() {
             <div className="my-3">
               <div>
                 <Label className="font-semibold">
-                  Total Module Starter: {courseModules.length}
+                  Total Module: {classEnrollmentModules.length}
                 </Label>
               </div>
               <div>
-                {isCourseModulesEmpty && (
+                {isClassEnrollmentModulesEmpty && (
                   <div className={`${heightTable}`}>
                     <Label className="text-sm text-gray-500">
-                      Tidak ada module starter yang tersedia
+                      Tidak ada module yang tersedia
                     </Label>
                   </div>
                 )}
               </div>
             </div>
-            {!isCourseModulesEmpty && (
+            {!isClassEnrollmentModulesEmpty && (
               <ScrollArea
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {courseModules.map((courseModule, index) => (
-                    <Link
-                      to={`/class-enrollments/${id}/modules/starter-kit/${courseModule.module.id}`}
-                      key={index}
-                      className="block"
-                    >
-                      <CardModule key={index} data={courseModule.module} />
-                    </Link>
-                  ))}
+                  {classEnrollmentModules.map(
+                    (classEnrollmentModule, index) => (
+                      <Link
+                        to={`/class-enrollments/${id}/modules/${classEnrollmentModule.module.id}`}
+                        key={index}
+                        className="block"
+                      >
+                        <CardModule
+                          key={index}
+                          data={classEnrollmentModule.module}
+                        />
+                      </Link>
+                    )
+                  )}
                 </div>
               </ScrollArea>
             )}
           </div>
         )}
+        <div className="bottom-16 left-0 w-full bg-white">
+          <Button
+            variant="smagaLMSGreen"
+            className="w-full"
+            type="submit"
+            onClick={navigateToAddNewModule}
+          >
+            Tambah Modul
+          </Button>
+        </div>
       </div>
     </>
   );
