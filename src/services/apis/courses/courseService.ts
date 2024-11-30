@@ -36,7 +36,12 @@ const courseService = {
     payload: addNewCoursePayload
   ): Promise<BaseResponseAPIDto<CourseResponseDto>> => {
     try {
-      const response = await axiosClient.post("/courses", payload);
+      const reqPayload = {
+        name: payload.name,
+        grade: payload.grade,
+        user_id: payload.userID,
+      };
+      const response = await axiosClient.post("/courses", reqPayload);
       return response.data;
     } catch (error) {
       return handleAxiosError<CourseResponseDto>(error);
