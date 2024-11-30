@@ -145,7 +145,12 @@ export default function AddNewClassRoomPage() {
           {errors && <ErrorDisplay errors={errors} />}
 
           <div>
-            <Accordion type="single" collapsible className="">
+            <Accordion
+              type="single"
+              collapsible
+              className=""
+              defaultValue="item-1"
+            >
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
                   Lihat kelas yang akan ditambahkan :
@@ -178,8 +183,8 @@ export default function AddNewClassRoomPage() {
                       </div>
                     </AlertDescription>
                     {/* <p className="mt-2 text-center font-semibold bg-secondary rounded-md p-2">
-                      kode kelas dapat dilihat setelah anda mengirimkan data
-                    </p> */}
+                  kode kelas dapat dilihat setelah anda mengirimkan data
+                </p> */}
                   </Alert>
                 </AccordionContent>
               </AccordionItem>
