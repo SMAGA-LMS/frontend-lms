@@ -60,7 +60,7 @@ export default function CourseDetailPage() {
     };
 
     // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
-    // Check if the current user (teacher) is PIC Course of this course
+    // Check if the current user (PIC Course) is PIC Course of this course
     if (!isUserAdmin() && !isValidPICCourse()) {
       // setHasErrorPage(true);
       setTimeout(() => {

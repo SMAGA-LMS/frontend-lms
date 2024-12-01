@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 
 export interface addNewCourseModulePayload {
   courseID: number;
@@ -36,6 +38,7 @@ export default function AddNewCourseModulePage() {
   };
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
@@ -44,6 +47,7 @@ export default function AddNewCourseModulePage() {
   const [formData, setFormData] =
     useState<addNewCourseModulePayload>(initialFormData);
   const [course, setCourse] = useState<CourseDto>();
+  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
 
   useEffect(() => {
     const getCourseDetail = async () => {
@@ -66,7 +70,29 @@ export default function AddNewCourseModulePage() {
     getCourseDetail();
   }, [id]);
 
-  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
+  useEffect(() => {
+    if (!course || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidPICCourse = () => {
+      return currentUser.id === course.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (PIC Course) is the PIC Course of this course
+    if (!isUserAdmin() && !isValidPICCourse()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
+    }
+  }, [course, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
