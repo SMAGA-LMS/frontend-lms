@@ -100,8 +100,6 @@ export default function AddNewCourseModulePage() {
 
     const payloadFormData = createFormData(payload);
 
-    console.log("Payload", payload);
-
     setLoading(true);
     const response = await courseModuleService.addNewCourseModule(
       payloadFormData
@@ -145,6 +143,10 @@ export default function AddNewCourseModulePage() {
   const handleRemoveFile = () => {
     const fileInput = document.getElementById("file") as HTMLInputElement;
     fileInput.value = "";
+    setFormData({
+      ...formData,
+      file: null,
+    });
     setIsFileSelected(false);
   };
 
