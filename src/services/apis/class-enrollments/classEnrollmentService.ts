@@ -64,12 +64,12 @@ const classEnrollmentService = {
       return handleAxiosError<ClassEnrollmentResponseDto>(error);
     }
   },
-  getClassEnrollmentByClassroomID: async (
-    classroomID: number
+  getStudentClassEnrollments: async (
+    userID: number
   ): Promise<BaseResponseAPIDto<ListClassEnrollmentsResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/class-enrollments?classroom_id=${classroomID}`
+        `/class-enrollments/student/${userID}`
       );
       return response.data;
     } catch (error) {

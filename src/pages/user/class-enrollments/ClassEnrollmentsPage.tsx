@@ -2,14 +2,12 @@ import CardClassEnrollmentItem from "@/components/class-enrollments/CardClassEnr
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
-import { StudentEnrollmentDto } from "@/components/student-enrollments/studentEnrollment";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
-import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -25,29 +23,30 @@ export default function ClassEnrollmentsPage() {
   const [classEnrollments, setClassEnrollments] = useState<
     ClassEnrollmentDto[]
   >([]);
-  const [studentEnrollment, setStudentEnrollment] =
-    useState<StudentEnrollmentDto>();
+  // const [studentEnrollments, setStudentEnrollments] = useState<
+  //   StudentEnrollmentDto[]
+  // >([]);
 
-  useEffect(() => {
-    if (currentUser?.role === UserRolesEnum.STUDENT) {
-      const getStudentEnrollmentData = async () => {
-        setLoading(true);
-        const response =
-          await studentEnrollmentService.getStudentEnrollmentByStudentID(
-            currentUser.id
-          );
-        setLoading(false);
+  // useEffect(() => {
+  //   if (currentUser?.role === UserRolesEnum.STUDENT) {
+  //     const getStudentEnrollmentData = async () => {
+  //       setLoading(true);
+  //       const response =
+  //         await studentEnrollmentService.getStudentEnrollmentByStudentID(
+  //           currentUser.id
+  //         );
+  //       setLoading(false);
 
-        if (response.success && response.data) {
-          setStudentEnrollment(response.data);
-        } else {
-          toast.error(response.message);
-        }
-      };
+  //       if (response.success && response.data) {
+  //         setStudentEnrollments(response.data);
+  //       } else {
+  //         toast.error(response.message);
+  //       }
+  //     };
 
-      getStudentEnrollmentData();
-    }
-  }, [currentUser]);
+  //     getStudentEnrollmentData();
+  //   }
+  // }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentsData = async () => {
@@ -64,12 +63,9 @@ export default function ClassEnrollmentsPage() {
           currentUser.id
         );
       } else if (currentUser.role === UserRolesEnum.STUDENT) {
-        if (studentEnrollment?.classroom.id !== undefined) {
-          response =
-            await classEnrollmentService.getClassEnrollmentByClassroomID(
-              studentEnrollment.classroom.id
-            );
-        }
+        response = await classEnrollmentService.getStudentClassEnrollments(
+          currentUser.id
+        );
       }
       setLoading(false);
 
@@ -82,7 +78,7 @@ export default function ClassEnrollmentsPage() {
       }
     };
     getClassEnrollmentsData();
-  }, [currentUser, studentEnrollment]);
+  }, [currentUser]);
 
   const navigateToAddNewClassEnrollment = () => {
     navigate("/class-enrollments/create");

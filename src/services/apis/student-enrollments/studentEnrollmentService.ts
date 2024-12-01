@@ -50,14 +50,14 @@ const studentEnrollmentService = {
   },
   getStudentEnrollmentByStudentID: async (
     studentID: number
-  ): Promise<BaseResponseAPIDto<StudentEnrollmentResponseDto>> => {
+  ): Promise<BaseResponseAPIDto<ListStudentEnrollmentResponseDto>> => {
     try {
       const response = await axiosClient.get(
-        `/student-enrollments/student/${studentID}/classroom`
+        `/student-enrollments?user_id=${studentID}`
       );
       return response.data;
     } catch (error) {
-      return handleAxiosError<StudentEnrollmentResponseDto>(error);
+      return handleAxiosError<ListStudentEnrollmentResponseDto>(error);
     }
   },
 };
