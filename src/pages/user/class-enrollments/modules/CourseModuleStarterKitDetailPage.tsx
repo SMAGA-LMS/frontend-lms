@@ -13,7 +13,7 @@ import { toast } from "sonner";
 
 export default function CourseModuleStarterKitDetailPage() {
   const pageTitle = "Modul";
-  const { moduleID } = useParams<{ moduleID: string }>();
+  const { courseModuleID } = useParams<{ courseModuleID: string }>();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
@@ -22,13 +22,13 @@ export default function CourseModuleStarterKitDetailPage() {
 
   useEffect(() => {
     const getModuleDetail = async () => {
-      if (!moduleID) {
+      if (!courseModuleID) {
         return;
       }
 
       setLoading(true);
       const response = await moduleService.getModuleDetailByID(
-        Number(moduleID)
+        Number(courseModuleID)
       );
       setLoading(false);
 
@@ -40,7 +40,7 @@ export default function CourseModuleStarterKitDetailPage() {
       }
     };
     getModuleDetail();
-  }, [moduleID]);
+  }, [courseModuleID]);
 
   if (hasErrorPage) {
     return <ErrorPage />;

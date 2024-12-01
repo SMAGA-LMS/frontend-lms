@@ -13,7 +13,9 @@ import { toast } from "sonner";
 
 export default function ClassEnrollmentModuleDetailPage() {
   const pageTitle = "Modul";
-  const { moduleID } = useParams<{ moduleID: string }>();
+  const { classEnrollmentModuleID } = useParams<{
+    classEnrollmentModuleID: string;
+  }>();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
@@ -22,13 +24,13 @@ export default function ClassEnrollmentModuleDetailPage() {
 
   useEffect(() => {
     const getModuleDetail = async () => {
-      if (!moduleID) {
+      if (!classEnrollmentModuleID) {
         return;
       }
 
       setLoading(true);
       const response = await moduleService.getModuleDetailByID(
-        Number(moduleID)
+        Number(classEnrollmentModuleID)
       );
       setLoading(false);
 
@@ -40,7 +42,7 @@ export default function ClassEnrollmentModuleDetailPage() {
       }
     };
     getModuleDetail();
-  }, [moduleID]);
+  }, [classEnrollmentModuleID]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
