@@ -23,30 +23,6 @@ export default function ClassEnrollmentsPage() {
   const [classEnrollments, setClassEnrollments] = useState<
     ClassEnrollmentDto[]
   >([]);
-  // const [studentEnrollments, setStudentEnrollments] = useState<
-  //   StudentEnrollmentDto[]
-  // >([]);
-
-  // useEffect(() => {
-  //   if (currentUser?.role === UserRolesEnum.STUDENT) {
-  //     const getStudentEnrollmentData = async () => {
-  //       setLoading(true);
-  //       const response =
-  //         await studentEnrollmentService.getStudentEnrollmentByStudentID(
-  //           currentUser.id
-  //         );
-  //       setLoading(false);
-
-  //       if (response.success && response.data) {
-  //         setStudentEnrollments(response.data);
-  //       } else {
-  //         toast.error(response.message);
-  //       }
-  //     };
-
-  //     getStudentEnrollmentData();
-  //   }
-  // }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentsData = async () => {
