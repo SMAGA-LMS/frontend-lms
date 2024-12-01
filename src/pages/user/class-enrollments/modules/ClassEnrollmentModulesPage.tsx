@@ -127,6 +127,8 @@ export default function ClassEnrollmentModulesPage() {
     getClassEnrollmentModulesData();
   }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
 
+  console.log("classEnrollmentModules: ", classEnrollmentModules);
+
   if (hasErrorPage) {
     return <ErrorPage />;
   }
@@ -182,20 +184,18 @@ export default function ClassEnrollmentModulesPage() {
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {classEnrollmentModules.map(
-                    (classEnrollmentModule, index) => (
-                      <Link
-                        to={`/class-enrollments/${id}/modules/${classEnrollmentModule.module.id}`}
-                        key={index}
-                        className="block"
-                      >
-                        <CardModule
-                          key={index}
-                          data={classEnrollmentModule.module}
-                        />
-                      </Link>
-                    )
-                  )}
+                  {classEnrollmentModules.map((classEnrollmentModule) => (
+                    <Link
+                      to={`/class-enrollments/${id}/modules/${classEnrollmentModule.id}`}
+                      key={classEnrollmentModule.id}
+                      className="block"
+                    >
+                      <CardModule
+                        key={classEnrollmentModule.id}
+                        data={classEnrollmentModule.module}
+                      />
+                    </Link>
+                  ))}
                 </div>
               </ScrollArea>
             )}

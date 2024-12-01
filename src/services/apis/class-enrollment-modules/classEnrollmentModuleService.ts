@@ -3,6 +3,7 @@ import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { handleAxiosError } from "../handleError";
 import { ListClassEnrollmentModulesResponseDto } from "./listClassEnrollmentModulesResponse";
 import { ClassEnrollmentResponseDto } from "../class-enrollments/classEnrollmentResponse";
+import { ClassEnrollmentModuleResponseDto } from "./classEnrollmentModuleResponse";
 
 const classEnrollmentModuleService = {
   addNewClassEnrollmentModule: async (
@@ -40,6 +41,18 @@ const classEnrollmentModuleService = {
       return response.data;
     } catch (error) {
       return handleAxiosError<ListClassEnrollmentModulesResponseDto>(error);
+    }
+  },
+  getClassEnrollmentModuleDetailByID: async (
+    classEnrollmentModuleID: number
+  ): Promise<BaseResponseAPIDto<ClassEnrollmentModuleResponseDto>> => {
+    try {
+      const response = await axiosClient.get(
+        `/class-enrollment-modules/${classEnrollmentModuleID}`
+      );
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ClassEnrollmentModuleResponseDto>(error);
     }
   },
 };
