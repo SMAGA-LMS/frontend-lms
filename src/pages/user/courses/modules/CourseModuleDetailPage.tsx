@@ -4,11 +4,13 @@ import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import { EyeIcon, PaperclipIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function CourseModuleDetailPage() {
@@ -17,6 +19,9 @@ export default function CourseModuleDetailPage() {
     id: string;
     courseModuleID: string;
   }>();
+
+  const { currentUser } = useStateContext();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
@@ -46,7 +51,7 @@ export default function CourseModuleDetailPage() {
   }, [courseModuleID]);
 
   useEffect(() => {
-    if (!id || !courseModuleID || !courseModule) {
+    if (!id || !courseModuleID || !courseModule || !currentUser) {
       return;
     }
 
@@ -57,8 +62,26 @@ export default function CourseModuleDetailPage() {
     // check if course id from params must be same with course id from course module
     if (!isMatchingCourse()) {
       setHasErrorPage(true);
+      return;
     }
-  }, [courseModule, courseModuleID, id]);
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidPICCourse = () => {
+      return currentUser.id === courseModule.course?.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    if (!isUserAdmin() && !isValidPICCourse()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate(`/home`, { replace: true });
+      return;
+    }
+  }, [courseModule, courseModuleID, currentUser, id, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
