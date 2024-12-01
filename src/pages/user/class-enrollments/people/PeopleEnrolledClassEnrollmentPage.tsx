@@ -13,13 +13,14 @@ import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import studentEnrollmentService from "@/services/apis/student-enrollments/studentEnrollmentService";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function PeopleEnrolledClassEnrollmentPage() {
   const pageTitle = "List Siswa Kelas";
   const heightTable = "h-[60vh]";
 
+  const navigate = useNavigate();
   const { currentUser } = useStateContext();
 
   // const { classroomCode } = useParams() as { classroomCode: string };
@@ -31,44 +32,30 @@ export default function PeopleEnrolledClassEnrollmentPage() {
   const [studentEnrollments, setStudentEnrollments] = useState<
     StudentEnrollmentDto[]
   >([]);
-  const [studentEnrollment, setStudentEnrollment] =
-    useState<StudentEnrollmentDto>();
-
-  // const [classroom, setClassroom] = useState<ClassroomDto>({
-  //   classPeriod: {
-  //     id: "",
-  //     classPeriodName: "",
-  //     classPeriodCode: "",
-  //     totalStudentsEnrolled: "",
-  //   },
-  //   teacher: null,
-  // });
-
-  // const [users, setUsers] = useState<UserDto[]>([]);
-  // const [virtualUsers, setVirtualUsers] = useState<UserDto[]>([]);
-  // const [errors, setErrors] = useState<string[]>([]);
-
-  // const [responseData, setResponseData] = useState<any | null>(null);
+  const [studentClassEnrollments, setStudentClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
 
   useEffect(() => {
-    const getStudentEnrollmentData = async () => {
-      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) return;
+    const getStudentClassEnrollmentsData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) {
+        return;
+      }
 
       setLoading(true);
-      const response =
-        await studentEnrollmentService.getStudentEnrollmentByStudentID(
-          currentUser.id
-        );
+      const response = await classEnrollmentService.getStudentClassEnrollments(
+        currentUser.id
+      );
       setLoading(false);
 
       if (response.success && response.data) {
-        setStudentEnrollment(response.data);
+        setStudentClassEnrollments(response.data);
       } else {
         toast.error(response.message);
       }
     };
 
-    getStudentEnrollmentData();
+    getStudentClassEnrollmentsData();
   }, [currentUser]);
 
   useEffect(() => {
@@ -94,15 +81,16 @@ export default function PeopleEnrolledClassEnrollmentPage() {
   }, [id]);
 
   useEffect(() => {
-    const classroomID = classEnrollment?.classroom.id;
     async function getPeopleEnrolledClassroom() {
-      if (!classroomID) {
+      if (!classEnrollment) {
         return;
       }
 
       setLoading(true);
       const response =
-        await studentEnrollmentService.getPeopleEnrolledClassroom(classroomID);
+        await studentEnrollmentService.getPeopleEnrolledClassroom(
+          classEnrollment.classroom.id
+        );
       setLoading(false);
 
       if (response.success && response.data) {
@@ -112,103 +100,46 @@ export default function PeopleEnrolledClassEnrollmentPage() {
       }
     }
     getPeopleEnrolledClassroom();
-  }, [classEnrollment?.classroom.id]);
+  }, [classEnrollment]);
 
   useEffect(() => {
-    if (!classEnrollment || !currentUser || !studentEnrollment) {
+    if (!classEnrollment || !currentUser) {
       return;
     }
 
-    const isValidStudent = () => {
-      console.log(classEnrollment.id, studentEnrollment.classroom.id);
-      return classEnrollment.classroom.id === studentEnrollment.classroom.id;
+    const isUserAdmin = () => {
+      return currentUser?.role === UserRolesEnum.ADMIN;
     };
 
-    // currentUser => student (10) !== classEnrollment?.user?.id (15) karena 15 teacher di classEnrollment  ==> hasilnya true
-    // currentUser => student !== ADMIN ==> hasil nya true
-    // !isValidStudent() ==> false
-    if (
-      currentUser?.id !== classEnrollment?.user?.id &&
-      currentUser?.role !== UserRolesEnum.ADMIN &&
-      !isValidStudent()
-    ) {
-      setHasErrorPage(true);
+    const isValidTeacher = () => {
+      return currentUser?.id === classEnrollment?.user?.id;
+    };
+
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) => enrollment.id === classEnrollment?.id
+      );
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    // Check if the current user (student) is the student of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
     }
-  }, [classEnrollment, currentUser, studentEnrollment]);
+  }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
   }
 
-  // useEffect(() => {
-  //   if (enrolledStudents) {
-  //     const studentEnrollment = enrolledStudents.map((student) => {
-  //       return student;
-  //     });
-  //   }
-  // }, [stundentEnrollment]);
-
-  // useEffect(() => {
-  //   async function getEnrolledStudentsData() {
-  //     setLoading(true);
-  //     try {
-  //       const response = await axiosClient.get(
-  //         `/class-periods/${classroomCode}/people`
-  //       );
-  //       setUsers(response.data.data.map((enrollment) => enrollment.user));
-  //       setVirtualUsers(
-  //         response.data.data.map((enrollment) => enrollment.user)
-  //       );
-  //     } catch (error) {
-  //       toast.error("Failed to fetch data students");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   getEnrolledStudentsData();
-  // }, [classroomCode]);
-
   if (hasErrorPage) {
     return <ErrorPage />;
   }
-
-  // function handleSearchUser(value: string) {
-  //   // setSelectedUser(null);
-  //   // setIsUserSelected(false);
-  //   setResetSelected(true);
-  //   if (value === "") {
-  //     setVirtualUsers(users);
-  //     return;
-  //   }
-
-  //   const filteredData = virtualUsers.filter((virtualUser) =>
-  //     virtualUser.fullName.toLowerCase().includes(value.toLowerCase())
-  //   );
-
-  //   setVirtualUsers(filteredData);
-  // }
-
-  // function generateSkeletonList() {
-  //   return (
-  //     <>
-  //       {Array.from({ length: 5 }).map((_, index) => (
-  //         <SkeletonUserCard key={index} />
-  //       ))}
-  //     </>
-  //   );
-  // }
-
-  // const [resetSelected, setResetSelected] = useState(false);
-  // function handleSelectedUser(id: string) {
-  //   // setIsUserSelected(true);
-  //   console.log("selected user id add screen: ", id);
-  //   // setFormData({
-  //   //   ...formData,
-  //   //   ["user_id"]: id,
-  //   // });
-  //   // console.log("users: ", users);
-  // }
 
   return (
     <>
