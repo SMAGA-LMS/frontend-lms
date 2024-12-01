@@ -81,6 +81,35 @@ export default function PeopleEnrolledClassEnrollmentPage() {
   }, [id]);
 
   useEffect(() => {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment?.user?.id;
+    };
+
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) => enrollment.id === classEnrollment?.id
+      );
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    // Check if the current user (student) is the student of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
+    }
+
     async function getPeopleEnrolledClassroom() {
       if (!classEnrollment) {
         return;
@@ -100,37 +129,6 @@ export default function PeopleEnrolledClassEnrollmentPage() {
       }
     }
     getPeopleEnrolledClassroom();
-  }, [classEnrollment]);
-
-  useEffect(() => {
-    if (!classEnrollment || !currentUser) {
-      return;
-    }
-
-    const isUserAdmin = () => {
-      return currentUser?.role === UserRolesEnum.ADMIN;
-    };
-
-    const isValidTeacher = () => {
-      return currentUser?.id === classEnrollment?.user?.id;
-    };
-
-    const isValidStudent = () => {
-      return studentClassEnrollments.some(
-        (enrollment) => enrollment.id === classEnrollment?.id
-      );
-    };
-
-    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
-    // Check if the current user (teacher) is the teacher of this class enrollment
-    // Check if the current user (student) is the student of this class enrollment
-    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
-      setTimeout(() => {
-        toast.warning("You are not authorized to access this page");
-      }, 300);
-      navigate("/home", { replace: true });
-      return;
-    }
   }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
 
   if (hasErrorPage) {
