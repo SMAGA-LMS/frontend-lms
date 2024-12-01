@@ -60,13 +60,13 @@ export default function CourseModulesPage() {
       return currentUser?.role === UserRolesEnum.ADMIN;
     };
 
-    const isValidTeacher = () => {
+    const isValidPICCourse = () => {
       return currentUser.id === course.user?.id;
     };
 
     // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
-    // Check if the current user (teacher) is the teacher of this class enrollment
-    if (!isUserAdmin() && !isValidTeacher()) {
+    // Check if the current user (PIC Course) is the PIC Course of this course
+    if (!isUserAdmin() && !isValidPICCourse()) {
       setTimeout(() => {
         toast.warning("You are not authorized to access this page");
       }, 300);
