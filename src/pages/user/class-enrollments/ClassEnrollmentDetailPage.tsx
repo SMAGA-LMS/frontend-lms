@@ -170,7 +170,7 @@ export default function ClassEnrollmentDetailPage() {
         {classEnrollment && (
           <Link
             to={`/class-enrollments/${id}/modules/starter-kit`}
-            key={id}
+            key={classEnrollment.course.id}
             className="block"
           >
             <CardStarterKitCourseModule data={classEnrollment.course} />
@@ -180,7 +180,7 @@ export default function ClassEnrollmentDetailPage() {
         {classEnrollment && (
           <Link
             to={`/class-enrollments/${id}/modules`}
-            key={id}
+            key={classEnrollment.id}
             className="block"
           >
             <CardClassEnrollmentModule data={classEnrollment} />
