@@ -46,10 +46,16 @@ export default function CourseModulesPage() {
       }
     };
     getCourseDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!course) {
+      return;
+    }
 
     const getCourseModulesData = async () => {
       setLoading(true);
-      const response = await courseModuleService.getCourseModules(Number(id));
+      const response = await courseModuleService.getCourseModules(course.id);
       setLoading(false);
 
       if (response.success && response.data) {
@@ -59,7 +65,7 @@ export default function CourseModulesPage() {
       }
     };
     getCourseModulesData();
-  }, [id]);
+  }, [course]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
