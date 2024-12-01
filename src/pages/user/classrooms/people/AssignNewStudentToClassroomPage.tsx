@@ -74,11 +74,16 @@ export default function AssignNewStudentToClassroomPage() {
       }
     };
     getClassroomDetail();
+  }, [id]);
 
+  useEffect(() => {
+    if (!classroom) {
+      return;
+    }
     const getAvailableStudents = async () => {
       setLoading(true);
       const response = await studentEnrollmentService.getAvailableStudents(
-        Number(id)
+        classroom.id
       );
       setLoading(false);
 
@@ -90,7 +95,7 @@ export default function AssignNewStudentToClassroomPage() {
       }
     };
     getAvailableStudents();
-  }, [id]);
+  }, [classroom]);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
