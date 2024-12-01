@@ -37,7 +37,7 @@ export default function AddNewUserPage() {
 
   const initialFormData: addNewUserPayload = {
     name: "",
-    role: UserRolesEnum.STUDENT,
+    role: "",
   };
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -79,11 +79,14 @@ export default function AddNewUserPage() {
 
       setResponseData(responseData);
       setErrors(null);
+      setFormData(initialFormData);
       toast.success(response.message);
     } else {
       setErrors(response.errors);
       toast.error(response.message);
     }
+
+    console.log("formData", formData);
   }
 
   function handleInputChange(event) {
@@ -103,7 +106,7 @@ export default function AddNewUserPage() {
       <div className="mx-4">
         <form onSubmit={handleFormSubmit} method="post">
           <div>
-            <Accordion type="single" collapsible className="">
+            <Accordion type="single" collapsible>
               <AccordionItem value="item-1">
                 <AccordionTrigger className="font-semibold">
                   <InfoIcon size="24" />
@@ -150,6 +153,7 @@ export default function AddNewUserPage() {
 
               <div className="col-span-2">
                 <Select
+                  value={formData.role}
                   onValueChange={(val) => {
                     const event = {
                       target: {
@@ -159,7 +163,7 @@ export default function AddNewUserPage() {
                     };
                     handleInputChange(event);
                   }}
-                  value={formData.role}
+                  required
                 >
                   <SelectTrigger className="w-full" id="role" name="role">
                     <SelectValue placeholder="Pilih role" />
@@ -191,7 +195,7 @@ export default function AddNewUserPage() {
           <Separator />
           <div className="">
             <div>
-              <Accordion type="single" collapsible className="">
+              <Accordion type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="font-semibold">
                     Lihat user yang akan ditambahkan:
