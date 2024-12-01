@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import courseService from "@/services/apis/courses/courseService";
@@ -20,6 +22,7 @@ export default function CourseModulesPage() {
   const heightTable = "h-[60vh]";
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,7 +52,25 @@ export default function CourseModulesPage() {
   }, [id]);
 
   useEffect(() => {
-    if (!course) {
+    if (!course || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser?.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === course.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
       return;
     }
 
@@ -65,7 +86,7 @@ export default function CourseModulesPage() {
       }
     };
     getCourseModulesData();
-  }, [course]);
+  }, [course, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
