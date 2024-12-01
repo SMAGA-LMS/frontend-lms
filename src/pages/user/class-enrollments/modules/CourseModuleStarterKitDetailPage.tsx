@@ -30,6 +30,31 @@ export default function CourseModuleStarterKitDetailPage() {
 
   const [courseModule, setCourseModule] = useState<CourseModuleDto>();
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
+  const [studentClassEnrollments, setStudentClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
+
+  useEffect(() => {
+    const getStudentClassEnrollmentsData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) {
+        return;
+      }
+
+      setLoading(true);
+      const response = await classEnrollmentService.getStudentClassEnrollments(
+        currentUser.id
+      );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentClassEnrollments(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentClassEnrollmentsData();
+  }, [currentUser]);
 
   useEffect(() => {
     const getCourseModuleDetail = async () => {
@@ -99,22 +124,28 @@ export default function CourseModuleStarterKitDetailPage() {
       return currentUser.id === classEnrollment.user?.id;
     };
 
-    // const isValidStudent = () => {
-    //   return studentClassEnrollments.some(
-    //     (enrollment) =>
-    //       enrollment.id === classEnrollmentModule.classEnrollment.id
-    //   );
-    // };
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) => enrollment.id === classEnrollment.id
+      );
+    };
 
     // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
-    if (!isUserAdmin() && !isValidTeacher()) {
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
       setTimeout(() => {
         toast.warning("You are not authorized to access this page");
       }, 300);
       navigate(`/home`, { replace: true });
       return;
     }
-  }, [classEnrollment, courseModule, currentUser, id, navigate]);
+  }, [
+    classEnrollment,
+    courseModule,
+    currentUser,
+    id,
+    navigate,
+    studentClassEnrollments,
+  ]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
