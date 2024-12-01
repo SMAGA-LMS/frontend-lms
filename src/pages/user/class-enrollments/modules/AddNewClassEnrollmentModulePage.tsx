@@ -148,6 +148,10 @@ export default function AddNewClassEnrollmentModulePage() {
   const handleRemoveFile = () => {
     const fileInput = document.getElementById("file") as HTMLInputElement;
     fileInput.value = "";
+    setFormData({
+      ...formData,
+      file: null,
+    });
     setIsFileSelected(false);
   };
 
