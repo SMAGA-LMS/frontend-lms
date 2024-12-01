@@ -7,11 +7,13 @@ import CardModule from "@/components/modules/CardModule";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function CourseModulesStarterKitPage() {
@@ -19,6 +21,10 @@ export default function CourseModulesStarterKitPage() {
   const heightTable = "h-[60vh]";
 
   const { id } = useParams<{ id: string }>();
+
+  const { currentUser } = useStateContext();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
@@ -49,7 +55,25 @@ export default function CourseModulesStarterKitPage() {
   }, [id]);
 
   useEffect(() => {
-    if (!classEnrollment) {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
       return;
     }
 
@@ -67,7 +91,7 @@ export default function CourseModulesStarterKitPage() {
       }
     };
     getCourseModulesData();
-  }, [classEnrollment, id]);
+  }, [classEnrollment, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
