@@ -32,6 +32,31 @@ export default function ClassEnrollmentModulesPage() {
   const [classEnrollmentModules, setClassEnrollmentModules] = useState<
     ClassEnrollmentModuleDto[]
   >([]);
+  const [studentClassEnrollments, setStudentClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
+
+  useEffect(() => {
+    const getStudentClassEnrollmentsData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) {
+        return;
+      }
+
+      setLoading(true);
+      const response = await classEnrollmentService.getStudentClassEnrollments(
+        currentUser.id
+      );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentClassEnrollments(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentClassEnrollmentsData();
+  }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentDetail = async () => {
@@ -68,9 +93,16 @@ export default function ClassEnrollmentModulesPage() {
       return currentUser.id === classEnrollment.user?.id;
     };
 
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) => enrollment.id === classEnrollment?.id
+      );
+    };
+
     // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
     // Check if the current user (teacher) is the teacher of this class enrollment
-    if (!isUserAdmin() && !isValidTeacher()) {
+    // Check if the current user (student) is the student of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
       setTimeout(() => {
         toast.warning("You are not authorized to access this page");
       }, 300);
@@ -93,7 +125,7 @@ export default function ClassEnrollmentModulesPage() {
       }
     };
     getClassEnrollmentModulesData();
-  }, [classEnrollment, currentUser, navigate]);
+  }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
