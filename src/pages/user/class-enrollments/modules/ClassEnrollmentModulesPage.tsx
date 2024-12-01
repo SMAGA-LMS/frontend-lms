@@ -202,14 +202,16 @@ export default function ClassEnrollmentModulesPage() {
           </div>
         )}
         <div className="bottom-16 left-0 w-full bg-white">
-          <Button
-            variant="smagaLMSGreen"
-            className="w-full"
-            type="submit"
-            onClick={navigateToAddNewModule}
-          >
-            Tambah Modul
-          </Button>
+          {currentUser?.role === UserRolesEnum.ADMIN && (
+            <Button
+              variant="smagaLMSGreen"
+              className="w-full"
+              type="submit"
+              onClick={navigateToAddNewModule}
+            >
+              Tambah Modul
+            </Button>
+          )}
         </div>
       </div>
     </>
