@@ -13,7 +13,10 @@ import { toast } from "sonner";
 
 export default function CourseModuleDetailPage() {
   const pageTitle = "Modul";
-  const { courseModuleID } = useParams<{ courseModuleID: string }>();
+  const { id, courseModuleID } = useParams<{
+    id: string;
+    courseModuleID: string;
+  }>();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
@@ -41,6 +44,21 @@ export default function CourseModuleDetailPage() {
     };
     getCourseModuleDetail();
   }, [courseModuleID]);
+
+  useEffect(() => {
+    if (!id || !courseModuleID || !courseModule) {
+      return;
+    }
+
+    const isMatchingCourse = () => {
+      return courseModule.course?.id === Number(id);
+    };
+
+    // check if course id from params must be same with course id from course module
+    if (!isMatchingCourse()) {
+      setHasErrorPage(true);
+    }
+  }, [courseModule, courseModuleID, id]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
