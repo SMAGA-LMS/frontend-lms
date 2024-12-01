@@ -175,13 +175,16 @@ export default function CourseModulesStarterKitPage() {
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {courseModules.map((courseModule, index) => (
+                  {courseModules.map((courseModule) => (
                     <Link
-                      to={`/class-enrollments/${id}/modules/starter-kit/${courseModule.module.id}`}
-                      key={index}
+                      to={`/class-enrollments/${id}/modules/starter-kit/${courseModule.id}`}
+                      key={courseModule.id}
                       className="block"
                     >
-                      <CardModule key={index} data={courseModule.module} />
+                      <CardModule
+                        key={courseModule.id}
+                        data={courseModule.module}
+                      />
                     </Link>
                   ))}
                 </div>

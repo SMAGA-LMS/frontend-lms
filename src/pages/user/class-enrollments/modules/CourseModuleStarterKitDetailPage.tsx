@@ -1,54 +1,128 @@
+import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
+import { CourseModuleDto } from "@/components/course-modules/courseModule";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
-import { ModuleDto } from "@/components/modules/module";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
-import moduleService from "@/services/apis/modules/moduleService";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
+import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import { EyeIcon, PaperclipIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function CourseModuleStarterKitDetailPage() {
   const pageTitle = "Modul";
-  const { courseModuleID } = useParams<{ courseModuleID: string }>();
+  const { id, courseModuleID } = useParams<{
+    id: string;
+    courseModuleID: string;
+  }>();
+
+  const { currentUser } = useStateContext();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
-  const [module, setModule] = useState<ModuleDto>();
+  const [courseModule, setCourseModule] = useState<CourseModuleDto>();
+  const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
 
   useEffect(() => {
-    const getModuleDetail = async () => {
+    const getCourseModuleDetail = async () => {
       if (!courseModuleID) {
         return;
       }
 
       setLoading(true);
-      const response = await moduleService.getModuleDetailByID(
+      const response = await courseModuleService.getCourseModuleDetailByID(
         Number(courseModuleID)
       );
       setLoading(false);
 
       if (response.success && response.data) {
-        setModule(response.data);
+        setCourseModule(response.data);
       } else {
         toast.error(response.message);
         setHasErrorPage(true);
       }
     };
-    getModuleDetail();
+    getCourseModuleDetail();
   }, [courseModuleID]);
+
+  useEffect(() => {
+    const getClassEnrollmentDetail = async () => {
+      if (!id) {
+        return;
+      }
+
+      setLoading(true);
+      const response = await classEnrollmentService.getClassEnrollmentByID(
+        Number(id)
+      );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setClassEnrollment(response.data);
+      } else {
+        toast.error(response.message);
+        setHasErrorPage(true);
+      }
+    };
+
+    getClassEnrollmentDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!id || !courseModule || !currentUser || !classEnrollment) {
+      return;
+    }
+
+    const isMatchingCourse = () => {
+      return courseModule.course?.id === classEnrollment.course.id;
+    };
+
+    // check if course id from class enrollment must be same with course id from course module
+    if (!isMatchingCourse()) {
+      setHasErrorPage(true);
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment.user?.id;
+    };
+
+    // const isValidStudent = () => {
+    //   return studentClassEnrollments.some(
+    //     (enrollment) =>
+    //       enrollment.id === classEnrollmentModule.classEnrollment.id
+    //   );
+    // };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    if (!isUserAdmin() && !isValidTeacher()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate(`/home`, { replace: true });
+      return;
+    }
+  }, [classEnrollment, courseModule, currentUser, id, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
   }
 
   const handleViewFile = () => {
-    if (module?.file) {
-      window.open(module.file, "_blank");
+    if (courseModule?.module?.file) {
+      window.open(courseModule.module.file, "_blank");
     }
   };
 
@@ -65,19 +139,19 @@ export default function CourseModuleStarterKitDetailPage() {
           <SkeletonGenerator />
         ) : (
           <div>
-            <h1 className="font-semibold">{module?.name}</h1>
+            <h1 className="font-semibold">{courseModule?.module?.name}</h1>
             <Separator className="my-3" />
             <Textarea
-              value={module?.description}
+              value={courseModule?.module?.description}
               disabled
               className="text-black bg-secondary"
               style={{ opacity: 1 }}
             />
-            {module?.file && (
+            {courseModule?.module?.file && (
               <div className="flex items-center justify-between space-x-2 mt-2">
                 <PaperclipIcon size="24" />
                 <span className="text-black flex-grow">
-                  {getFileName(module?.file)}
+                  {getFileName(courseModule?.module?.file)}
                 </span>
                 <Button
                   type="button"
