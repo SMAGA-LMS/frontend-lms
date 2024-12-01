@@ -145,7 +145,7 @@ export default function CourseModulesPage() {
                 <div className="space-y-2">
                   {courseModules.map((courseModule, index) => (
                     <Link
-                      to={`/courses/${id}/modules/${courseModule.module.id}`}
+                      to={`/courses/${id}/modules/${courseModule.id}`}
                       key={index}
                       className="block"
                     >

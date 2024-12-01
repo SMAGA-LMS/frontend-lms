@@ -1,11 +1,11 @@
+import { CourseModuleDto } from "@/components/course-modules/courseModule";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
-import { ModuleDto } from "@/components/modules/module";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import ErrorPage from "@/pages/ErrorPage";
-import moduleService from "@/services/apis/modules/moduleService";
+import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import { EyeIcon, PaperclipIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -13,42 +13,42 @@ import { toast } from "sonner";
 
 export default function CourseModuleDetailPage() {
   const pageTitle = "Modul";
-  const { moduleID } = useParams<{ moduleID: string }>();
+  const { courseModuleID } = useParams<{ courseModuleID: string }>();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
-  const [module, setModule] = useState<ModuleDto>();
+  const [courseModule, setCourseModule] = useState<CourseModuleDto>();
 
   useEffect(() => {
-    const getModuleDetail = async () => {
-      if (!moduleID) {
+    const getCourseModuleDetail = async () => {
+      if (!courseModuleID) {
         return;
       }
 
       setLoading(true);
-      const response = await moduleService.getModuleDetailByID(
-        Number(moduleID)
+      const response = await courseModuleService.getCourseModuleDetailByID(
+        Number(courseModuleID)
       );
       setLoading(false);
 
       if (response.success && response.data) {
-        setModule(response.data);
+        setCourseModule(response.data);
       } else {
         toast.error(response.message);
         setHasErrorPage(true);
       }
     };
-    getModuleDetail();
-  }, [moduleID]);
+    getCourseModuleDetail();
+  }, [courseModuleID]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
   }
 
   const handleViewFile = () => {
-    if (module?.file) {
-      window.open(module.file, "_blank");
+    if (courseModule?.module.file) {
+      window.open(courseModule.module.file, "_blank");
     }
   };
 
@@ -65,19 +65,19 @@ export default function CourseModuleDetailPage() {
           <SkeletonGenerator />
         ) : (
           <div>
-            <h1 className="font-semibold">{module?.name}</h1>
+            <h1 className="font-semibold">{courseModule?.module?.name}</h1>
             <Separator className="my-3" />
             <Textarea
-              value={module?.description}
+              value={courseModule?.module?.description}
               disabled
               className="text-black bg-secondary"
               style={{ opacity: 1 }}
             />
-            {module?.file && (
+            {courseModule?.module?.file && (
               <div className="flex items-center justify-between space-x-2 mt-2">
                 <PaperclipIcon size="24" />
                 <span className="text-black flex-grow">
-                  {getFileName(module?.file)}
+                  {getFileName(courseModule?.module?.file)}
                 </span>
                 <Button
                   type="button"

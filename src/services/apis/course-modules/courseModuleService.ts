@@ -36,6 +36,18 @@ const courseModuleService = {
       return handleAxiosError<ListCourseModulesResponseDto>(error);
     }
   },
+  getCourseModuleDetailByID: async (
+    courseModuleID: number
+  ): Promise<BaseResponseAPIDto<CourseModuleResponseDto>> => {
+    try {
+      const response = await axiosClient.get(
+        `/course-modules/${courseModuleID}`
+      );
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<CourseModuleResponseDto>(error);
+    }
+  },
 };
 
 export default courseModuleService;

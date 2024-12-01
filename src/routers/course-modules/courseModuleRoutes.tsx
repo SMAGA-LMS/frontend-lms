@@ -20,7 +20,7 @@ const courseModuleRoutes = [
         ]),
       },
       {
-        path: ":moduleID",
+        path: ":courseModuleID",
         element: withRoleBasedRoute(<CourseModuleDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
