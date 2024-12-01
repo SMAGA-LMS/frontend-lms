@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentModuleService from "@/services/apis/class-enrollment-modules/classEnrollmentModuleService";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
@@ -19,6 +21,7 @@ export default function ClassEnrollmentModulesPage() {
   const pageTitle = "List Modules";
   const heightTable = "h-[60vh]";
 
+  const { currentUser } = useStateContext();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -50,12 +53,36 @@ export default function ClassEnrollmentModulesPage() {
       }
     };
     getClassEnrollmentDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
+    }
 
     const getClassEnrollmentModulesData = async () => {
       setLoading(true);
       const response =
         await classEnrollmentModuleService.getClassEnrollmentModules(
-          Number(id)
+          classEnrollment.id
         );
       setLoading(false);
 
@@ -66,7 +93,7 @@ export default function ClassEnrollmentModulesPage() {
       }
     };
     getClassEnrollmentModulesData();
-  }, [id]);
+  }, [classEnrollment, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
