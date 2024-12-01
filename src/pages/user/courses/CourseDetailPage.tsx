@@ -51,6 +51,8 @@ export default function CourseDetailPage() {
       return;
     }
 
+    // Check if the current user (teacher) is PIC Course of this course
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
     if (
       currentUser?.id !== course?.user?.id &&
       currentUser?.role !== UserRolesEnum.ADMIN
