@@ -57,9 +57,14 @@ export default function CourseDetailPage() {
       currentUser?.id !== course?.user?.id &&
       currentUser?.role !== UserRolesEnum.ADMIN
     ) {
-      setHasErrorPage(true);
+      // setHasErrorPage(true);
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
     }
-  }, [course, currentUser]);
+  }, [course, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
