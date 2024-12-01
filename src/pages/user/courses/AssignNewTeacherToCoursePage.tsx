@@ -111,7 +111,11 @@ export default function AssignNewTeacherToCoursePage() {
     const payload: assignNewTeacherPayload = {};
 
     payload.userID = formData.userID;
-    if (formData.userID === 0 || formData.userID === null) {
+    if (
+      formData.userID === 0 ||
+      formData.userID === null ||
+      formData.userID?.toString() === "0"
+    ) {
       payload.userID = null;
     }
 
