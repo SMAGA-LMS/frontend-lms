@@ -38,6 +38,7 @@ export default {
           gray: "#9FA2B2",
           "soft-white": "#F2F3F7",
           "russian-green": "#5E9660",
+          red: "#cc0000",
         },
         card: {
           DEFAULT: "hsl(var(--card))",
