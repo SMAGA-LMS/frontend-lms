@@ -14,7 +14,7 @@ import attendanceService from "@/services/apis/attendances/attendanceService";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import sessionRecordService from "@/services/apis/session-records/sessionRecordService";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function SessionRecordsPage() {
@@ -199,10 +199,16 @@ export default function SessionRecordsPage() {
 
       <div className="mx-4 mt-8 pb-16">
         {currentUser?.role !== UserRolesEnum.STUDENT &&
-          sessionRecords.map((sessionRecord) => (
-            <div key={sessionRecord.id} className="mt-4">
-              <CardSessionItem sessionRecord={sessionRecord} />
-            </div>
+          sessionRecords.map((sessionRecord, index) => (
+            <Link
+              to={`/class-enrollments/${id}/attendances/${sessionRecord.id}`}
+              key={index}
+              className="block"
+            >
+              <div key={sessionRecord.id} className="mt-4">
+                <CardSessionItem sessionRecord={sessionRecord} />
+              </div>
+            </Link>
           ))}
         {currentUser?.role === UserRolesEnum.STUDENT &&
           attendances.map((attendance) => (

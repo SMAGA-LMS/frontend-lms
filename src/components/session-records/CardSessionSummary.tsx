@@ -12,7 +12,7 @@ export default function CardSessionSummary({
   return (
     <Card className="bg-smagaLMS-green text-white p-2 rounded-3xl shadow-xl w-full max-w-md">
       <div className="flex justify-center items-center space-x-8">
-        {totalPresent && (
+        {totalPresent !== undefined && (
           <>
             <div className="text-center">
               <h2 className="text-sm font-medium">Total Hadir</h2>

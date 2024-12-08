@@ -3,7 +3,7 @@ import { UserDto } from "../users/user";
 import { SessionRecordDto } from "../session-records/sessionRecord";
 
 export interface AttendanceDto extends Model {
-  student?: UserDto;
+  student: UserDto;
   sessionRecord: SessionRecordDto;
   status: string;
 }

@@ -20,6 +20,18 @@ const attendanceService = {
       return handleAxiosError<ListAttendancesResponseDto>(error);
     }
   },
+  getListAttendancesBySessionRecordID: async (
+    sessionRecordID: number
+  ): Promise<BaseResponseAPIDto<ListAttendancesResponseDto>> => {
+    try {
+      const response = await axiosClient.get(
+        `/attendances?session_record_id=${sessionRecordID}`
+      );
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ListAttendancesResponseDto>(error);
+    }
+  },
 };
 
 export default attendanceService;

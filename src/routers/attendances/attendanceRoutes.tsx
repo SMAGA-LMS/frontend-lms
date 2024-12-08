@@ -41,7 +41,6 @@ const attendanceRoutes = [
         element: withRoleBasedRoute(<SessionRecordDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
       {

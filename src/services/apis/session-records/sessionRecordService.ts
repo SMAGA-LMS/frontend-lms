@@ -2,6 +2,7 @@ import axiosClient from "@/services/axiosClient";
 import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { ListSessionRecordsResponseDto } from "./listSessionRecordsResponse";
 import { handleAxiosError } from "../handleError";
+import { SessionRecordResponseDto } from "./sessionRecordResponse";
 
 const sessionRecordService = {
   getListSessionRecordsByClassEnrollmentID: async (
@@ -16,6 +17,18 @@ const sessionRecordService = {
       return response.data;
     } catch (error) {
       return handleAxiosError<ListSessionRecordsResponseDto>(error);
+    }
+  },
+  getSessionRecordByID: async (
+    sessionRecordID: number
+  ): Promise<BaseResponseAPIDto<SessionRecordResponseDto>> => {
+    try {
+      const response = await axiosClient.get(
+        `/session-records/${sessionRecordID}`
+      );
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<SessionRecordResponseDto>(error);
     }
   },
 };
