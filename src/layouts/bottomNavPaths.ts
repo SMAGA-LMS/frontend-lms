@@ -1,6 +1,5 @@
 const bottomNavPaths = [
   "/home",
-  // "/courses",
   "/classrooms",
   "/users",
   "/profile",
