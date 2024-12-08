@@ -10,12 +10,20 @@ import {
 } from "../ui/select";
 import { UserDto } from "../users/user";
 
+export interface StudentAttendance {
+  student: UserDto;
+  attendanceStatus: string;
+}
+
 interface CardUserAttendanceProps {
   user: UserDto;
-  attendanceStatus: string;
+  attendanceStatus?: string;
   incrementUserAttendance: number;
   disabled: boolean;
   backgroundColor?: string;
+  handleSelectedStudentAttendance?: (
+    studentAttendance: StudentAttendance
+  ) => void;
 }
 
 export default function CardUserAttendance({
@@ -24,6 +32,7 @@ export default function CardUserAttendance({
   incrementUserAttendance,
   disabled,
   backgroundColor,
+  handleSelectedStudentAttendance,
 }: CardUserAttendanceProps) {
   const listAttendanceStatus: string[] = Object.values(AttendanceStatusEnum);
 
@@ -31,11 +40,11 @@ export default function CardUserAttendance({
     <>
       <Card
         key={user.id}
-        className={`p-4 ${backgroundColor} shadow-sm shadow-neutral-300`}
+        className={`p-2 ${backgroundColor} shadow-sm shadow-neutral-300`}
       >
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="flex-shrink-0">{incrementUserAttendance}.</div>
+            <div className="flex-shrink-0 ml-2">{incrementUserAttendance}.</div>
             <Avatar className="h-10 w-10">
               <AvatarImage alt={user.name} src={user.avatar} />
               <AvatarFallback className="bg-secondary">
@@ -48,9 +57,22 @@ export default function CardUserAttendance({
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Select defaultValue={attendanceStatus} disabled={disabled}>
+            <Select
+              defaultValue={attendanceStatus}
+              disabled={disabled}
+              required
+              onValueChange={(val) => {
+                if (!handleSelectedStudentAttendance) return;
+
+                const studentAttendance: StudentAttendance = {
+                  student: user,
+                  attendanceStatus: val,
+                };
+                handleSelectedStudentAttendance(studentAttendance);
+              }}
+            >
               <SelectTrigger className="w-[100px]">
-                <SelectValue />
+                <SelectValue placeholder="Pilih" />
               </SelectTrigger>
               <SelectContent>
                 {listAttendanceStatus.map((status) => (
