@@ -297,9 +297,11 @@ export default function AddNewSessionRecordAttendancesPage() {
           <div className="pb-16">
             {!loading && studentEnrollments && (
               <div>
-                <h1 className="font-bold text-sm">
-                  Siswa ({studentEnrollments.length})
-                </h1>
+                <div className="flex justify-between items-center">
+                  <h1 className="font-bold text-sm">
+                    Siswa ({studentEnrollments.length})
+                  </h1>
+                </div>
                 <div>
                   {studentEnrollments.map((studentEnrollment, index) => (
                     <div key={index} className="my-2">

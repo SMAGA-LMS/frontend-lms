@@ -1,4 +1,3 @@
-import CardClassEnrollmentModule from "@/components/class-enrollment-modules/CardClassEnrollmentModule";
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
