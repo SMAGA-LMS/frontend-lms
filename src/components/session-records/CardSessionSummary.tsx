@@ -10,7 +10,7 @@ export default function CardSessionSummary({
   totalPresent,
 }: CardSessionSummaryProps) {
   return (
-    <Card className="bg-smagaLMS-green text-white p-2 rounded-3xl shadow-xl w-full max-w-md">
+    <Card className="bg-smagaLMS-green text-white p-2 rounded-xl shadow-xl w-full max-w-md">
       <div className="flex justify-center items-center space-x-8">
         {totalPresent !== undefined && (
           <>
