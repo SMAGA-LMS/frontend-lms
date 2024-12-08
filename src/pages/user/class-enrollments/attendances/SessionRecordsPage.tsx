@@ -6,6 +6,7 @@ import CardSessionItem from "@/components/session-records/CardSessionItem";
 import CardSessionSummary from "@/components/session-records/CardSessionSummary";
 import { SessionRecordDto } from "@/components/session-records/sessionRecord";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { useStateContext } from "@/contexts/ContextProvider";
 import AttendanceStatusEnum from "@/enums/AttendanceStatusEnum";
 import UserRolesEnum from "@/enums/UserRoleEnum";
@@ -161,6 +162,11 @@ export default function SessionRecordsPage() {
     (attendance) => attendance.status === AttendanceStatusEnum.PRESENT
   ).length;
 
+  const navigateToAddNewSessionRecordAttendance = () => {
+    navigate(`/class-enrollments/${id}/attendances/create`);
+    return;
+  };
+
   return (
     <>
       <HeaderPageWithBackButton pageTitle={pageTitle} />
@@ -219,6 +225,16 @@ export default function SessionRecordsPage() {
               />
             </div>
           ))}
+      </div>
+      <div className="fixed bottom-4 left-4 right-4 bg-white">
+        <Button
+          variant="smagaLMSGreen"
+          className="w-full"
+          type="submit"
+          onClick={navigateToAddNewSessionRecordAttendance}
+        >
+          Tambah Session Attendance Baru
+        </Button>
       </div>
     </>
   );
