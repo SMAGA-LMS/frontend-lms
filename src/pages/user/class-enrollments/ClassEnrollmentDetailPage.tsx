@@ -1,19 +1,27 @@
 import CardClassEnrollmentModule from "@/components/class-enrollment-modules/CardClassEnrollmentModule";
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
-import CardStarterKitCourseModule from "@/components/course-modules/CardStarterKitCourseModule";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
+import IconMenu from "@/components/global/IconMenu";
+import IconMenuWithBackground from "@/components/global/IconMenuWithBackground";
+import ItemMenuWithLabel from "@/components/global/ItemMenuWithLabel";
 import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
-import { EditIcon, UsersIcon } from "lucide-react";
+import {
+  BookCopyIcon,
+  EditIcon,
+  LibraryBigIcon,
+  UsersIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
+import attendanceIcon from "@/assets/icons/attendances.svg";
 
 export default function ClassEnrollmentDetailPage() {
   const pageTitle = "Detail Class Enrollment";
@@ -174,27 +182,33 @@ export default function ClassEnrollmentDetailPage() {
           </CardUserItem>
         )}
       </div>
-      <div className="mx-4 mt-4">
-        <p className="font-semibold text-sm my-2">Starter Kit Course Modules</p>
-        {classEnrollment && (
-          <Link
-            to={`/class-enrollments/${id}/modules/starter-kit`}
-            key={classEnrollment.course.id}
-            className="block"
-          >
-            <CardStarterKitCourseModule data={classEnrollment.course} />
-          </Link>
-        )}
-        <p className="font-semibold text-sm my-2">Class Enrollment Modules</p>
-        {classEnrollment && (
-          <Link
-            to={`/class-enrollments/${id}/modules`}
-            key={classEnrollment.id}
-            className="block"
-          >
-            <CardClassEnrollmentModule data={classEnrollment} />
-          </Link>
-        )}
+      <div className="mx-4 mt-4 flex justify-center space-x-4">
+        <Link to={`/class-enrollments/${id}/attendances`} className="block">
+          <ItemMenuWithLabel label="Attendances">
+            <IconMenuWithBackground color="smagaLMS-russian-green">
+              <IconMenu icon={attendanceIcon} />
+            </IconMenuWithBackground>
+          </ItemMenuWithLabel>
+        </Link>
+
+        <Link
+          to={`/class-enrollments/${id}/modules/starter-kit`}
+          className="block"
+        >
+          <ItemMenuWithLabel label="Starter Kit Modules">
+            <IconMenuWithBackground color="smagaLMS-green">
+              <LibraryBigIcon size={24} className="text-white" />
+            </IconMenuWithBackground>
+          </ItemMenuWithLabel>
+        </Link>
+
+        <Link to={`/class-enrollments/${id}/modules`} className="block">
+          <ItemMenuWithLabel label="Class Modules">
+            <IconMenuWithBackground color="smagaLMS-gray">
+              <BookCopyIcon size={24} className="text-white" />
+            </IconMenuWithBackground>
+          </ItemMenuWithLabel>
+        </Link>
       </div>
     </>
   );
