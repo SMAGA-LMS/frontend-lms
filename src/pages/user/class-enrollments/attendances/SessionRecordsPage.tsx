@@ -226,10 +226,10 @@ export default function SessionRecordsPage() {
             </div>
           ))}
       </div>
-      <div className="fixed bottom-4 left-4 right-4 bg-white">
+      <div className="fixed bottom-4 left-4 right-4 flex justify-center">
         <Button
           variant="smagaLMSGreen"
-          className="w-full"
+          className="w-[calc(100%)] max-w-[22rem] rounded-lg"
           type="submit"
           onClick={navigateToAddNewSessionRecordAttendance}
         >
