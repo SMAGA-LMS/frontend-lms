@@ -226,16 +226,18 @@ export default function SessionRecordsPage() {
             </div>
           ))}
       </div>
-      <div className="fixed bottom-4 left-4 right-4 flex justify-center">
-        <Button
-          variant="smagaLMSGreen"
-          className="w-[calc(100%)] max-w-[22rem] rounded-lg"
-          type="submit"
-          onClick={navigateToAddNewSessionRecordAttendance}
-        >
-          Tambah Session Attendance Baru
-        </Button>
-      </div>
+      {currentUser?.role !== UserRolesEnum.STUDENT && (
+        <div className="fixed bottom-4 left-4 right-4 flex justify-center">
+          <Button
+            variant="smagaLMSGreen"
+            className="w-[calc(100%)] max-w-[22rem] rounded-lg"
+            type="submit"
+            onClick={navigateToAddNewSessionRecordAttendance}
+          >
+            Tambah Session Attendance Baru
+          </Button>
+        </div>
+      )}
     </>
   );
 }
