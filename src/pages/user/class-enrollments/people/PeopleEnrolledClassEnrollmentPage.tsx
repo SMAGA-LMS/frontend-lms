@@ -110,7 +110,7 @@ export default function PeopleEnrolledClassEnrollmentPage() {
       return;
     }
 
-    async function getPeopleEnrolledClassroom() {
+    const getPeopleEnrolledClassroom = async () => {
       if (!classEnrollment) {
         return;
       }
@@ -127,7 +127,7 @@ export default function PeopleEnrolledClassEnrollmentPage() {
       } else {
         toast.error(response.message);
       }
-    }
+    };
     getPeopleEnrolledClassroom();
   }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
 
