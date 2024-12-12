@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
 import { UserDto } from "@/components/users/user";
 import UserRolesEnum from "@/enums/UserRoleEnum";
+import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import userService from "@/services/apis/users/userService";
 import { Terminal } from "lucide-react";
@@ -44,6 +45,7 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [formData, setFormData] =
     useState<assignNewTeacherToClassEnrollmentPayload>(initialFormData);
@@ -53,24 +55,10 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
 
   useEffect(() => {
-    const getTeachers = async () => {
-      setLoading(true);
-      const response = await userService.getUsers(UserRolesEnum.TEACHER);
-      setLoading(false);
-
-      if (response.success && response.data) {
-        setTeachers(response.data);
-      } else {
-        toast.error(response.message);
-      }
-    };
-    getTeachers();
-  }, []);
-
-  useEffect(() => {
     const getClassEnrollmentDetail = async () => {
       if (!id) {
         toast.error("Invalid class enrollment ID");
+        setHasErrorPage(true);
         return;
       }
 
@@ -87,11 +75,35 @@ export default function AssignNewTeacherToClassEnrollmentPage() {
         });
       } else {
         toast.error(response.message);
+        setHasErrorPage(true);
       }
     };
 
     getClassEnrollmentDetail();
   }, [id]);
+
+  useEffect(() => {
+    if (!classEnrollment) {
+      return;
+    }
+
+    const getTeachers = async () => {
+      setLoading(true);
+      const response = await userService.getUsers(UserRolesEnum.TEACHER);
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setTeachers(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+    getTeachers();
+  }, [classEnrollment]);
+
+  if (hasErrorPage) {
+    return <ErrorPage />;
+  }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();

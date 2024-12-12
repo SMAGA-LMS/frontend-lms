@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import courseService from "@/services/apis/courses/courseService";
@@ -20,6 +22,7 @@ export default function CourseModulesPage() {
   const heightTable = "h-[60vh]";
 
   const navigate = useNavigate();
+  const { currentUser } = useStateContext();
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,10 +49,34 @@ export default function CourseModulesPage() {
       }
     };
     getCourseDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!course || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser?.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidPICCourse = () => {
+      return currentUser.id === course.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (PIC Course) is the PIC Course of this course
+    if (!isUserAdmin() && !isValidPICCourse()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
+    }
 
     const getCourseModulesData = async () => {
       setLoading(true);
-      const response = await courseModuleService.getCourseModules(Number(id));
+      const response = await courseModuleService.getCourseModules(course.id);
       setLoading(false);
 
       if (response.success && response.data) {
@@ -59,7 +86,7 @@ export default function CourseModulesPage() {
       }
     };
     getCourseModulesData();
-  }, [id]);
+  }, [course, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
@@ -118,7 +145,7 @@ export default function CourseModulesPage() {
                 <div className="space-y-2">
                   {courseModules.map((courseModule, index) => (
                     <Link
-                      to={`/courses/${id}/modules/${courseModule.module.id}`}
+                      to={`/courses/${id}/modules/${courseModule.id}`}
                       key={index}
                       className="block"
                     >

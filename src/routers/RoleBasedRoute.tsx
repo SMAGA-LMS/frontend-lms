@@ -22,7 +22,9 @@ function RoleBasedRoute({ allowedRoles, children }: RoleBasedRouteProps) {
   }
 
   if (!allowedRoles.includes(currentUser.role)) {
-    toast.warning("You are not authorized to access this page");
+    setTimeout(() => {
+      toast.warning("You are not authorized to access this page");
+    }, 300);
     return <Navigate to="/home" replace />;
   }
 

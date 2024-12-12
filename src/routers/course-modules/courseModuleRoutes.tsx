@@ -17,11 +17,10 @@ const courseModuleRoutes = [
         element: withRoleBasedRoute(<CourseModulesPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
-          UserRolesEnum.STUDENT,
         ]),
       },
       {
-        path: ":moduleID",
+        path: ":courseModuleID",
         element: withRoleBasedRoute(<CourseModuleDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,

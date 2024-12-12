@@ -7,11 +7,13 @@ import CardModule from "@/components/modules/CardModule";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import courseModuleService from "@/services/apis/course-modules/courseModuleService";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function CourseModulesStarterKitPage() {
@@ -19,11 +21,40 @@ export default function CourseModulesStarterKitPage() {
   const heightTable = "h-[60vh]";
 
   const { id } = useParams<{ id: string }>();
+
+  const { currentUser } = useStateContext();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
   const [classEnrollment, setClassEnrollment] = useState<ClassEnrollmentDto>();
   const [courseModules, setCourseModules] = useState<CourseModuleDto[]>([]);
+  const [studentClassEnrollments, setStudentClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
+
+  useEffect(() => {
+    const getStudentClassEnrollmentsData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) {
+        return;
+      }
+
+      setLoading(true);
+      const response = await classEnrollmentService.getStudentClassEnrollments(
+        currentUser.id
+      );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentClassEnrollments(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentClassEnrollmentsData();
+  }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentDetail = async () => {
@@ -49,7 +80,32 @@ export default function CourseModulesStarterKitPage() {
   }, [id]);
 
   useEffect(() => {
-    if (!classEnrollment) {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment.user?.id;
+    };
+
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) => enrollment.id === classEnrollment?.id
+      );
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    // Check if the current user (student) is the student of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
       return;
     }
 
@@ -67,7 +123,7 @@ export default function CourseModulesStarterKitPage() {
       }
     };
     getCourseModulesData();
-  }, [classEnrollment, id]);
+  }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
@@ -119,13 +175,16 @@ export default function CourseModulesStarterKitPage() {
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {courseModules.map((courseModule, index) => (
+                  {courseModules.map((courseModule) => (
                     <Link
-                      to={`/class-enrollments/${id}/modules/starter-kit/${courseModule.module.id}`}
-                      key={index}
+                      to={`/class-enrollments/${id}/modules/starter-kit/${courseModule.id}`}
+                      key={courseModule.id}
                       className="block"
                     >
-                      <CardModule key={index} data={courseModule.module} />
+                      <CardModule
+                        key={courseModule.id}
+                        data={courseModule.module}
+                      />
                     </Link>
                   ))}
                 </div>

@@ -8,6 +8,8 @@ import HomeAdminMenu from "@/components/home/HomeAdminMenu";
 import HomeStudentMenu from "@/components/home/HomeStudentMenu";
 import HomeTeacherMenu from "@/components/home/HomeTeacherMenu";
 import { UserDto } from "@/components/users/user";
+import { Bell } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const { currentUser } = useStateContext() as { currentUser: UserDto };
@@ -39,8 +41,11 @@ export default function HomePage() {
 
   return (
     <>
-      <div className="mx-4 mt-4">
+      <div className="mx-4 mt-4 flex justify-between items-center">
         <ProfileHeaderUser user={currentUser} />
+        <Link to={`/announcement-receivers`} className="block">
+          <Bell size={24} />
+        </Link>
       </div>
       <div className="mt-5 pb-5">
         <div className="bg-smagaLMS-gradient-linear">

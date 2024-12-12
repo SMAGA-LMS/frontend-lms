@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import CardUserItem from "@/components/users/CardUserItem";
 import { UserDto } from "@/components/users/user";
 import UserRolesEnum from "@/enums/UserRoleEnum";
+import ErrorPage from "@/pages/ErrorPage";
 import courseService from "@/services/apis/courses/courseService";
 import userService from "@/services/apis/users/userService";
 import { Terminal } from "lucide-react";
@@ -44,6 +45,7 @@ export default function AssignNewTeacherToCoursePage() {
 
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [formData, setFormData] =
     useState<assignNewTeacherPayload>(initialFormData);
@@ -53,6 +55,38 @@ export default function AssignNewTeacherToCoursePage() {
   const [course, setCourse] = useState<CourseDto>();
 
   useEffect(() => {
+    const getCourseDetail = async () => {
+      if (!id) {
+        toast.error("Invalid course ID");
+        setHasErrorPage(true);
+        return;
+      }
+
+      setLoading(true);
+      const response = await courseService.getCourseDetailByID(Number(id));
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setCourse(response.data);
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          userID: response.data?.user?.id || null,
+          courseID: response.data?.id || null, // ini apa ya? lupa lagi, tapi jalan-jalan aja
+        }));
+      } else {
+        toast.error(response.message);
+        setHasErrorPage(true);
+      }
+    };
+
+    getCourseDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!course) {
+      return;
+    }
+
     const noTeacher: UserDto = {
       name: "<<hapus PIC>>",
       username: "null",
@@ -72,33 +106,11 @@ export default function AssignNewTeacherToCoursePage() {
       }
     };
     getTeachers();
-  }, []);
+  }, [course]);
 
-  useEffect(() => {
-    const getCourseDetail = async () => {
-      if (!id) {
-        toast.error("Invalid course ID");
-        return;
-      }
-
-      setLoading(true);
-      const response = await courseService.getCourseDetailByID(Number(id));
-      setLoading(false);
-
-      if (response.success && response.data) {
-        setCourse(response.data);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          userID: response.data?.user?.id || null,
-          courseID: response.data?.id || null, // ini apa ya? lupa lagi, tapi jalan-jalan aja
-        }));
-      } else {
-        toast.error(response.message);
-      }
-    };
-
-    getCourseDetail();
-  }, [id]);
+  if (hasErrorPage) {
+    return <ErrorPage />;
+  }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -111,7 +123,11 @@ export default function AssignNewTeacherToCoursePage() {
     const payload: assignNewTeacherPayload = {};
 
     payload.userID = formData.userID;
-    if (formData.userID === 0 || formData.userID === null) {
+    if (
+      formData.userID === 0 ||
+      formData.userID === null ||
+      formData.userID?.toString() === "0"
+    ) {
       payload.userID = null;
     }
 

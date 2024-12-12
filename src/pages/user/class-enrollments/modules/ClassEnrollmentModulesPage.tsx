@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
 import classEnrollmentModuleService from "@/services/apis/class-enrollment-modules/classEnrollmentModuleService";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
@@ -19,6 +21,7 @@ export default function ClassEnrollmentModulesPage() {
   const pageTitle = "List Modules";
   const heightTable = "h-[60vh]";
 
+  const { currentUser } = useStateContext();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -29,6 +32,31 @@ export default function ClassEnrollmentModulesPage() {
   const [classEnrollmentModules, setClassEnrollmentModules] = useState<
     ClassEnrollmentModuleDto[]
   >([]);
+  const [studentClassEnrollments, setStudentClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
+
+  useEffect(() => {
+    const getStudentClassEnrollmentsData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) {
+        return;
+      }
+
+      setLoading(true);
+      const response = await classEnrollmentService.getStudentClassEnrollments(
+        currentUser.id
+      );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setStudentClassEnrollments(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentClassEnrollmentsData();
+  }, [currentUser]);
 
   useEffect(() => {
     const getClassEnrollmentDetail = async () => {
@@ -50,12 +78,43 @@ export default function ClassEnrollmentModulesPage() {
       }
     };
     getClassEnrollmentDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment.user?.id;
+    };
+
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) => enrollment.id === classEnrollment?.id
+      );
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (teacher) is the teacher of this class enrollment
+    // Check if the current user (student) is the student of this class enrollment
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
+    }
 
     const getClassEnrollmentModulesData = async () => {
       setLoading(true);
       const response =
         await classEnrollmentModuleService.getClassEnrollmentModules(
-          Number(id)
+          classEnrollment.id
         );
       setLoading(false);
 
@@ -66,7 +125,9 @@ export default function ClassEnrollmentModulesPage() {
       }
     };
     getClassEnrollmentModulesData();
-  }, [id]);
+  }, [classEnrollment, currentUser, navigate, studentClassEnrollments]);
+
+  console.log("classEnrollmentModules: ", classEnrollmentModules);
 
   if (hasErrorPage) {
     return <ErrorPage />;
@@ -123,34 +184,34 @@ export default function ClassEnrollmentModulesPage() {
                 className={`${heightTable} rounded-md overflow-y-auto`}
               >
                 <div className="space-y-2">
-                  {classEnrollmentModules.map(
-                    (classEnrollmentModule, index) => (
-                      <Link
-                        to={`/class-enrollments/${id}/modules/${classEnrollmentModule.module.id}`}
-                        key={index}
-                        className="block"
-                      >
-                        <CardModule
-                          key={index}
-                          data={classEnrollmentModule.module}
-                        />
-                      </Link>
-                    )
-                  )}
+                  {classEnrollmentModules.map((classEnrollmentModule) => (
+                    <Link
+                      to={`/class-enrollments/${id}/modules/${classEnrollmentModule.id}`}
+                      key={classEnrollmentModule.id}
+                      className="block"
+                    >
+                      <CardModule
+                        key={classEnrollmentModule.id}
+                        data={classEnrollmentModule.module}
+                      />
+                    </Link>
+                  ))}
                 </div>
               </ScrollArea>
             )}
           </div>
         )}
         <div className="bottom-16 left-0 w-full bg-white">
-          <Button
-            variant="smagaLMSGreen"
-            className="w-full"
-            type="submit"
-            onClick={navigateToAddNewModule}
-          >
-            Tambah Modul
-          </Button>
+          {currentUser?.role === UserRolesEnum.ADMIN && (
+            <Button
+              variant="smagaLMSGreen"
+              className="w-full"
+              type="submit"
+              onClick={navigateToAddNewModule}
+            >
+              Tambah Modul
+            </Button>
+          )}
         </div>
       </div>
     </>

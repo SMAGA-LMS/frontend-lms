@@ -15,6 +15,8 @@ import { toast } from "sonner";
 import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import classEnrollmentModuleService from "@/services/apis/class-enrollment-modules/classEnrollmentModuleService";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 
 export interface addNewClassEnrollmentModulePayload {
   classEnrollmentID: number;
@@ -35,11 +37,13 @@ export default function AddNewClassEnrollmentModulePage() {
     file: null,
   };
 
+  const { currentUser } = useStateContext();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Errors | null>(null);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
+  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
 
   const [formData, setFormData] =
     useState<addNewClassEnrollmentModulePayload>(initialFormData);
@@ -68,7 +72,29 @@ export default function AddNewClassEnrollmentModulePage() {
     getClassEnrollmentDetail();
   }, [id]);
 
-  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
+  useEffect(() => {
+    if (!classEnrollment || !currentUser) {
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollment.user?.id;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (Teacher) is the Teacher of this course
+    if (!isUserAdmin() && !isValidTeacher()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
+    }
+  }, [classEnrollment, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
@@ -148,6 +174,10 @@ export default function AddNewClassEnrollmentModulePage() {
   const handleRemoveFile = () => {
     const fileInput = document.getElementById("file") as HTMLInputElement;
     fileInput.value = "";
+    setFormData({
+      ...formData,
+      file: null,
+    });
     setIsFileSelected(false);
   };
 

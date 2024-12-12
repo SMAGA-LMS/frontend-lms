@@ -21,7 +21,6 @@ export default function PeopleEnrolledClassroomPage() {
 
   const navigate = useNavigate();
 
-  // const { classroomCode } = useParams() as { classroomCode: string };
   const { id } = useParams() as { id: string };
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
@@ -31,21 +30,6 @@ export default function PeopleEnrolledClassroomPage() {
     StudentEnrollmentDto[]
   >([]);
 
-  // const [classroom, setClassroom] = useState<ClassroomDto>({
-  //   classPeriod: {
-  //     id: "",
-  //     classPeriodName: "",
-  //     classPeriodCode: "",
-  //     totalStudentsEnrolled: "",
-  //   },
-  //   teacher: null,
-  // });
-
-  // const [users, setUsers] = useState<UserDto[]>([]);
-  // const [virtualUsers, setVirtualUsers] = useState<UserDto[]>([]);
-  // const [errors, setErrors] = useState<string[]>([]);
-
-  // const [responseData, setResponseData] = useState<any | null>(null);
   useEffect(() => {
     const getClassroomDetail = async () => {
       if (!id) {
@@ -66,15 +50,17 @@ export default function PeopleEnrolledClassroomPage() {
       }
     };
     getClassroomDetail();
+  }, [id]);
 
+  useEffect(() => {
     async function getPeopleEnrolledClassroom() {
-      if (!id) {
+      if (!classroom) {
         return;
       }
 
       setLoading(true);
       const response =
-        await studentEnrollmentService.getPeopleEnrolledClassroom(Number(id));
+        await studentEnrollmentService.getPeopleEnrolledClassroom(classroom.id);
       setLoading(false);
 
       if (response.success && response.data) {
@@ -84,36 +70,7 @@ export default function PeopleEnrolledClassroomPage() {
       }
     }
     getPeopleEnrolledClassroom();
-  }, [id]);
-
-  // useEffect(() => {
-  //   if (enrolledStudents) {
-  //     const studentEnrollment = enrolledStudents.map((student) => {
-  //       return student;
-  //     });
-  //   }
-  // }, [stundentEnrollment]);
-
-  // useEffect(() => {
-  //   async function getEnrolledStudentsData() {
-  //     setLoading(true);
-  //     try {
-  //       const response = await axiosClient.get(
-  //         `/class-periods/${classroomCode}/people`
-  //       );
-  //       setUsers(response.data.data.map((enrollment) => enrollment.user));
-  //       setVirtualUsers(
-  //         response.data.data.map((enrollment) => enrollment.user)
-  //       );
-  //     } catch (error) {
-  //       toast.error("Failed to fetch data students");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   getEnrolledStudentsData();
-  // }, [classroomCode]);
+  }, [classroom]);
 
   if (hasErrorPage) {
     return <ErrorPage />;

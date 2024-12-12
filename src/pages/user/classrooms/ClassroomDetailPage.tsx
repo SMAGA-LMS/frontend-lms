@@ -16,7 +16,6 @@ export default function ClassroomDetailPage() {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  // const { classPeriodCode } = useParams() as { classPeriodCode: string };
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
@@ -42,7 +41,7 @@ export default function ClassroomDetailPage() {
       }
     }
     getClassroomDetail();
-  }, [id, navigate]);
+  }, [id]);
 
   if (hasErrorPage) {
     return <ErrorPage />;

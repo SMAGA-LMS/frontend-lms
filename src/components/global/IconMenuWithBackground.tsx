@@ -3,6 +3,7 @@ import { ReactNode, useState } from "react";
 const colors = {
   "smagaLMS-green": "bg-smagaLMS-green",
   "smagaLMS-gray": "bg-smagaLMS-gray",
+  "smagaLMS-russian-green": "bg-smagaLMS-russian-green",
 };
 
 interface IconMenuWithBackgroundProps {

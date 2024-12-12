@@ -1,54 +1,133 @@
+import { ClassEnrollmentModuleDto } from "@/components/class-enrollment-modules/classEnrollmentModule";
+import { ClassEnrollmentDto } from "@/components/class-enrollments/classEnrollment";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
-import { ModuleDto } from "@/components/modules/module";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useStateContext } from "@/contexts/ContextProvider";
+import UserRolesEnum from "@/enums/UserRoleEnum";
 import ErrorPage from "@/pages/ErrorPage";
-import moduleService from "@/services/apis/modules/moduleService";
+import classEnrollmentModuleService from "@/services/apis/class-enrollment-modules/classEnrollmentModuleService";
+import classEnrollmentService from "@/services/apis/class-enrollments/classEnrollmentService";
 import { EyeIcon, PaperclipIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function ClassEnrollmentModuleDetailPage() {
   const pageTitle = "Modul";
-  const { moduleID } = useParams<{ moduleID: string }>();
+  const { id, classEnrollmentModuleID } = useParams<{
+    id: string;
+    classEnrollmentModuleID: string;
+  }>();
+
+  const { currentUser } = useStateContext();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [hasErrorPage, setHasErrorPage] = useState<boolean>(false);
 
-  const [module, setModule] = useState<ModuleDto>();
+  const [classEnrollmentModule, setClassEnrollmentModule] =
+    useState<ClassEnrollmentModuleDto>();
+  const [studentClassEnrollments, setStudentClassEnrollments] = useState<
+    ClassEnrollmentDto[]
+  >([]);
 
   useEffect(() => {
-    const getModuleDetail = async () => {
-      if (!moduleID) {
+    const getStudentClassEnrollmentsData = async () => {
+      if (!currentUser || currentUser.role !== UserRolesEnum.STUDENT) {
         return;
       }
 
       setLoading(true);
-      const response = await moduleService.getModuleDetailByID(
-        Number(moduleID)
+      const response = await classEnrollmentService.getStudentClassEnrollments(
+        currentUser.id
       );
       setLoading(false);
 
       if (response.success && response.data) {
-        setModule(response.data);
+        setStudentClassEnrollments(response.data);
+      } else {
+        toast.error(response.message);
+      }
+    };
+
+    getStudentClassEnrollmentsData();
+  }, [currentUser]);
+
+  useEffect(() => {
+    const getClassEnrollmentModuleDetail = async () => {
+      setLoading(true);
+      const response =
+        await classEnrollmentModuleService.getClassEnrollmentModuleDetailByID(
+          Number(classEnrollmentModuleID)
+        );
+      setLoading(false);
+
+      if (response.success && response.data) {
+        setClassEnrollmentModule(response.data);
       } else {
         toast.error(response.message);
         setHasErrorPage(true);
       }
     };
-    getModuleDetail();
-  }, [moduleID]);
+    getClassEnrollmentModuleDetail();
+  }, [classEnrollmentModuleID]);
+
+  useEffect(() => {
+    if (!id || !classEnrollmentModule || !currentUser) {
+      return;
+    }
+
+    const isMatchingClassEnrollment = () => {
+      return classEnrollmentModule.classEnrollment?.id === Number(id);
+    };
+
+    // check if class enrollment id from params must be same with class enrollment id from class enrollment module
+    if (!isMatchingClassEnrollment()) {
+      setHasErrorPage(true);
+      return;
+    }
+
+    const isUserAdmin = () => {
+      return currentUser.role === UserRolesEnum.ADMIN;
+    };
+
+    const isValidTeacher = () => {
+      return currentUser.id === classEnrollmentModule.classEnrollment?.user?.id;
+    };
+
+    const isValidStudent = () => {
+      return studentClassEnrollments.some(
+        (enrollment) =>
+          enrollment.id === classEnrollmentModule.classEnrollment.id
+      );
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    if (!isUserAdmin() && !isValidTeacher() && !isValidStudent()) {
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate(`/home`, { replace: true });
+      return;
+    }
+  }, [
+    classEnrollmentModule,
+    currentUser,
+    id,
+    navigate,
+    studentClassEnrollments,
+  ]);
 
   if (hasErrorPage) {
     return <ErrorPage />;
   }
 
   const handleViewFile = () => {
-    if (module?.file) {
-      window.open(module.file, "_blank");
+    if (classEnrollmentModule?.module.file) {
+      window.open(classEnrollmentModule?.module.file, "_blank");
     }
   };
 
@@ -65,19 +144,21 @@ export default function ClassEnrollmentModuleDetailPage() {
           <SkeletonGenerator />
         ) : (
           <div>
-            <h1 className="font-semibold">{module?.name}</h1>
+            <h1 className="font-semibold">
+              {classEnrollmentModule?.module?.name}
+            </h1>
             <Separator className="my-3" />
             <Textarea
-              value={module?.description}
+              value={classEnrollmentModule?.module?.description}
               disabled
               className="text-black bg-secondary"
               style={{ opacity: 1 }}
             />
-            {module?.file && (
+            {classEnrollmentModule?.module?.file && (
               <div className="flex items-center justify-between space-x-2 mt-2">
                 <PaperclipIcon size="24" />
                 <span className="text-black flex-grow">
-                  {getFileName(module?.file)}
+                  {getFileName(classEnrollmentModule?.module?.file)}
                 </span>
                 <Button
                   type="button"

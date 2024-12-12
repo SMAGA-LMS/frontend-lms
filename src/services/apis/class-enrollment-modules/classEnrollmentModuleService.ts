@@ -3,6 +3,7 @@ import { BaseResponseAPIDto } from "../baseResponseAPI";
 import { handleAxiosError } from "../handleError";
 import { ListClassEnrollmentModulesResponseDto } from "./listClassEnrollmentModulesResponse";
 import { ClassEnrollmentResponseDto } from "../class-enrollments/classEnrollmentResponse";
+import { ClassEnrollmentModuleResponseDto } from "./classEnrollmentModuleResponse";
 
 const classEnrollmentModuleService = {
   addNewClassEnrollmentModule: async (
@@ -16,8 +17,11 @@ const classEnrollmentModuleService = {
       );
       reqPayload.append("name", payload.get("name") as string);
       reqPayload.append("description", payload.get("description") as string);
-      reqPayload.append("file", payload.get("file") as File);
-      console.log("reqPayload", reqPayload);
+
+      if (payload.get("file")) {
+        reqPayload.append("file", payload.get("file") as File);
+      }
+
       const response = await axiosClient.post(
         "/class-enrollment-modules",
         reqPayload
@@ -37,6 +41,18 @@ const classEnrollmentModuleService = {
       return response.data;
     } catch (error) {
       return handleAxiosError<ListClassEnrollmentModulesResponseDto>(error);
+    }
+  },
+  getClassEnrollmentModuleDetailByID: async (
+    classEnrollmentModuleID: number
+  ): Promise<BaseResponseAPIDto<ClassEnrollmentModuleResponseDto>> => {
+    try {
+      const response = await axiosClient.get(
+        `/class-enrollment-modules/${classEnrollmentModuleID}`
+      );
+      return response.data;
+    } catch (error) {
+      return handleAxiosError<ClassEnrollmentModuleResponseDto>(error);
     }
   },
 };

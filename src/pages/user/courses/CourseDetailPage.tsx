@@ -51,13 +51,25 @@ export default function CourseDetailPage() {
       return;
     }
 
-    if (
-      currentUser?.id !== course?.user?.id &&
-      currentUser?.role !== UserRolesEnum.ADMIN
-    ) {
-      setHasErrorPage(true);
+    const isValidPICCourse = () => {
+      return currentUser?.id === course?.user?.id;
+    };
+
+    const isUserAdmin = () => {
+      return currentUser?.role === UserRolesEnum.ADMIN;
+    };
+
+    // check if the current user is an admin (argument value will be false for user that has role admin), then they can access this page
+    // Check if the current user (PIC Course) is PIC Course of this course
+    if (!isUserAdmin() && !isValidPICCourse()) {
+      // setHasErrorPage(true);
+      setTimeout(() => {
+        toast.warning("You are not authorized to access this page");
+      }, 300);
+      navigate("/home", { replace: true });
+      return;
     }
-  }, [course, currentUser]);
+  }, [course, currentUser, navigate]);
 
   if (hasErrorPage) {
     return <ErrorPage />;

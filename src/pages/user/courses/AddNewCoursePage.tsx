@@ -137,7 +137,7 @@ export default function AddNewCoursePage() {
                     <ol className="list-decimal ml-4">
                       <li>Nama Mata Pelajaran</li>
                       <li>Tingkatan Kelas</li>
-                      <li>Guru atau Pengajar (Opsional)</li>
+                      <li>PIC Course (Opsional)</li>
                     </ol>
                   </div>
                 </AccordionContent>
@@ -192,7 +192,7 @@ export default function AddNewCoursePage() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="teacher" className="text-right">
-                Pengajar
+                PIC Course
               </Label>
 
               <div className="col-span-2">
@@ -208,7 +208,7 @@ export default function AddNewCoursePage() {
                   }}
                 >
                   <SelectTrigger className="w-full" id="teacher" name="teacher">
-                    <SelectValue placeholder="Pilih pengajar" />
+                    <SelectValue placeholder="Pilih PIC Course" />
                   </SelectTrigger>
                   <SelectContent>
                     {teachers.map((teacher) => (
@@ -254,7 +254,7 @@ export default function AddNewCoursePage() {
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                           <Label htmlFor="teacher" className="text-right">
-                            Pengajar
+                            PIC Course
                           </Label>
                           <div className="col-span-3">
                             {formData.userID && (

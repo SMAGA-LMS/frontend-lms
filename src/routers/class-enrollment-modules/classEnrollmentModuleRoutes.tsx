@@ -31,7 +31,7 @@ const classEnrollmentModuleRoutes = [
         ]),
       },
       {
-        path: "starter-kit/:moduleID",
+        path: "starter-kit/:courseModuleID",
         element: withRoleBasedRoute(<CourseModuleStarterKitDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,
@@ -39,7 +39,7 @@ const classEnrollmentModuleRoutes = [
         ]),
       },
       {
-        path: ":moduleID",
+        path: ":classEnrollmentModuleID",
         element: withRoleBasedRoute(<ClassEnrollmentModuleDetailPage />, [
           UserRolesEnum.ADMIN,
           UserRolesEnum.TEACHER,

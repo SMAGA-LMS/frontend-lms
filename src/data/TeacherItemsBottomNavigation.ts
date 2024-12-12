@@ -19,13 +19,13 @@ const TeacherItemsBottomNavigation = [
   },
   {
     icon: iconAttendances,
-    label: "",
+    label: "Attendance",
     slug: "/attendances",
-    active: false,
+    active: true,
   },
   {
     icon: iconAssignments,
-    label: "Assignments",
+    label: "Assignment",
     slug: "/assignments",
     active: false,
   },
