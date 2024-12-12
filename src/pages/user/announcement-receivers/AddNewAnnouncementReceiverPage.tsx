@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import announcementReceiverService from "@/services/apis/announcement-receivers/announcementReceiverService";
-import { EyeIcon, Trash2Icon } from "lucide-react";
+import { EyeIcon, InfoIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -39,7 +39,7 @@ export default function AddNewAnnouncementReceiverPage() {
     description: "",
     file: null,
     authorID: 0,
-    receiverRoles: [],
+    receiverRoles: [UserRolesEnum.ADMIN],
   };
 
   const { currentUser } = useStateContext();
@@ -159,6 +159,8 @@ export default function AddNewAnnouncementReceiverPage() {
       newReceiverRoles = newReceiverRoles.filter((role) => role !== value);
     }
 
+    console.log("New Receiver Roles", newReceiverRoles);
+
     setFormData({
       ...formData,
       [name]: newReceiverRoles,
@@ -277,6 +279,14 @@ export default function AddNewAnnouncementReceiverPage() {
 
           <div className="mt-2">
             <Label className="font-bold text-sm">Penerima Announcement</Label>
+            <span className="ml-2 text-sm text-gray-500 relative group">
+              <InfoIcon className="inline-block" size={16} />
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 p-2 bg-gray-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                Admin akan selalu mendapatkan salinan announcement, apabila
+                ingin mengirim announcement khusus untuk admin saja maka tidak
+                perlu memilih apapun lagi, default nya sudah dengan admin
+              </div>
+            </span>
             <div className="flex flex-col mt-1">
               {Object.values(UserRolesEnum).map((role) => (
                 <div key={role} className="flex items-center">
@@ -287,6 +297,8 @@ export default function AddNewAnnouncementReceiverPage() {
                     value={role}
                     className="h-4 w-4"
                     onChange={handleInputChangeCheckbox}
+                    defaultChecked={role === UserRolesEnum.ADMIN}
+                    disabled={role === UserRolesEnum.ADMIN}
                   />
                   <Label htmlFor={role} className="ml-2 text-sm">
                     {role}
