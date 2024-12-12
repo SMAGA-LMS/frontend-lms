@@ -44,7 +44,7 @@ export default function AnnouncementReceiversPage() {
   }, [currentUser]);
 
   const navigateToAddNewAnnouncementReceiver = () => {
-    navigate("/announcements/create");
+    navigate("/announcement-receivers/create");
     return;
   };
 
@@ -80,7 +80,7 @@ export default function AnnouncementReceiversPage() {
                 <div>
                   {announcementReceivers.map((announcementReceiver, index) => (
                     <Link
-                      to={`/announcements/${announcementReceiver.id}`}
+                      to={`/announcement-receivers/${announcementReceiver.id}`}
                       key={index}
                       className="block"
                     >
@@ -95,10 +95,10 @@ export default function AnnouncementReceiversPage() {
             </div>
           </div>
         )}
-        {currentUser?.role !== UserRolesEnum.STUDENT && (
+        {currentUser?.role === UserRolesEnum.ADMIN && (
           <div className="fixed bottom-4 left-4 right-4 flex justify-center">
             <Button
-              variant="smagaLMSGreen"
+              variant="default"
               className="w-[calc(100%)] max-w-[22rem] rounded-lg"
               type="submit"
               onClick={navigateToAddNewAnnouncementReceiver}

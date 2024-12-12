@@ -8,7 +8,7 @@ interface CardAnnouncementProps {
 export default function CardAnnouncement({ data }: CardAnnouncementProps) {
   return (
     <>
-      <div className="flex w-full bg-smagaLMS-green rounded-lg p-4 mb-2 justify-between">
+      <div className="flex w-full bg-smagaLMS-green/90 rounded-lg p-4 mb-2 justify-between">
         <div className="mr-4 text-left">
           <div className="font-semibold text-white">
             {data.title.length > 60
