@@ -6,13 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import ErrorPage from "@/pages/ErrorPage";
 import courseService from "@/services/apis/courses/courseService";
-import { EditIcon } from "lucide-react";
+import { EditIcon, LibraryBigIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
 import CardStarterKitCourseModule from "@/components/course-modules/CardStarterKitCourseModule";
+import ItemMenuWithLabel from "@/components/global/ItemMenuWithLabel";
+import IconMenuWithBackground from "@/components/global/IconMenuWithBackground";
 
 export default function CourseDetailPage() {
   const pageTitle = "Detail Mata Pelajaran";
@@ -121,12 +123,18 @@ export default function CourseDetailPage() {
           </div>
         )}
         <div className="mt-4">
-          <p className="font-semibold text-sm my-2">Starter Kit Modules</p>
-          {course && (
-            <Link to={`/courses/${id}/modules`} key={id} className="block">
-              <CardStarterKitCourseModule data={course} />
+          <div className="mx-4 mt-4 flex justify-center space-x-4">
+            <Link
+              to={`/class-enrollments/${id}/modules/starter-kit`}
+              className="block"
+            >
+              <ItemMenuWithLabel label="Starter Kit Modules">
+                <IconMenuWithBackground color="smagaLMS-green">
+                  <LibraryBigIcon size={24} className="text-white" />
+                </IconMenuWithBackground>
+              </ItemMenuWithLabel>
             </Link>
-          )}
+          </div>
         </div>
       </div>
     </>
