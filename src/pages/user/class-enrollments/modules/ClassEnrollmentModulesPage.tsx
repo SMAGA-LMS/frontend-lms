@@ -202,7 +202,7 @@ export default function ClassEnrollmentModulesPage() {
           </div>
         )}
         <div className="bottom-16 left-0 w-full bg-white">
-          {currentUser?.role === UserRolesEnum.ADMIN && (
+          {currentUser?.role !== UserRolesEnum.STUDENT && (
             <Button
               variant="smagaLMSGreen"
               className="w-full"
