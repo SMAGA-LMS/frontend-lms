@@ -12,7 +12,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useStateContext } from "@/contexts/ContextProvider";
 import UserRolesEnum from "@/enums/UserRoleEnum";
-import CardStarterKitCourseModule from "@/components/course-modules/CardStarterKitCourseModule";
 import ItemMenuWithLabel from "@/components/global/ItemMenuWithLabel";
 import IconMenuWithBackground from "@/components/global/IconMenuWithBackground";
 
@@ -124,10 +123,7 @@ export default function CourseDetailPage() {
         )}
         <div className="mt-4">
           <div className="mx-4 mt-4 flex justify-center space-x-4">
-            <Link
-              to={`/class-enrollments/${id}/modules/starter-kit`}
-              className="block"
-            >
+            <Link to={`/courses/${id}/modules`} className="block">
               <ItemMenuWithLabel label="Starter Kit Modules">
                 <IconMenuWithBackground color="smagaLMS-green">
                   <LibraryBigIcon size={24} className="text-white" />

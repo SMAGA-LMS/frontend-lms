@@ -30,7 +30,7 @@ export default function AnnouncementReceiversPage() {
 
       setLoading(true);
       const response =
-        await announcementReceiverService.getAnnouncementReceivers(
+        await announcementReceiverService.getAnnouncementsReceiver(
           currentUser.role
         );
       setLoading(false);

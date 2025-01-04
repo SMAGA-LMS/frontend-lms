@@ -19,7 +19,7 @@ const authService = {
       };
       const response = await axiosClient.post("/auth/login", reqPayload);
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return handleAxiosError<LoginResponseDto>(error);
     }
   },
@@ -38,7 +38,7 @@ const authService = {
       const response = await axiosClient.get("/auth/me");
       console.log("response: ", response);
       return response.data;
-    } catch (error: any) {
+    } catch (error) {
       return handleAxiosError<AuthResponseDto>(error);
     }
   },
