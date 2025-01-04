@@ -5,7 +5,7 @@ import { ListAnnouncementReceiversResponseDto } from "./listAnnouncementReceiver
 import { AnnouncementReceiverResponseDto } from "./announcementReceiverResponse";
 
 const announcementReceiverService = {
-  getAnnouncementReceivers: async (
+  getAnnouncementsReceiver: async (
     receiverRole: string
   ): Promise<BaseResponseAPIDto<ListAnnouncementReceiversResponseDto>> => {
     try {
