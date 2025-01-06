@@ -152,8 +152,6 @@ export default function ClassEnrollmentDetailPage() {
             <h1 className="font-bold font-sans text-lg">
               {classEnrollment?.course.name} | {classEnrollment?.course.grade}
             </h1>
-            <Badge variant="default">{classEnrollment?.id}</Badge>
-            <br />
             <Badge variant="outline">{classEnrollment?.classroom.name}</Badge>
           </div>
         )}

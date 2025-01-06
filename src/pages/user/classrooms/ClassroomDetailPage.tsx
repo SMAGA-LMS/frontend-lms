@@ -1,5 +1,4 @@
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
-import { Badge } from "@/components/ui/badge";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import { UsersIcon } from "lucide-react";
@@ -77,7 +76,6 @@ export default function ClassroomDetailPage() {
             <h1 className="font-bold font-sans text-lg">
               {classroom?.name} | {classroom?.grade}
             </h1>
-            <Badge variant="default">{classroom?.id}</Badge>
           </div>
         )}
       </div>

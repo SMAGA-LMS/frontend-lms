@@ -142,7 +142,6 @@ export default function CourseModulesStarterKitPage() {
             <h1 className="font-bold font-sans text-lg">
               {classEnrollment?.course?.name} | {classEnrollment?.course?.grade}
             </h1>
-            <Badge variant="default">{classEnrollment?.course?.id}</Badge>
           </div>
         )}
       </div>

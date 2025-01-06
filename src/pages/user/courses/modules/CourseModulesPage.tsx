@@ -4,7 +4,6 @@ import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import CardModule from "@/components/modules/CardModule";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -110,7 +109,6 @@ export default function CourseModulesPage() {
             <h1 className="font-bold font-sans text-lg">
               {course?.name} | {course?.grade}
             </h1>
-            <Badge variant="default">{course?.id}</Badge>
           </div>
         )}
       </div>

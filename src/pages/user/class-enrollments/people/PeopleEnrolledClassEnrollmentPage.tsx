@@ -154,8 +154,6 @@ export default function PeopleEnrolledClassEnrollmentPage() {
                   {classEnrollment?.course?.name} |{" "}
                   {classEnrollment?.classroom?.grade}
                 </h1>
-                <Badge variant="default">{classEnrollment?.id}</Badge>
-                <br />
                 <Badge variant="outline">
                   {classEnrollment?.classroom.name}
                 </Badge>
