@@ -9,6 +9,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import authService from "@/services/apis/auth/authService";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 export default function ProfilePage() {
   const { currentUser } = useStateContext();
@@ -37,7 +49,7 @@ export default function ProfilePage() {
         setCurrentUser(null);
         setToken(null);
         navigate("/login");
-      }, 200);
+      }, 600);
     } else {
       toast.error(response.message);
     }
@@ -54,20 +66,32 @@ export default function ProfilePage() {
         <div className="flex justify-center">
           <ProfileHeaderUser user={currentUser} />
           <div className="flex items-center">
-            <form method="post" onSubmit={handleLogout}>
-              <div className="">
-                {loading ? (
-                  <ButtonLoading variant="secondary" />
-                ) : (
-                  <ButtonWithIcon variant="secondary" size="sm" type="submit">
-                    <LogOut className="m-1" />
-                    <Label className="font-sans font-bold text-sm mr-2">
-                      Logout
-                    </Label>
-                  </ButtonWithIcon>
-                )}
-              </div>
-            </form>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="secondary" size="sm">
+                  <LogOut className="m-1" />
+                  <Label className="font-sans font-bold text-sm mr-2">
+                    Logout
+                  </Label>
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to logout?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action will log you out of your account.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout}>
+                    Logout
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <Separator className="my-3" />
