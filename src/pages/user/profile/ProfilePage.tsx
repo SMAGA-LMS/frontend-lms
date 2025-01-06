@@ -1,6 +1,4 @@
 import ProfileHeaderUser from "@/components/users/ProfileHeaderUser";
-import { ButtonLoading } from "@/components/global/ButtonLoading";
-import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useStateContext } from "@/contexts/ContextProvider";
@@ -9,6 +7,19 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import authService from "@/services/apis/auth/authService";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { ButtonLoading } from "@/components/global/ButtonLoading";
 
 export default function ProfilePage() {
   const { currentUser } = useStateContext();
@@ -37,7 +48,7 @@ export default function ProfilePage() {
         setCurrentUser(null);
         setToken(null);
         navigate("/login");
-      }, 200);
+      }, 600);
     } else {
       toast.error(response.message);
     }
@@ -54,20 +65,36 @@ export default function ProfilePage() {
         <div className="flex justify-center">
           <ProfileHeaderUser user={currentUser} />
           <div className="flex items-center">
-            <form method="post" onSubmit={handleLogout}>
-              <div className="">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
                 {loading ? (
-                  <ButtonLoading variant="secondary" />
+                  <ButtonLoading />
                 ) : (
-                  <ButtonWithIcon variant="secondary" size="sm" type="submit">
+                  <Button variant="secondary" size="sm">
                     <LogOut className="m-1" />
                     <Label className="font-sans font-bold text-sm mr-2">
                       Logout
                     </Label>
-                  </ButtonWithIcon>
+                  </Button>
                 )}
-              </div>
-            </form>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Are you sure you want to logout?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action will log you out of your account.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLogout}>
+                    {loading ? <ButtonLoading /> : "Logout"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <Separator className="my-3" />
