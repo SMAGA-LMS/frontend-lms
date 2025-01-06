@@ -1,5 +1,3 @@
-import IconMenu from "../global/IconMenu";
-import iconAssignments from "@/assets/icons/bottom-navigation/assignments.svg";
 import ItemMenuWithLabel from "../global/ItemMenuWithLabel";
 import IconMenuWithBackground from "../global/IconMenuWithBackground";
 import { BookOpenTextIcon } from "lucide-react";
@@ -11,8 +9,8 @@ export default function HomeTeacherMenu() {
     navigate("/courses");
   };
   return (
-    <div className="mt-5 flex items-start justify-between">
-      <div className="bg-slate-300 rounded-xl py-2 px-4 flex items-center">
+    <div className="mt-5 flex items-end justify-end">
+      {/* <div className="bg-slate-300 rounded-xl py-2 px-4 flex items-center">
         <div className="mr-2">
           <IconMenu icon={iconAssignments} />
         </div>
@@ -22,7 +20,7 @@ export default function HomeTeacherMenu() {
             <b>perlu dinilai!</b>
           </p>
         </div>
-      </div>
+      </div> */}
       <button onClick={navigateToPICCourse}>
         <ItemMenuWithLabel label="PIC Course">
           <IconMenuWithBackground color="smagaLMS-gray">
