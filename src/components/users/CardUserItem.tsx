@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { UserDto } from "./user";
 import { ReactNode } from "react";
 import UserRolesEnum from "@/enums/UserRoleEnum";
@@ -22,7 +21,7 @@ export default function CardUserItem({
   user,
   additionalClassName,
   textFullnameColor,
-  defaultBadgeStyle,
+  // defaultBadgeStyle,
   // teacherType,
   children,
 }: CardUserItemProps) {
@@ -32,9 +31,6 @@ export default function CardUserItem({
     username: "dummyteacher",
     role: UserRolesEnum.TEACHER,
   };
-
-  // const defaultTeacherType = TeacherTypeEnum.TEACHER;
-  // const displayTeacherType = teacherType || defaultTeacherType;
 
   const displayUser = user || defaultUser;
   return (
@@ -55,13 +51,6 @@ export default function CardUserItem({
             >
               {displayUser.name}
             </h2>
-            <Badge className="mr-2" variant={defaultBadgeStyle}>
-              {displayUser.id}
-            </Badge>
-            {/* | */}
-            {/* <Badge className="ml-2" variant="default">
-              {displayTeacherType}
-            </Badge> */}
           </div>
         </div>
 

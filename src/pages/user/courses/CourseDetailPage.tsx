@@ -2,7 +2,6 @@ import { CourseDto } from "@/components/courses/course";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import ButtonWithIcon from "@/components/global/ButtonWithIcon";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
-import { Badge } from "@/components/ui/badge";
 import CardUserItem from "@/components/users/CardUserItem";
 import ErrorPage from "@/pages/ErrorPage";
 import courseService from "@/services/apis/courses/courseService";
@@ -93,7 +92,6 @@ export default function CourseDetailPage() {
             <h1 className="font-bold font-sans text-lg">
               {course?.name} | {course?.grade}
             </h1>
-            <Badge variant="default">{course?.id}</Badge>
           </div>
         )}
       </div>

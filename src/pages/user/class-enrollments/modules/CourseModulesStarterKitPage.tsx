@@ -4,7 +4,6 @@ import BasicSkelenton from "@/components/global/BasicSkelenton";
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
 import SkeletonGenerator from "@/components/global/SkeletonGenerator";
 import CardModule from "@/components/modules/CardModule";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useStateContext } from "@/contexts/ContextProvider";
@@ -142,7 +141,6 @@ export default function CourseModulesStarterKitPage() {
             <h1 className="font-bold font-sans text-lg">
               {classEnrollment?.course?.name} | {classEnrollment?.course?.grade}
             </h1>
-            <Badge variant="default">{classEnrollment?.course?.id}</Badge>
           </div>
         )}
       </div>

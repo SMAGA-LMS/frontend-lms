@@ -1,5 +1,4 @@
 import HeaderPageWithBackButton from "@/components/global/HeaderPageWithBackButton";
-import { Badge } from "@/components/ui/badge";
 import BasicSkelenton from "@/components/global/BasicSkelenton";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -131,7 +130,6 @@ export default function PeopleEnrolledClassroomPage() {
                 <h1 className="font-bold font-sans text-lg">
                   {classroom?.name} | {classroom?.grade}
                 </h1>
-                <Badge variant="default">{classroom?.id}</Badge>
               </div>
             </div>
           </div>
