@@ -19,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { ButtonLoading } from "@/components/global/ButtonLoading";
 
 export default function ProfilePage() {
   const { currentUser } = useStateContext();
@@ -66,12 +67,16 @@ export default function ProfilePage() {
           <div className="flex items-center">
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="secondary" size="sm">
-                  <LogOut className="m-1" />
-                  <Label className="font-sans font-bold text-sm mr-2">
-                    Logout
-                  </Label>
-                </Button>
+                {loading ? (
+                  <ButtonLoading />
+                ) : (
+                  <Button variant="secondary" size="sm">
+                    <LogOut className="m-1" />
+                    <Label className="font-sans font-bold text-sm mr-2">
+                      Logout
+                    </Label>
+                  </Button>
+                )}
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -85,7 +90,7 @@ export default function ProfilePage() {
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction onClick={handleLogout}>
-                    Logout
+                    {loading ? <ButtonLoading /> : "Logout"}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
